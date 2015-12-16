@@ -1,0 +1,20 @@
+{
+  "name": "SciTwits",
+  "version": "1.0.0",
+  "description": "== README",
+  "main": "./frontend/sciProj.jsx",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+      "react": "",
+      "react-dom": "",
+      "babel-core": "",
+      "babel-loader": "",
+      "babel-preset-react": "",
+      "webpack": "",
+      "react-router": ""
+  }
+}

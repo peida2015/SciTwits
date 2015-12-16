@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SciTwits</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<% if current_user %>
+Logged in: <%= current_user.username %>
+<%= button_to "Logout", sessions_url, method:"delete" %>
+<% else %>
+<%= button_to "Login", new_sessions_url, method:'get' %>
+<%= button_to "Sign Up", new_user_url, method:'get' %>
+<% end %>
+
+<%= yield %><br></br>
+
+<%= render 'layouts/errors' %>
+</body>
+</html>
