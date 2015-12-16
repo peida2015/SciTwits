@@ -5,3 +5,29 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+# users = [
+#   {
+#     username: user, password: password
+#   }
+# ]
+
+
+projects = [
+  [ "Theory of Everything",
+    "Finishing Einstein's Dream",
+    1,
+    "Explains everything that happens in the Universe"
+  ],
+  [ "The Microbiomes Project",
+    "Study the hidden ecosystems of microbes",
+    2
+  ]
+]
+
+projects.each do |title, description, owner_id, significance|
+  Project.create(title: title,
+      description: description,
+      owner_id: owner_id,
+      significance: significance)
+end

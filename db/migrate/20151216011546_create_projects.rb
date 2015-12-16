@@ -4,11 +4,12 @@ class CreateProjects < ActiveRecord::Migration
       t.string :title, null: false
       t.text :description, null: false
       t.integer :owner_id, null: false
-      t.integer :field_id, null: false
-      t.text :significance, null: false
+      t.integer :field_id
+      t.text :significance
       t.string :subfield
 
       t.timestamps null: false
     end
+    add_index :projects, :title
   end
 end
