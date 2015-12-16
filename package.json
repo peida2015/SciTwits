@@ -4,7 +4,8 @@
   "description": "== README",
   "main": "./frontend/sciProj.jsx",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "./node_modules/.bin/webpack"
   },
   "author": "",
   "license": "ISC",
@@ -16,5 +17,9 @@
       "babel-preset-react": "",
       "webpack": "",
       "react-router": ""
+  },
+  "engines": {
+    "node": "",
+    "npm": ""
   }
 }
