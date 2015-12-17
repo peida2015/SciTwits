@@ -16,7 +16,8 @@
       "babel-loader": "",
       "babel-preset-react": "",
       "webpack": "",
-      "react-router": ""
+      "react-router": "",
+      "flux":""
   },
   "engines": {
     "node": "",

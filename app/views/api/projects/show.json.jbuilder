@@ -1,1 +1,5 @@
-json.extract! @project, :id, :title, :description, :owner_id, :field_id, :significance, :subfield, :created_at, :updated_at
+json.owner @project.owner.username
+# debugger
+json.created time_ago_in_words(@project.created_at)
+json.extract! @project, :id, :title, :description, :field_id, :significance, :subfield, :updated_at
+json.title @project.title

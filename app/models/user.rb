@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   validates :session_token, uniqueness:true
   validates :username, uniqueness: true
 
+  has_many :projects
+
   after_initialize :ensure_token
 
   def is_password?(password)

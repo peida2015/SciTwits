@@ -7,7 +7,6 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
 <% if current_user %>
 Logged in: <%= current_user.username %>
 <%= button_to "Logout", sessions_url, method:"delete" %>

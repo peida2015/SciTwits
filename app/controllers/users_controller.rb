@@ -8,7 +8,7 @@ class UsersController < ApplicationController
 
     if @user.save
       login(@user)
-      render "users/show.html.erb"
+      render "static_pages/root"
     else
       flash[:errors] = @user.errors.full_messages
       redirect_to new_user_url

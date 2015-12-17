@@ -5,11 +5,11 @@ class Api::ProjectsController < ApplicationController
   # GET /projects.json
   def index
     @projects = Project.all
-    render json: @projects
+    render :index
   end
 
   def show
-    render json: @project
+    render :show
   end
 
   # POST /projects
