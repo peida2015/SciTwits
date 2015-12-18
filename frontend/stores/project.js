@@ -21,12 +21,15 @@ ProjectStore.__onDispatch = function (payload) {
       ProjectStore.__emitChange();
       break;
 
-    case "PROJECTS_RECEIVED":
+    case "PROJECT_RECEIVED":
       this.addProject(payload.project);
       ProjectStore.__emitChange();
       break;
-    // default:
   }
+};
+
+ProjectStore.addProject = function (project) {
+  _projects.push(project);
 };
 
 // Project.receiveAllProjects = function (projects) {
@@ -34,9 +37,6 @@ ProjectStore.__onDispatch = function (payload) {
 //   _projects = projects;
 // };
 //
-// Project.addProject = function (project) {
-//   _projects.push(project)
-// };
 //
 // Project
 

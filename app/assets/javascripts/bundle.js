@@ -49,8 +49,9 @@
 	var Router = __webpack_require__(159).Router;
 	var Route = __webpack_require__(159).Route;
 	var IndexRoute = __webpack_require__(159).IndexRoute;
-	var ProjectsIndex = __webpack_require__(233);
-	var ProjectView = __webpack_require__(234);
+	// var Link = require('react-router').Link;
+	var ProjectsIndex = __webpack_require__(210);
+	var ProjectView = __webpack_require__(236);
 	var ProjectForm = __webpack_require__(235);
 	// debugger
 	
@@ -59,11 +60,10 @@
 	    displayName: 'SciTwits',
 	
 	    render: function () {
-	      console.log("inside SciTwits");
+	      // console.log("inside SciTwits");
 	      return React.createElement(
 	        'div',
 	        null,
-	        React.createElement('h4', null),
 	        this.props.children
 	      );
 	    }
@@ -75,17 +75,18 @@
 	    Route,
 	    { path: '/', component: SciTwits },
 	    React.createElement(IndexRoute, { component: ProjectsIndex }),
-	    React.createElement(Route, { path: 'api/projects/:id', component: ProjectView }),
-	    React.createElement(Route, { path: 'api/projects/', component: ProjectForm })
+	    React.createElement(Route, { path: 'projects/form', component: ProjectForm }),
+	    React.createElement(Route, { path: 'projects/:id', component: ProjectView })
 	  );
 	  var root = document.getElementById("root");
-	  debugger;
-	  ReactDOM.render(React.createElement(
-	    Router,
-	    null,
-	    routes
-	  ), root);
-	  // ReactDOM.render("This is what I want you to see", header);
+	  if (root) {
+	    ReactDOM.render(React.createElement(
+	      Router,
+	      null,
+	      routes
+	    ), root);
+	  }
+	  // ReactDOM.render(<div>"This is what I want you to see"</div>, header);
 	});
 
 /***/ },
@@ -24442,8 +24443,173 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 210 */,
-/* 211 */,
+/* 210 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ProjectStore = __webpack_require__(211);
+	var ProjectActions = __webpack_require__(232);
+	
+	var ProjectsIndex = React.createClass({
+	  displayName: 'ProjectsIndex',
+	
+	  getInitialState: function () {
+	    return { projects: [] };
+	  },
+	
+	  componentDidMount: function () {
+	    debugger;
+	    ProjectActions.fetchAllProjects();
+	    this.listenerToken = ProjectStore.addListener(this.handleStoreChange);
+	    // document.addListener("Click", this.handleClick);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listenerToken.remove();
+	  },
+	
+	  handleStoreChange: function () {
+	    console.log("Store changed");
+	    this.setState({ projects: ProjectStore.all() });
+	  },
+	
+	  handleDelete: function (e) {
+	    debugger;
+	    console.log("Clicked Remove");
+	    ProjectActions.deleteProject(e.target.id);
+	  },
+	
+	  buildProject: function (project, idx) {
+	    return React.createElement(
+	      'div',
+	      { key: idx },
+	      React.createElement(
+	        'div',
+	        { className: 'project' },
+	        React.createElement(
+	          'strong',
+	          null,
+	          'Title:'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'title' },
+	          project.title
+	        ),
+	        React.createElement(
+	          'strong',
+	          null,
+	          'Description:'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'description' },
+	          project.description
+	        ),
+	        React.createElement(
+	          'strong',
+	          null,
+	          'Significance:'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'significance' },
+	          project.significance
+	        ),
+	        '// ',
+	        React.createElement(
+	          'strong',
+	          null,
+	          'Project Leader:'
+	        ),
+	        '// ',
+	        React.createElement('div', { className: 'leader' })
+	      ),
+	      React.createElement(
+	        'button',
+	        { onClick: this.handleDelete, id: project.id },
+	        'Remove Project'
+	      )
+	    );
+	  },
+	
+	  render: function () {
+	    // debugger
+	    var proj_view = this.state.projects.map(this.buildProject);
+	    // console.log("ProjectsIndex");
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'a',
+	        { href: '#projects/form' },
+	        React.createElement(
+	          'h5',
+	          null,
+	          'Create New'
+	        )
+	      ),
+	      React.createElement(
+	        'h4',
+	        null,
+	        'ProjectsIndex'
+	      ),
+	      proj_view
+	    );
+	  }
+	});
+	
+	module.exports = ProjectsIndex;
+
+/***/ },
+/* 211 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(212);
+	var Store = __webpack_require__(216).Store;
+	
+	var _projects = [];
+	
+	var ProjectStore = new Store(Dispatcher);
+	
+	ProjectStore.all = function () {
+	  return _projects;
+	};
+	
+	ProjectStore.resetAllProjects = function (projects) {
+	  _projects = projects;
+	};
+	
+	ProjectStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "PROJECTS_RECEIVED":
+	      debugger;
+	      this.resetAllProjects(payload.projects);
+	      ProjectStore.__emitChange();
+	      break;
+	
+	    case "PROJECT_RECEIVED":
+	      this.addProject(payload.project);
+	      ProjectStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	ProjectStore.addProject = function (project) {
+	  _projects.push(project);
+	};
+	
+	// Project.receiveAllProjects = function (projects) {
+	//   // projects should be an array of Project objects.
+	//   _projects = projects;
+	// };
+	//
+	//
+	// Project
+	
+	module.exports = ProjectStore;
+
+/***/ },
 /* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -31154,215 +31320,30 @@
 /* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(212);
-	var Store = __webpack_require__(216).Store;
-	
-	var _projects = [];
-	
-	var ProjectStore = new Store(Dispatcher);
-	
-	ProjectStore.all = function () {
-	  return _projects;
-	};
-	
-	ProjectStore.resetAllProjects = function (projects) {
-	  _projects = projects;
-	};
-	
-	ProjectStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case "PROJECTS_RECEIVED":
-	      debugger;
-	      this.resetAllProjects(payload.projects);
-	      ProjectStore.__emitChange();
-	      break;
-	
-	    case "PROJECTS_RECEIVED":
-	      this.addProject(payload.project);
-	      ProjectStore.__emitChange();
-	      break;
-	    // default:
-	  }
-	};
-	
-	// Project.receiveAllProjects = function (projects) {
-	//   // projects should be an array of Project objects.
-	//   _projects = projects;
-	// };
-	//
-	// Project.addProject = function (project) {
-	//   _projects.push(project)
-	// };
-	//
-	// Project
-	
-	module.exports = ProjectStore;
-
-/***/ },
-/* 233 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ProjectStore = __webpack_require__(232);
-	var ProjectActions = __webpack_require__(236);
-	
-	var ProjectsIndex = React.createClass({
-	  displayName: 'ProjectsIndex',
-	
-	  getInitialState: function () {
-	    return { projects: [] };
-	  },
-	
-	  componentDidMount: function () {
-	    debugger;
-	    ProjectActions.fetchAllProjects();
-	    ProjectStore.addListener(this.handleStoreChange);
-	    // this.addListener("Click", this.handleClick);
-	  },
-	
-	  // componentWillMount: function () {
-	  // debugger
-	  // ProjectStore.removeListener(this.handleStoreChange);
-	  // },
-	
-	  handleStoreChange: function () {
-	    this.setState({ projects: ProjectStore.all() });
-	  },
-	
-	  buildProject: function (project, idx) {
-	    return React.createElement(
-	      'div',
-	      { key: idx },
-	      React.createElement(
-	        'strong',
-	        null,
-	        'Title:'
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'title' },
-	        project.title
-	      ),
-	      React.createElement(
-	        'strong',
-	        null,
-	        'Description:'
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'description' },
-	        project.description
-	      ),
-	      React.createElement(
-	        'strong',
-	        null,
-	        'Significance:'
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'significance' },
-	        project.significance
-	      ),
-	      '// ',
-	      React.createElement(
-	        'strong',
-	        null,
-	        'Project Leader:'
-	      ),
-	      '// ',
-	      React.createElement('div', { className: 'leader' })
-	    );
-	  },
-	
-	  render: function () {
-	    debugger;
-	    var proj_view = this.state.projects.map(this.buildProject);
-	    // console.log("ProjectsIndex");
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h4',
-	        null,
-	        'ProjectsIndex'
-	      ),
-	      proj_view
-	    );
-	  }
-	});
-	
-	module.exports = ProjectsIndex;
-
-/***/ },
-/* 234 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var ProjectView = React.createClass({
-	  displayName: 'ProjectView',
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      'This is ProjectView.'
-	    );
-	  }
-	});
-	
-	module.exports = ProjectView;
-
-/***/ },
-/* 235 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ProjectActions = __webpack_require__(236);
-	
-	var ProjectForm = React.createClass({
-	  displayName: 'ProjectForm',
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      'This is ProjectForm.'
-	    );
-	  }
-	});
-	
-	module.exports = ProjectForm;
-
-/***/ },
-/* 236 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ApiUtil = __webpack_require__(237);
+	var ApiUtil = __webpack_require__(233);
 	
 	var ProjectActions = {
 	  fetchAllProjects: function () {
 	    ApiUtil.fetchAll();
 	  },
 	
-	  createProject: function () {
-	    ApiUtil.saveProject();
+	  createProject: function (data, callback) {
+	    ApiUtil.saveProject(data, callback);
 	  },
 	
-	  deleteProject: function (id) {
-	    ApiUtil.destroyProject();
+	  deleteProject: function (id, callback) {
+	    ApiUtil.destroyProject(id, callback);
 	  }
 	
 	};
-	
 	module.exports = ProjectActions;
 
 /***/ },
-/* 237 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ApiActions = __webpack_require__(239);
-	// var ProjectActions = require('../actions/ProjectActions');
+	var ApiActions = __webpack_require__(234);
+	// var ProjectForm = require('../components/projects/ProjectForm');
 	
 	var ApiUtil = {
 	  fetchAll: function () {
@@ -31373,19 +31354,23 @@
 	      success: ApiActions.receiveAllProjects
 	    });
 	  },
-	  saveProject: function (proj_data) {
+	  saveProject: function (proj_data, callback) {
 	    $.ajax({
 	      type: "POST",
 	      url: "api/projects",
 	      data: proj_data,
-	      success: ApiActions.receiveProject
+	      success: function (resp) {
+	        // debugger
+	        ApiActions.receiveProject(resp);
+	        // ProjectForm.afterSubmit(resp.id);
+	        callback(resp.id);
+	      }
 	    });
 	  },
-	  deleteProject: function (proj_id) {
+	  destroyProject: function (proj_id) {
 	    $.ajax({
 	      type: "DELETE",
-	      url: "api/projects/",
-	      data: proj_id,
+	      url: "api/projects/" + proj_id,
 	      success: ApiActions.receiveAllProjects
 	    });
 	  }
@@ -31394,8 +31379,7 @@
 	module.exports = ApiUtil;
 
 /***/ },
-/* 238 */,
-/* 239 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(212);
@@ -31424,6 +31408,179 @@
 	};
 	
 	module.exports = ApiAction;
+
+/***/ },
+/* 235 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ProjectActions = __webpack_require__(232);
+	var History = __webpack_require__(159).History;
+	
+	var ProjectForm = React.createClass({
+	  displayName: 'ProjectForm',
+	
+	  mixins: [History],
+	
+	  getInitialState: function () {
+	    return { title: "", description: "", significance: "" };
+	  },
+	
+	  handleSubmit: function (e) {
+	    debugger;
+	    e.preventDefault();
+	    var data = {
+	      project: {
+	        title: e.target[0].value,
+	        description: e.target[1].value,
+	        significance: e.target[2].value
+	      }
+	    };
+	    ProjectActions.createProject(data, this.redirectToShow);
+	  },
+	
+	  handleChange: function (e) {
+	    // debugger
+	    // this.setState({ e.target.dataset["name"] : e.target.value});
+	    if (e.target.dataset["name"] === "title") {
+	      this.setState({ title: e.target.value });
+	    } else if (e.target.dataset["name"] === "description") {
+	      this.setState({ description: e.target.value });
+	    } else {
+	      this.setState({ significance: e.target.value });
+	    }
+	    // debugger;
+	    // this.setState(e.target.value
+	  },
+	
+	  redirectToShow: function (id) {
+	    this.props.history.pushState(this.state, 'projects/' + id);
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.handleSubmit },
+	        React.createElement(
+	          'label',
+	          null,
+	          'Title:'
+	        ),
+	        React.createElement('input', { type: 'text', value: this.state.title,
+	          onChange: this.handleChange,
+	          placeholder: 'Your AMAZING research deserves something AMAZING',
+	          'data-name': 'title' }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Description:'
+	        ),
+	        React.createElement('textarea', { placeholder: 'Share your experiment or theory emphasis.',
+	          onChange: this.handleChange,
+	          value: this.state.description,
+	          'data-name': 'description' }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Significance:'
+	        ),
+	        React.createElement('textarea', { placeholder: 'Why it matters? *Optional',
+	          value: this.state.significance,
+	          'data-name': 'significance',
+	          onChange: this.handleChange }),
+	        React.createElement(
+	          'button',
+	          null,
+	          'Make Your Research Seen!'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = ProjectForm;
+
+/***/ },
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ProjectStore = __webpack_require__(211);
+	var ProjectActions = __webpack_require__(232);
+	
+	var ProjectView = React.createClass({
+	  displayName: 'ProjectView',
+	
+	  getProject: function () {
+	    debugger;
+	    ProjectStore.getProject(1);
+	  },
+	
+	  buildProject: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'project' },
+	        React.createElement(
+	          'strong',
+	          null,
+	          'Title:'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'title' },
+	          this.props.location.state.title
+	        ),
+	        React.createElement(
+	          'strong',
+	          null,
+	          'Description:'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'description' },
+	          this.props.location.state.description
+	        ),
+	        React.createElement(
+	          'strong',
+	          null,
+	          'Significance:'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'significance' },
+	          this.props.location.state.significance
+	        ),
+	        '// ',
+	        React.createElement(
+	          'strong',
+	          null,
+	          'Project Leader:'
+	        ),
+	        '// ',
+	        React.createElement('div', { className: 'leader' })
+	      )
+	    );
+	  },
+	
+	  render: function () {
+	    debugger;
+	    return React.createElement(
+	      'div',
+	      null,
+	      this.buildProject()
+	    );
+	  }
+	});
+	
+	module.exports = ProjectView;
 
 /***/ }
 /******/ ]);

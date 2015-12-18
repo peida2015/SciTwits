@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   def new
-
+    render "static_pages/root" if current_user
   end
 
   def create

@@ -3,6 +3,7 @@ var ReactDOM = require('react-dom');
 var Router = require('react-router').Router;
 var Route = require('react-router').Route;
 var IndexRoute = require('react-router').IndexRoute;
+// var Link = require('react-router').Link;
 var ProjectsIndex = require('./components/projects/ProjectsIndex');
 var ProjectView = require('./components/projects/ProjectView');
 var ProjectForm = require('./components/projects/ProjectForm');
@@ -11,10 +12,9 @@ var ProjectForm = require('./components/projects/ProjectForm');
 $(function () {
   var SciTwits = React.createClass({
     render: function (){
-      console.log("inside SciTwits");
+      // console.log("inside SciTwits");
       return(
         <div>
-          <h4></h4>
           { this.props.children }
         </div>
       )
@@ -25,13 +25,15 @@ $(function () {
 
   var routes = (
     <Route path='/' component={SciTwits}>
-      <IndexRoute component={ProjectsIndex} />
-      <Route path='api/projects/:id' component={ProjectView}></Route>
-      <Route path='api/projects/' component={ProjectForm}></Route>
+      <IndexRoute component={ProjectsIndex}>
+      </IndexRoute>
+      <Route path='projects/form' component={ProjectForm}></Route>
+      <Route path='projects/:id' component={ProjectView}></Route>
     </Route>
   );
   var root = document.getElementById("root");
-  debugger
-  ReactDOM.render(<Router>{routes}</Router>, root);
-  // ReactDOM.render("This is what I want you to see", header);
+  if (root) {
+    ReactDOM.render(<Router>{routes}</Router>, root);
+  }
+  // ReactDOM.render(<div>"This is what I want you to see"</div>, header);
 })

@@ -15,16 +15,11 @@ class Api::ProjectsController < ApplicationController
   # POST /projects
   # POST /projects.json
   def create
-    @project = Project.new(project_params)
-
-    respond_to do |format|
-      if @project.save
-        format.html { redirect_to @project, notice: 'Project was successfully created.' }
-        format.json { render :show, status: :created, location: @project }
-      else
-        format.html { render :new }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
-      end
+    @project = current_user.projects.new(project_params)
+    if @project.save
+      render :show
+    else
+      flash[:errors] = @project.errors.full_message
     end
   end
 
@@ -46,10 +41,8 @@ class Api::ProjectsController < ApplicationController
   # DELETE /projects/1.json
   def destroy
     @project.destroy
-    respond_to do |format|
-      format.html { redirect_to projects_url, notice: 'Project was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    @projects = Project.all
+    render :index
   end
 
   private

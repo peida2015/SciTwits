@@ -1,5 +1,5 @@
 var ApiActions = require('../actions/ApiActions');
-// var ProjectActions = require('../actions/ProjectActions');
+// var ProjectForm = require('../components/projects/ProjectForm');
 
 var ApiUtil = {
   fetchAll: function () {
@@ -10,19 +10,23 @@ var ApiUtil = {
       success: ApiActions.receiveAllProjects
     })
   },
-  saveProject: function (proj_data) {
+  saveProject: function (proj_data, callback) {
     $.ajax({
       type: "POST",
       url: "api/projects",
       data: proj_data,
-      success: ApiActions.receiveProject
+      success: function (resp) {
+        // debugger
+        ApiActions.receiveProject(resp);
+        // ProjectForm.afterSubmit(resp.id);
+        callback(resp.id);
+      }
     })
   },
-  deleteProject: function (proj_id) {
+  destroyProject: function (proj_id) {
     $.ajax({
       type: "DELETE",
-      url: "api/projects/",
-      data: proj_id,
+      url: "api/projects/"+proj_id,
       success: ApiActions.receiveAllProjects
     })
   }

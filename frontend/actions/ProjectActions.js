@@ -5,14 +5,13 @@ var ProjectActions = {
     ApiUtil.fetchAll();
   },
 
-  createProject: function () {
-    ApiUtil.saveProject();
+  createProject: function (data, callback) {
+    ApiUtil.saveProject(data, callback);
   },
 
-  deleteProject: function (id) {
-    ApiUtil.destroyProject();
+  deleteProject: function (id, callback) {
+    ApiUtil.destroyProject(id, callback);
   }
 
 }
-
 module.exports = ProjectActions;
