@@ -9,6 +9,15 @@ ProjectStore.all = function () {
   return _projects;
 };
 
+ProjectStore.find = function (id){
+  return _projects.forEach(function (project){
+    debugger
+    if (project.id == id) {
+      return project
+    }
+  })
+},
+
 ProjectStore.resetAllProjects = function (projects) {
   _projects = projects;
 };
@@ -16,7 +25,7 @@ ProjectStore.resetAllProjects = function (projects) {
 ProjectStore.__onDispatch = function (payload) {
   switch (payload.actionType) {
     case "PROJECTS_RECEIVED":
-      debugger
+      // debugger
       this.resetAllProjects(payload.projects);
       ProjectStore.__emitChange();
       break;

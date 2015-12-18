@@ -8,7 +8,7 @@ var ProjectsIndex = React.createClass({
   },
 
   componentDidMount: function () {
-    debugger
+    // debugger
     ProjectActions.fetchAllProjects();
     this.listenerToken = ProjectStore.addListener(this.handleStoreChange);
     // document.addListener("Click", this.handleClick);
@@ -24,12 +24,39 @@ var ProjectsIndex = React.createClass({
   },
 
   handleDelete: function (e) {
-    debugger;
     console.log("Clicked Remove");
     ProjectActions.deleteProject(e.target.id)
   },
 
+  handleEditClick: function (e){
+    var project = ProjectStore.find(e.target.id);
+    if (project) {
+      this.props.history.pushState(null,'#projects/edit', project)
+    } else {
+      alert("project doesn't exist!");
+    }
+  },
+
+  buildButtons: function (project) {
+    if (this.props.route.user_id == project.owner_id) {
+      var removeButton =(
+        <button onClick={this.handleDelete}
+          id={project.id}>
+          Remove Project</button>)
+      var editButton =(
+        <button onClick={this.handleEditClick}
+          id={project.id}>
+          Edit Project</button>)
+    } else {
+      var removeButton = "";
+      var editButton = ""
+    }
+    return [removeButton, editButton];
+  },
+
   buildProject: function (project, idx) {
+    debugger
+    var buttons = this.buildButtons(project);
     return (
       <div key={idx}>
         <div className="project">
@@ -42,7 +69,8 @@ var ProjectsIndex = React.createClass({
           // <strong>Project Leader:</strong>
           // <div className="leader"></div>
         </div>
-        <button onClick={this.handleDelete} id={project.id}>Remove Project</button>
+        {buttons[0]}
+        {buttons[1]}
       </div>
     )
   },

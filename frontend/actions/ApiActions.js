@@ -16,12 +16,6 @@ var ApiAction = {
     })
   },
 
-  deleteProject: function (project_id) {
-    Dispatcher.dispatch({
-      actionType: "PROJECT_DELETED",
-      id: project_id
-    })
-  }
 }
 
 module.exports = ApiAction;

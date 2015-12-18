@@ -10,6 +10,9 @@ var ProjectForm = require('./components/projects/ProjectForm');
 // debugger
 
 $(function () {
+  // var header = document.getElementById('header');
+  var root = document.getElementById("root");
+
   var SciTwits = React.createClass({
     render: function (){
       // console.log("inside SciTwits");
@@ -21,17 +24,17 @@ $(function () {
     }
   });
 
-  // var header = document.getElementById('header');
-
   var routes = (
     <Route path='/' component={SciTwits}>
-      <IndexRoute component={ProjectsIndex}>
+      <IndexRoute component={ProjectsIndex} user_id={root.dataset["user_id"]}>
       </IndexRoute>
       <Route path='projects/form' component={ProjectForm}></Route>
       <Route path='projects/:id' component={ProjectView}></Route>
     </Route>
   );
-  var root = document.getElementById("root");
+
+  // debugger
+
   if (root) {
     ReactDOM.render(<Router>{routes}</Router>, root);
   }
