@@ -1,28 +1,32 @@
 var React = require('react');
 var ProjectActions = require('../../actions/ProjectActions');
-var History = require('react-router').History;
-var MediaActions = require('../../actions/MediaActions');
-var UploadButton = require('./UploadButton');
+// var History = require('react-router').History;
 
-var ProjectForm = React.createClass({
-  mixins: [History],
+var ProjectEdit = React.createClass({
+  // mixins: [History],
 
   getInitialState: function () {
-    return ({ title: "", description: "", significance: ""})
+    var project = this.props.location.state.projects.find(function(project){
+      return this.props.location.query.id == project.id
+    }.bind(this));
+    debugger
+    return ({ title: project.title,
+              description: project.description,
+              significance: project.significance})
   },
 
   handleSubmit: function(e) {
     debugger
     e.preventDefault();
-
-    // var data = {
-    //   project : {
-    //     title: e.target[0].value,
-    //     description: e.target[1].value,
-    //     significance: e.target[2].value
-    //   }
-    // };
-    // ProjectActions.createProject(data, this.redirectToShow);
+    var data = {
+      project : {
+        id: this.props.location.query.id,
+        title: e.target[0].value,
+        description: e.target[1].value,
+        significance: e.target[2].value
+      }
+    };
+    ProjectActions.updateProject(data, this.redirectToShow);
   },
 
   handleChange: function (e) {
@@ -65,10 +69,6 @@ var ProjectForm = React.createClass({
                     value={this.state.significance}
                     data-name="significance"
                     onChange={this.handleChange}></textarea>
-          <br></br>
-          <UploadButton/>
-          <label>Upload a photo</label>
-          <br></br>
           <button>Make Your Research Seen!</button>
         </form>
       </div>
@@ -76,4 +76,4 @@ var ProjectForm = React.createClass({
   }
 });
 
-module.exports = ProjectForm;
+module.exports = ProjectEdit;

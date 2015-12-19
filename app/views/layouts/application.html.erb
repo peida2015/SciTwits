@@ -2,11 +2,20 @@
 <html>
 <head>
   <title>SciTwits</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
+  <script src="//widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    window.CLOUDINARY_OPTIONS = {
+      cloud_name: "<%=ENV['CLOUD_NAME']%>",
+      upload_preset: "<%= ENV['UPLOAD_PRESET'] %>"
+    };
+  </script>
 </head>
 <body>
+<%= cloudinary_js_config %>
+
 <% if current_user %>
 Logged in: <%= current_user.username %>
 <%= button_to "Logout", sessions_url, method:"delete" %>

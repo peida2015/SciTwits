@@ -10,11 +10,8 @@ ProjectStore.all = function () {
 };
 
 ProjectStore.find = function (id){
-  return _projects.forEach(function (project){
-    debugger
-    if (project.id == id) {
-      return project
-    }
+  return _projects.find(function (project){
+    return (project.id == id)
   })
 },
 

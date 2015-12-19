@@ -9,6 +9,10 @@ var ProjectActions = {
     ApiUtil.saveProject(data, callback);
   },
 
+  updateProject: function (data, callback) {
+    ApiUtil.changeProject(data, callback);
+  },
+
   deleteProject: function (id, callback) {
     ApiUtil.destroyProject(id, callback);
   }

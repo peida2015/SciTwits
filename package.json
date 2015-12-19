@@ -17,7 +17,8 @@
       "babel-preset-react": "",
       "webpack": "",
       "react-router": "",
-      "flux":""
+      "flux":"",
+      "cloudinary": ""
   },
   "engines": {
     "node": "",

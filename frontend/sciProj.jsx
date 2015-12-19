@@ -7,6 +7,7 @@ var IndexRoute = require('react-router').IndexRoute;
 var ProjectsIndex = require('./components/projects/ProjectsIndex');
 var ProjectView = require('./components/projects/ProjectView');
 var ProjectForm = require('./components/projects/ProjectForm');
+var ProjectEdit = require('./components/projects/ProjectEdit');
 // debugger
 
 $(function () {
@@ -16,6 +17,7 @@ $(function () {
   var SciTwits = React.createClass({
     render: function (){
       // console.log("inside SciTwits");
+      debugger
       return(
         <div>
           { this.props.children }
@@ -29,13 +31,14 @@ $(function () {
       <IndexRoute component={ProjectsIndex} user_id={root.dataset["user_id"]}>
       </IndexRoute>
       <Route path='projects/form' component={ProjectForm}></Route>
+      <Route path='projects/edit' component={ProjectEdit}></Route>
       <Route path='projects/:id' component={ProjectView}></Route>
     </Route>
   );
 
-  // debugger
 
   if (root) {
+    // debugger
     ReactDOM.render(<Router>{routes}</Router>, root);
   }
   // ReactDOM.render(<div>"This is what I want you to see"</div>, header);

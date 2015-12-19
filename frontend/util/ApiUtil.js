@@ -23,6 +23,20 @@ var ApiUtil = {
       }
     })
   },
+  changeProject: function (proj_data, callback) {
+    debugger
+    $.ajax({
+      type: "PATCH",
+      url: "api/projects/"+proj_data.project.id,
+      data: proj_data,
+      success: function (resp) {
+        // debugger
+        ApiActions.receiveProject(resp);
+        // ProjectForm.afterSubmit(resp.id);
+        callback(resp.id);
+      }
+    })
+  },
   destroyProject: function (proj_id) {
     $.ajax({
       type: "DELETE",

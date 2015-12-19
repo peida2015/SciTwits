@@ -1,8 +1,11 @@
 var React = require('react');
 var ProjectStore = require('../../stores/project');
 var ProjectActions = require('../../actions/ProjectActions');
+// var History = require('react-router').History;
 
 var ProjectsIndex = React.createClass({
+  // mixins:[History],
+
   getInitialState: function () {
     return ({ projects: [] });
   },
@@ -11,6 +14,9 @@ var ProjectsIndex = React.createClass({
     // debugger
     ProjectActions.fetchAllProjects();
     this.listenerToken = ProjectStore.addListener(this.handleStoreChange);
+    window.onpopstate = function (e) {
+
+    }
     // document.addListener("Click", this.handleClick);
   },
 
@@ -31,7 +37,8 @@ var ProjectsIndex = React.createClass({
   handleEditClick: function (e){
     var project = ProjectStore.find(e.target.id);
     if (project) {
-      this.props.history.pushState(null,'#projects/edit', project)
+      // debugger
+      this.props.history.pushState(this.state, 'projects/edit', {id: e.target.id});
     } else {
       alert("project doesn't exist!");
     }
@@ -55,7 +62,7 @@ var ProjectsIndex = React.createClass({
   },
 
   buildProject: function (project, idx) {
-    debugger
+    // debugger
     var buttons = this.buildButtons(project);
     return (
       <div key={idx}>

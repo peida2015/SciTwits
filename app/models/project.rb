@@ -2,6 +2,7 @@ class Project < ActiveRecord::Base
   validates :title, :description, :owner_id, presence: true
   validates :significance, length: { maximum: 1000 }
 
+  has_many :media
   belongs_to :owner,
       class_name: "User",
       primary_key: :id,
