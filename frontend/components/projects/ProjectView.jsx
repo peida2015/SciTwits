@@ -9,24 +9,27 @@ var ProjectView = React.createClass({
   //   ProjectStore.getProject(1);
   // },
   componentDidMount: function () {
+    // debugger
     this.listenerToken = MediaStore.addListener(this.fetchMedia)
   },
 
   componentWillUnmount: function () {
-    this.listenerToken.removeListener()
+    this.listenerToken.remove()
   },
 
   fetchMedia: function () {
     debugger
-    this.media = MediaStore.getProjectMedia(this.props.location.state.project_id);
+    this.media = MediaStore.getProjectMedia(this.props.params.id);
   },
 
   buildProject: function () {
     // debugger
     var cropped_url = "http://res.cloudinary.com/"+CLOUDINARY_OPTIONS.cloud_name+"/image/upload/";
-    var media_tags = this.props.location.state.media.map(function (medium) {
-      return (<img src={cropped_url+ "/w_300,h_300,c_fill/"+medium.medium.link}></img>)
-    });
+    if (this.props.location.state.media) {
+      var media_tags = this.props.location.state.media.map(function (medium, idx) {
+        return (<img key={idx} src={cropped_url+ "/w_300,h_300,c_fill/"+medium.medium.link}></img>)
+      });
+    }
 
     return (
       <div>

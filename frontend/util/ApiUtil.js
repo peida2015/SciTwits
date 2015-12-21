@@ -16,7 +16,7 @@ var ApiUtil = {
       url: "api/projects",
       data: proj_data,
       success: function (resp) {
-        debugger
+        // debugger
         ApiActions.receiveProject(resp);
         // this.saveMedia(proj_data, resp.id)
         callback(resp.id);
@@ -29,15 +29,15 @@ var ApiUtil = {
       url: "api/media",
       data: medium_data,
       success: function (resp) {
-        debugger
-        ApiActions.receiveMedia(resp);
-        callback(resp.id);
+        // debugger
+        ApiActions.receiveMedium(resp);
+        callback(resp.project_id);
       }
     })
   },
 
   changeProject: function (proj_data, callback) {
-    debugger
+    // debugger
     $.ajax({
       type: "PATCH",
       url: "api/projects/"+proj_data.project.id,
@@ -50,7 +50,7 @@ var ApiUtil = {
       }
     })
   },
-  
+
   destroyProject: function (proj_id) {
     $.ajax({
       type: "DELETE",

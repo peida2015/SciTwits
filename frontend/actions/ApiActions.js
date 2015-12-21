@@ -22,7 +22,12 @@ var ApiAction = {
       media: media
     })
   },
-
+  receiveMedium: function (medium){
+    Dispatcher.dispatch({
+      actionType: "MEDIUM_RECEIVED",
+      medium:medium
+    })
+  },
 }
 
 module.exports = ApiAction;

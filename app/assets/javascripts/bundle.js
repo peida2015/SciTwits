@@ -52,8 +52,8 @@
 	// var Link = require('react-router').Link;
 	var ProjectsIndex = __webpack_require__(210);
 	var ProjectView = __webpack_require__(235);
-	var ProjectForm = __webpack_require__(236);
-	var ProjectEdit = __webpack_require__(239);
+	var ProjectForm = __webpack_require__(237);
+	var ProjectEdit = __webpack_require__(240);
 	// debugger
 	
 	$(function () {
@@ -31405,7 +31405,7 @@
 	      url: "api/projects",
 	      data: proj_data,
 	      success: function (resp) {
-	        debugger;
+	        // debugger
 	        ApiActions.receiveProject(resp);
 	        // this.saveMedia(proj_data, resp.id)
 	        callback(resp.id);
@@ -31418,15 +31418,15 @@
 	      url: "api/media",
 	      data: medium_data,
 	      success: function (resp) {
-	        debugger;
-	        ApiActions.receiveMedia(resp);
-	        callback(resp.id);
+	        // debugger
+	        ApiActions.receiveMedium(resp);
+	        callback(resp.project_id);
 	      }
 	    });
 	  },
 	
 	  changeProject: function (proj_data, callback) {
-	    debugger;
+	    // debugger
 	    $.ajax({
 	      type: "PATCH",
 	      url: "api/projects/" + proj_data.project.id,
@@ -31477,8 +31477,13 @@
 	      actionType: "MEDIA_RECEIVED",
 	      media: media
 	    });
+	  },
+	  receiveMedium: function (medium) {
+	    Dispatcher.dispatch({
+	      actionType: "MEDIUM_RECEIVED",
+	      medium: medium
+	    });
 	  }
-	
 	};
 	
 	module.exports = ApiAction;
@@ -31489,7 +31494,7 @@
 
 	var React = __webpack_require__(1);
 	var ProjectStore = __webpack_require__(211);
-	var MediaStore = __webpack_require__(240);
+	var MediaStore = __webpack_require__(236);
 	var ProjectActions = __webpack_require__(232);
 	
 	var ProjectView = React.createClass({
@@ -31500,24 +31505,27 @@
 	  //   ProjectStore.getProject(1);
 	  // },
 	  componentDidMount: function () {
+	    // debugger
 	    this.listenerToken = MediaStore.addListener(this.fetchMedia);
 	  },
 	
 	  componentWillUnmount: function () {
-	    this.listenerToken.removeListener();
+	    this.listenerToken.remove();
 	  },
 	
 	  fetchMedia: function () {
 	    debugger;
-	    this.media = MediaStore.getProjectMedia(this.props.location.state.project_id);
+	    this.media = MediaStore.getProjectMedia(this.props.params.id);
 	  },
 	
 	  buildProject: function () {
 	    // debugger
 	    var cropped_url = "http://res.cloudinary.com/" + CLOUDINARY_OPTIONS.cloud_name + "/image/upload/";
-	    var media_tags = this.props.location.state.media.map(function (medium) {
-	      return React.createElement('img', { src: cropped_url + "/w_300,h_300,c_fill/" + medium.medium.link });
-	    });
+	    if (this.props.location.state.media) {
+	      var media_tags = this.props.location.state.media.map(function (medium, idx) {
+	        return React.createElement('img', { key: idx, src: cropped_url + "/w_300,h_300,c_fill/" + medium.medium.link });
+	      });
+	    }
 	
 	    return React.createElement(
 	      'div',
@@ -31587,11 +31595,59 @@
 /* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var Dispatcher = __webpack_require__(212);
+	var Store = __webpack_require__(216).Store;
+	
+	var _media = [];
+	
+	var MediaStore = new Store(Dispatcher);
+	
+	MediaStore.all = function () {
+	  return _media;
+	};
+	
+	MediaStore.getProjectMedia = function (project_id) {
+	  debugger;
+	  return _media.filter(function (medium) {
+	    return medium.project_id == project_id;
+	  });
+	};
+	
+	MediaStore.resetAllMedia = function (media) {
+	  _media = media;
+	};
+	
+	MediaStore.addMedium = function (medium) {
+	  var medium_idx = _media.indexOf(medium);
+	  if (medium_idx === -1) {
+	    _media.push(medium);
+	  }
+	};
+	
+	MediaStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "MEDIA_RECEIVED":
+	      this.resetAllMedia(payload.media);
+	      MediaStore.__emitChange();
+	      break;
+	    case "MEDIUM_RECEIVED":
+	      this.addMedium(payload.medium);
+	      MediaStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = MediaStore;
+
+/***/ },
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
 	var ProjectActions = __webpack_require__(232);
 	var History = __webpack_require__(159).History;
-	var MediaActions = __webpack_require__(237);
-	var UploadButton = __webpack_require__(238);
+	var MediaActions = __webpack_require__(238);
+	var UploadButton = __webpack_require__(239);
 	
 	var ProjectForm = React.createClass({
 	  displayName: 'ProjectForm',
@@ -31750,7 +31806,7 @@
 	module.exports = ProjectForm;
 
 /***/ },
-/* 237 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ApiUtil = __webpack_require__(233);
@@ -31759,6 +31815,7 @@
 	  saveMedia: function (media_data, callback) {
 	    var proj_id = media_data[1];
 	
+	    //This iterates through each uploaded image and get ApiUtil to send POST request to DB through saveMedium.  Should receive the object back after save.
 	    media_data[0].forEach(function (medium) {
 	      medium.medium.project_id = proj_id;
 	      debugger;
@@ -31773,7 +31830,7 @@
 	module.exports = MediaActions;
 
 /***/ },
-/* 238 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -31803,7 +31860,7 @@
 	// RegEx to match filename at the end of full path: .match(/[^\\/]+\.[^\\/]+$/)[0];
 
 /***/ },
-/* 239 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -31905,41 +31962,6 @@
 	});
 	
 	module.exports = ProjectEdit;
-
-/***/ },
-/* 240 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(212);
-	var Store = __webpack_require__(216).Store;
-	
-	var _media = [];
-	
-	var MediaStore = new Store(Dispatcher);
-	
-	MediaStore.all = function () {
-	  return _media;
-	};
-	
-	MediaStore.getProjectMedia = function (project_id) {
-	  return _media.filter(function (medium) {
-	    return medium.project_id == project_id;
-	  });
-	};
-	
-	MediaStore.resetAllMedia = function (media) {
-	  _media = media;
-	};
-	
-	MediaStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case "MEDIA_RECEIVED":
-	      // debugger
-	      this.resetAllMedia(payload.media);
-	      MediaStore.__emitChange();
-	      break;
-	  }
-	};
 
 /***/ }
 /******/ ]);
