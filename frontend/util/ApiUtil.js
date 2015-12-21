@@ -16,13 +16,26 @@ var ApiUtil = {
       url: "api/projects",
       data: proj_data,
       success: function (resp) {
-        // debugger
+        debugger
         ApiActions.receiveProject(resp);
-        // ProjectForm.afterSubmit(resp.id);
+        // this.saveMedia(proj_data, resp.id)
         callback(resp.id);
       }
     })
   },
+  saveMedium: function (medium_data, callback) {
+    $.ajax({
+      type: "POST",
+      url: "api/media",
+      data: medium_data,
+      success: function (resp) {
+        debugger
+        ApiActions.receiveMedia(resp);
+        callback(resp.id);
+      }
+    })
+  },
+
   changeProject: function (proj_data, callback) {
     debugger
     $.ajax({
@@ -37,6 +50,7 @@ var ApiUtil = {
       }
     })
   },
+  
   destroyProject: function (proj_id) {
     $.ajax({
       type: "DELETE",

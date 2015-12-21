@@ -14,9 +14,6 @@ var ProjectsIndex = React.createClass({
     // debugger
     ProjectActions.fetchAllProjects();
     this.listenerToken = ProjectStore.addListener(this.handleStoreChange);
-    window.onpopstate = function (e) {
-
-    }
     // document.addListener("Click", this.handleClick);
   },
 

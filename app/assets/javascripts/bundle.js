@@ -65,7 +65,7 @@
 	
 	    render: function () {
 	      // console.log("inside SciTwits");
-	      debugger;
+	      // debugger
 	      return React.createElement(
 	        'div',
 	        null,
@@ -24469,7 +24469,6 @@
 	    // debugger
 	    ProjectActions.fetchAllProjects();
 	    this.listenerToken = ProjectStore.addListener(this.handleStoreChange);
-	    window.onpopstate = function (e) {};
 	    // document.addListener("Click", this.handleClick);
 	  },
 	
@@ -31406,13 +31405,26 @@
 	      url: "api/projects",
 	      data: proj_data,
 	      success: function (resp) {
-	        // debugger
+	        debugger;
 	        ApiActions.receiveProject(resp);
-	        // ProjectForm.afterSubmit(resp.id);
+	        // this.saveMedia(proj_data, resp.id)
 	        callback(resp.id);
 	      }
 	    });
 	  },
+	  saveMedium: function (medium_data, callback) {
+	    $.ajax({
+	      type: "POST",
+	      url: "api/media",
+	      data: medium_data,
+	      success: function (resp) {
+	        debugger;
+	        ApiActions.receiveMedia(resp);
+	        callback(resp.id);
+	      }
+	    });
+	  },
+	
 	  changeProject: function (proj_data, callback) {
 	    debugger;
 	    $.ajax({
@@ -31427,6 +31439,7 @@
 	      }
 	    });
 	  },
+	
 	  destroyProject: function (proj_id) {
 	    $.ajax({
 	      type: "DELETE",
@@ -31457,6 +31470,13 @@
 	      actionType: "PROJECT_RECEIVED",
 	      project: project
 	    });
+	  },
+	
+	  receiveMedia: function (media) {
+	    Dispatcher.dispatch({
+	      actionType: "MEDIA_RECEIVED",
+	      media: media
+	    });
 	  }
 	
 	};
@@ -31469,17 +31489,36 @@
 
 	var React = __webpack_require__(1);
 	var ProjectStore = __webpack_require__(211);
+	var MediaStore = __webpack_require__(240);
 	var ProjectActions = __webpack_require__(232);
 	
 	var ProjectView = React.createClass({
 	  displayName: 'ProjectView',
 	
-	  getProject: function () {
+	  // getProject: function () {
+	  //   debugger
+	  //   ProjectStore.getProject(1);
+	  // },
+	  componentDidMount: function () {
+	    this.listenerToken = MediaStore.addListener(this.fetchMedia);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listenerToken.removeListener();
+	  },
+	
+	  fetchMedia: function () {
 	    debugger;
-	    ProjectStore.getProject(1);
+	    this.media = MediaStore.getProjectMedia(this.props.location.state.project_id);
 	  },
 	
 	  buildProject: function () {
+	    // debugger
+	    var cropped_url = "http://res.cloudinary.com/" + CLOUDINARY_OPTIONS.cloud_name + "/image/upload/";
+	    var media_tags = this.props.location.state.media.map(function (medium) {
+	      return React.createElement('img', { src: cropped_url + "/w_300,h_300,c_fill/" + medium.medium.link });
+	    });
+	
 	    return React.createElement(
 	      'div',
 	      null,
@@ -31523,13 +31562,17 @@
 	          'Project Leader:'
 	        ),
 	        '// ',
-	        React.createElement('div', { className: 'leader' })
+	        React.createElement('div', { className: 'leader' }),
+	        React.createElement(
+	          'div',
+	          null,
+	          media_tags
+	        )
 	      )
 	    );
 	  },
 	
 	  render: function () {
-	    debugger;
 	    return React.createElement(
 	      'div',
 	      null,
@@ -31556,21 +31599,29 @@
 	  mixins: [History],
 	
 	  getInitialState: function () {
-	    return { title: "", description: "", significance: "" };
+	    return { uploadResult: "", title: "", description: "", significance: "", media: [] };
 	  },
 	
-	  handleSubmit: function (e) {
-	    debugger;
-	    e.preventDefault();
+	  // componentDidMount: function () {
+	  //   debugger
+	  //   this.addListener("");
+	  // },
 	
-	    // var data = {
-	    //   project : {
-	    //     title: e.target[0].value,
-	    //     description: e.target[1].value,
-	    //     significance: e.target[2].value
-	    //   }
-	    // };
-	    // ProjectActions.createProject(data, this.redirectToShow);
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    var that = this;
+	    var data = {
+	      project: {
+	        title: e.target[0].value,
+	        description: e.target[1].value,
+	        significance: e.target[2].value,
+	        media: this.state.media
+	      }
+	    };
+	    ProjectActions.createProject(data, function (proj_id) {
+	      MediaActions.saveMedia([that.state.media, proj_id], that.redirectToShow);
+	      debugger;
+	    });
 	  },
 	
 	  handleChange: function (e) {
@@ -31591,7 +31642,52 @@
 	    this.props.history.pushState(this.state, 'projects/' + id);
 	  },
 	
+	  uploadCallback: function (error, results) {
+	    if (!error) {
+	      // debugger
+	      results.forEach((function (result) {
+	        var data = { medium: {
+	            public_id: result.public_id,
+	            original_filename: result.original_filename,
+	            link: result.url.match(/[^\\/]+\.[^\\/]+$/)[0],
+	            medium_type: result.resource_type
+	          } };
+	        this.state.media.push(data);
+	      }).bind(this));
+	      this.setState({ uploadResult: "Successfully uploaded: " + results.length + " files" });
+	      // this.props.postImage(results[0]);
+	    } else {
+	        this.setState({ uploadResult: "Something happened during upload.  Try again!" });
+	      }
+	    // debugger
+	    // this.render();
+	    // console.log(results);
+	  },
+	
+	  uploadedTag: function (medium, idx) {
+	    // debugger
+	    var cropped_url = "http://res.cloudinary.com/" + CLOUDINARY_OPTIONS.cloud_name + "/image/upload/";
+	
+	    return React.createElement(
+	      'div',
+	      { key: idx },
+	      medium.medium.original_filename,
+	      React.createElement('img', { src: cropped_url + "/w_150,h_150,c_fill/" + medium.medium.link }),
+	      React.createElement('br', null)
+	    );
+	  },
+	
 	  render: function () {
+	    console.log("Form rendered");
+	
+	    if (this.state.media.length !== 0) {
+	      var uploaded = "Uploaded so far:";
+	      var media_tags = this.state.media.map(this.uploadedTag);
+	    } else {
+	      var uploaded = "";
+	      var media_tags = "";
+	    }
+	
 	    // debugger
 	    return React.createElement(
 	      'div',
@@ -31629,12 +31725,17 @@
 	          'data-name': 'significance',
 	          onChange: this.handleChange }),
 	        React.createElement('br', null),
-	        React.createElement(UploadButton, null),
 	        React.createElement(
 	          'label',
 	          null,
-	          'Upload a photo'
+	          'Upload a photo!'
 	        ),
+	        React.createElement(UploadButton, { uploadCallback: this.uploadCallback }),
+	        this.state.uploadResult,
+	        React.createElement('br', null),
+	        uploaded,
+	        React.createElement('br', null),
+	        media_tags,
 	        React.createElement('br', null),
 	        React.createElement(
 	          'button',
@@ -31650,12 +31751,26 @@
 
 /***/ },
 /* 237 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
+	var ApiUtil = __webpack_require__(233);
 	
 	var MediaActions = {
-	  fetchMedium: function (id) {}
+	  saveMedia: function (media_data, callback) {
+	    var proj_id = media_data[1];
+	
+	    media_data[0].forEach(function (medium) {
+	      medium.medium.project_id = proj_id;
+	      debugger;
+	      ApiUtil.saveMedium(medium, function (proj_id) {
+	        console.log("medium saved for: " + proj_id);
+	      });
+	      callback(proj_id);
+	    });
+	  }
 	};
+	
+	module.exports = MediaActions;
 
 /***/ },
 /* 238 */
@@ -31668,15 +31783,7 @@
 	
 	  upload: function (e) {
 	    e.preventDefault();
-	    debugger;
-	    cloudinary.openUploadWidget(CLOUDINARY_OPTIONS, (function (error, results) {
-	      debugger;
-	      results.public;
-	      console.log(results);
-	      // if(!error){
-	      //   this.props.postImage(results[0]);
-	      // }
-	    }).bind(this));
+	    cloudinary.openUploadWidget(CLOUDINARY_OPTIONS, this.props.uploadCallback);
 	  },
 	  render: function () {
 	    return React.createElement(
@@ -31692,6 +31799,8 @@
 	});
 	
 	module.exports = UploadButton;
+	
+	// RegEx to match filename at the end of full path: .match(/[^\\/]+\.[^\\/]+$/)[0];
 
 /***/ },
 /* 239 */
@@ -31796,6 +31905,41 @@
 	});
 	
 	module.exports = ProjectEdit;
+
+/***/ },
+/* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(212);
+	var Store = __webpack_require__(216).Store;
+	
+	var _media = [];
+	
+	var MediaStore = new Store(Dispatcher);
+	
+	MediaStore.all = function () {
+	  return _media;
+	};
+	
+	MediaStore.getProjectMedia = function (project_id) {
+	  return _media.filter(function (medium) {
+	    return medium.project_id == project_id;
+	  });
+	};
+	
+	MediaStore.resetAllMedia = function (media) {
+	  _media = media;
+	};
+	
+	MediaStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "MEDIA_RECEIVED":
+	      // debugger
+	      this.resetAllMedia(payload.media);
+	      MediaStore.__emitChange();
+	      break;
+	  }
+	};
 
 /***/ }
 /******/ ]);

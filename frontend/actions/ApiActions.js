@@ -16,6 +16,13 @@ var ApiAction = {
     })
   },
 
+  receiveMedia: function (media){
+    Dispatcher.dispatch({
+      actionType: "MEDIA_RECEIVED",
+      media: media
+    })
+  },
+
 }
 
 module.exports = ApiAction;

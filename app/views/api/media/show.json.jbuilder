@@ -1,1 +1,1 @@
-json.extract! @project :url, :project_id, :type
+json.extract! @medium, :link, :project_id, :medium_type

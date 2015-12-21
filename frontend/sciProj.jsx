@@ -17,7 +17,7 @@ $(function () {
   var SciTwits = React.createClass({
     render: function (){
       // console.log("inside SciTwits");
-      debugger
+      // debugger
       return(
         <div>
           { this.props.children }

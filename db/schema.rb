@@ -17,11 +17,11 @@ ActiveRecord::Schema.define(version: 20151218220402) do
   enable_extension "plpgsql"
 
   create_table "media", force: :cascade do |t|
-    t.string   "link",       null: false
-    t.string   "type",       null: false
-    t.integer  "project_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "link",        null: false
+    t.string   "medium_type", null: false
+    t.integer  "project_id",  null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   add_index "media", ["project_id"], name: "index_media_on_project_id", using: :btree
