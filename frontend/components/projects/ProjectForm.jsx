@@ -100,6 +100,7 @@ var ProjectForm = React.createClass({
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
+          <a href="#/"><h5>Back to Index</h5></a>
           <label>Title:</label>
           <input type="text" value={this.state.title}
                   onChange={this.handleChange}
@@ -124,7 +125,7 @@ var ProjectForm = React.createClass({
                 {uploaded}<br></br>
                 {media_tags}
           <br></br>
-          <button>Make Your Research Seen!</button>
+          <button>Share Your Progress</button>
         </form>
       </div>
     )

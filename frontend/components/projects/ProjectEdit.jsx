@@ -50,6 +50,7 @@ var ProjectEdit = React.createClass({
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
+          <a href="#/"><h5>Back to Index</h5></a>
           <label>Title:</label>
           <input type="text" value={this.state.title}
                   onChange={this.handleChange}
@@ -67,7 +68,7 @@ var ProjectEdit = React.createClass({
                     value={this.state.significance}
                     data-name="significance"
                     onChange={this.handleChange}></textarea>
-          <button>Make Your Research Seen!</button>
+                  <button>Update Project!</button>
         </form>
       </div>
     )

@@ -23,7 +23,7 @@ var ProjectView = React.createClass({
     this.MediaToken = MediaStore.addListener(this.fetchMedia);
     this.TwitsToken = TwitsStore.addListener(this.fetchTwits);
     this.ProjectToken = ProjectStore.addListener(this.parseProject);
-      debugger
+
       // }.bind(this));
     TwitsActions.fetchTwits(this.props.params.id);
     ProjectActions.fetchAllProjects();
@@ -34,7 +34,6 @@ var ProjectView = React.createClass({
 
   parseProject: function () {
     var project = ProjectStore.find(this.props.params.id);
-    debugger
     this.setState({
       title: project.title,
       description: project.description,
@@ -54,13 +53,13 @@ var ProjectView = React.createClass({
   },
 
   fetchTwits: function () {
-    // debugger
+
     this.setState({ twits: TwitsStore.getProjectTwits(this.props.params.id) });
     // this.render()
   },
 
   buildProject: function () {
-    // debugger
+
     var cropped_url = "http://res.cloudinary.com/"+CLOUDINARY_OPTIONS.cloud_name+"/image/upload/";
     if (this.props.location.state.media) {
       var media_tags = this.props.location.state.media.map(function (medium, idx) {
