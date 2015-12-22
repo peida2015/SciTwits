@@ -6,12 +6,12 @@ var TwitsActions = {
   },
 
   fetchTwits : function (project_id) {
-    ApiUtil.fetchTwits(project_id);
-  }
+    ApiUtil.fetchTwits(project_id)
+  },
 
-  // deleteTwit: function (id) {
-  //   ApiUtil.deleteTwit
-  // }
+  deleteTwit: function (id) {
+    ApiUtil.deleteTwit(id)
+  }
 
 }
 

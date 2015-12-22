@@ -22,19 +22,24 @@ var ProjectView = React.createClass({
   componentDidMount: function () {
     this.MediaToken = MediaStore.addListener(this.fetchMedia);
     this.TwitsToken = TwitsStore.addListener(this.fetchTwits);
-      // debugger
+    this.ProjectToken = ProjectStore.addListener(this.parseProject);
+      debugger
       // }.bind(this));
     TwitsActions.fetchTwits(this.props.params.id);
     ProjectActions.fetchAllProjects();
     MediaActions.fetchMedia(this.props.params.id);
+    // this.fetchTwits();
+    // this.fetchMedia();
+  },
+
+  parseProject: function () {
     var project = ProjectStore.find(this.props.params.id);
+    debugger
     this.setState({
       title: project.title,
       description: project.description,
       significance: project.significance
     })
-    // this.fetchTwits();
-    // this.fetchMedia();
   },
 
   componentWillUnmount: function () {
@@ -88,6 +93,7 @@ var ProjectView = React.createClass({
 console.log("ProjectView");
     return(
       <div className="container">
+        <a href="#/"><h5>Back to Index</h5></a>
         {this.buildProject()}
         <TwitForm project_id={this.props.params.id}/>
         <Twits twits={this.state.twits}/>

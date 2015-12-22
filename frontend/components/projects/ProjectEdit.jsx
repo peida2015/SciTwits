@@ -9,14 +9,12 @@ var ProjectEdit = React.createClass({
     var project = this.props.location.state.projects.find(function(project){
       return this.props.location.query.id == project.id
     }.bind(this));
-    debugger
     return ({ title: project.title,
               description: project.description,
               significance: project.significance})
   },
 
   handleSubmit: function(e) {
-    debugger
     e.preventDefault();
     var data = {
       project : {
@@ -30,7 +28,7 @@ var ProjectEdit = React.createClass({
   },
 
   handleChange: function (e) {
-    // debugger
+
     // this.setState({ e.target.dataset["name"] : e.target.value});
     if (e.target.dataset["name"]==="title") {
       this.setState({title : e.target.value })
@@ -39,7 +37,7 @@ var ProjectEdit = React.createClass({
     } else {
       this.setState({significance : e.target.value })
     }
-    // debugger;
+    ;
     // this.setState(e.target.value
   },
 
@@ -48,7 +46,7 @@ var ProjectEdit = React.createClass({
   },
 
   render: function () {
-    // debugger
+
     return (
       <div>
         <form onSubmit={this.handleSubmit}>

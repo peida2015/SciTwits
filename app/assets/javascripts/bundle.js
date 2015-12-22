@@ -51,9 +51,9 @@
 	var IndexRoute = __webpack_require__(159).IndexRoute;
 	// var Link = require('react-router').Link;
 	var ProjectsIndex = __webpack_require__(210);
-	var ProjectView = __webpack_require__(235);
-	var ProjectForm = __webpack_require__(243);
-	var ProjectEdit = __webpack_require__(245);
+	var ProjectView = __webpack_require__(234);
+	var ProjectForm = __webpack_require__(242);
+	var ProjectEdit = __webpack_require__(244);
 	// debugger
 	
 	$(function () {
@@ -24612,10 +24612,11 @@
 	  return _projects;
 	};
 	
-	ProjectStore.find = function (id) {
+	ProjectStore.find = function (id, callback) {
 	  return _projects.find(function (project) {
 	    return project.id == id;
 	  });
+	
 	  // debugger
 	}, ProjectStore.resetAllProjects = function (projects) {
 	  _projects = projects;
@@ -31387,7 +31388,7 @@
 /* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ApiActions = __webpack_require__(234);
+	var ApiActions = __webpack_require__(245);
 	// var ProjectForm = require('../components/projects/ProjectForm');
 	
 	var ApiUtil = {
@@ -31452,41 +31453,31 @@
 	      type: "POST",
 	      url: "api/twits",
 	      data: twit_data,
-	      success: function (resp) {
-	        // debugger
-	        ApiActions.receiveTwit(resp);
-	        // callback(resp.project_id);
-	      }
+	      success: ApiActions.receiveTwit
 	      // error: function (resp){
 	      //   console.log(resp);
 	      // }
 	    });
 	  },
 	
-	  // deleteTwit: function (twit_id, callback) {
-	  //   $.ajax({
-	  //     type: "DELETE",
-	  //     url: "api/twits",
-	  //     id: twit_id,
-	  // success: function (resp) {
-	  // debugger
-	  // ApiActions.deleteTwit(resp);
-	  // callback(resp.project_id);
-	  // }
-	  // error: function (resp){
-	  //   console.log(resp);
-	  // }
-	  //   })
-	  // },
+	  deleteTwit: function (twit_id) {
+	    $.ajax({
+	      type: "DELETE",
+	      url: "api/twits/" + twit_id,
+	      success: ApiActions.receiveTwits
+	      // callback(resp.project_id);
+	      // error: function (resp){
+	      //   console.log(resp);
+	      // }
+	    });
+	  },
 	
 	  changeProject: function (proj_data, callback) {
-	    // debugger
 	    $.ajax({
 	      type: "PATCH",
 	      url: "api/projects/" + proj_data.project.id,
 	      data: proj_data,
 	      success: function (resp) {
-	        // debugger
 	        ApiActions.receiveProject(resp);
 	        // ProjectForm.afterSubmit(resp.id);
 	        callback(resp.id);
@@ -31509,64 +31500,15 @@
 /* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(212);
-	
-	var ApiAction = {
-	  receiveAllProjects: function (projects) {
-	    Dispatcher.dispatch({
-	      actionType: "PROJECTS_RECEIVED",
-	      projects: projects
-	    });
-	  },
-	
-	  receiveProject: function (project) {
-	    Dispatcher.dispatch({
-	      actionType: "PROJECT_RECEIVED",
-	      project: project
-	    });
-	  },
-	
-	  receiveMedia: function (media) {
-	    Dispatcher.dispatch({
-	      actionType: "MEDIA_RECEIVED",
-	      media: media
-	    });
-	  },
-	  receiveMedium: function (medium) {
-	    Dispatcher.dispatch({
-	      actionType: "MEDIUM_RECEIVED",
-	      medium: medium
-	    });
-	  },
-	  receiveTwits: function (twits) {
-	    Dispatcher.dispatch({
-	      actionType: "TWITS_RECEIVED",
-	      twits: twits
-	    });
-	  },
-	  receiveTwit: function (twit) {
-	    Dispatcher.dispatch({
-	      actionType: "TWIT_RECEIVED",
-	      twit: twit
-	    });
-	  }
-	};
-	
-	module.exports = ApiAction;
-
-/***/ },
-/* 235 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var React = __webpack_require__(1);
 	var ProjectStore = __webpack_require__(211);
-	var MediaStore = __webpack_require__(236);
-	var TwitsStore = __webpack_require__(237);
+	var MediaStore = __webpack_require__(235);
+	var TwitsStore = __webpack_require__(236);
 	var ProjectActions = __webpack_require__(232);
-	var TwitForm = __webpack_require__(238);
-	var Twits = __webpack_require__(240);
-	var TwitsActions = __webpack_require__(239);
-	var MediaActions = __webpack_require__(242);
+	var TwitForm = __webpack_require__(237);
+	var Twits = __webpack_require__(239);
+	var TwitsActions = __webpack_require__(238);
+	var MediaActions = __webpack_require__(241);
 	
 	var ProjectView = React.createClass({
 	  displayName: 'ProjectView',
@@ -31583,19 +31525,24 @@
 	  componentDidMount: function () {
 	    this.MediaToken = MediaStore.addListener(this.fetchMedia);
 	    this.TwitsToken = TwitsStore.addListener(this.fetchTwits);
-	    // debugger
+	    this.ProjectToken = ProjectStore.addListener(this.parseProject);
+	    debugger;
 	    // }.bind(this));
 	    TwitsActions.fetchTwits(this.props.params.id);
 	    ProjectActions.fetchAllProjects();
 	    MediaActions.fetchMedia(this.props.params.id);
+	    // this.fetchTwits();
+	    // this.fetchMedia();
+	  },
+	
+	  parseProject: function () {
 	    var project = ProjectStore.find(this.props.params.id);
+	    debugger;
 	    this.setState({
 	      title: project.title,
 	      description: project.description,
 	      significance: project.significance
 	    });
-	    // this.fetchTwits();
-	    // this.fetchMedia();
 	  },
 	
 	  componentWillUnmount: function () {
@@ -31680,6 +31627,15 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'container' },
+	      React.createElement(
+	        'a',
+	        { href: '#/' },
+	        React.createElement(
+	          'h5',
+	          null,
+	          'Back to Index'
+	        )
+	      ),
 	      this.buildProject(),
 	      React.createElement(TwitForm, { project_id: this.props.params.id }),
 	      React.createElement(Twits, { twits: this.state.twits })
@@ -31690,7 +31646,7 @@
 	module.exports = ProjectView;
 
 /***/ },
-/* 236 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(212);
@@ -31738,7 +31694,7 @@
 	module.exports = MediaStore;
 
 /***/ },
-/* 237 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(212);
@@ -31764,7 +31720,6 @@
 	};
 	
 	TwitsStore.addTwit = function (twit) {
-	  // debugger
 	  var twit_idx = _twits.indexOf(twit);
 	  if (twit_idx === -1) {
 	    _twits.push(twit);
@@ -31774,7 +31729,6 @@
 	TwitsStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case "TWITS_RECEIVED":
-	      debugger;
 	      this.resetAllTwits(payload.twits);
 	      TwitsStore.__emitChange();
 	      break;
@@ -31788,11 +31742,11 @@
 	module.exports = TwitsStore;
 
 /***/ },
-/* 238 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var TwitsActions = __webpack_require__(239);
+	var TwitsActions = __webpack_require__(238);
 	
 	var TwitForm = React.createClass({
 	  displayName: 'TwitForm',
@@ -31835,7 +31789,7 @@
 	module.exports = TwitForm;
 
 /***/ },
-/* 239 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ApiUtil = __webpack_require__(233);
@@ -31847,22 +31801,22 @@
 	
 	  fetchTwits: function (project_id) {
 	    ApiUtil.fetchTwits(project_id);
-	  }
+	  },
 	
-	  // deleteTwit: function (id) {
-	  //   ApiUtil.deleteTwit
-	  // }
+	  deleteTwit: function (id) {
+	    ApiUtil.deleteTwit(id);
+	  }
 	
 	};
 	
 	module.exports = TwitsActions;
 
 /***/ },
-/* 240 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var TwitItem = __webpack_require__(241);
+	var TwitItem = __webpack_require__(240);
 	// var TwitsStore = require('../../stores/twit');
 	
 	var Twits = React.createClass({
@@ -31892,25 +31846,34 @@
 	module.exports = Twits;
 
 /***/ },
-/* 241 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var TwitsActions = __webpack_require__(238);
 	
 	var TwitItem = React.createClass({
-	  displayName: "TwitItem",
+	  displayName: 'TwitItem',
+	
+	  handleDelete: function (e) {
+	    TwitsActions.deleteTwit(e.target.id);
+	  },
 	
 	  render: function () {
-	    // debugger
 	    return React.createElement(
-	      "div",
-	      { className: "twit" },
+	      'div',
+	      { className: 'twit' },
 	      this.props.twit.body,
-	      " ",
-	      React.createElement("br", null),
-	      "by: ",
+	      React.createElement(
+	        'button',
+	        { className: 'delete', onClick: this.handleDelete,
+	          id: this.props.twit.id },
+	        'Delete'
+	      ),
+	      React.createElement('br', null),
+	      'by: ',
 	      this.props.twit.user,
-	      React.createElement("br", null)
+	      React.createElement('br', null)
 	    );
 	  }
 	});
@@ -31918,7 +31881,7 @@
 	module.exports = TwitItem;
 
 /***/ },
-/* 242 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ApiUtil = __webpack_require__(233);
@@ -31945,14 +31908,14 @@
 	module.exports = MediaActions;
 
 /***/ },
-/* 243 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ProjectActions = __webpack_require__(232);
 	var History = __webpack_require__(159).History;
-	var MediaActions = __webpack_require__(242);
-	var UploadButton = __webpack_require__(244);
+	var MediaActions = __webpack_require__(241);
+	var UploadButton = __webpack_require__(243);
 	
 	var ProjectForm = React.createClass({
 	  displayName: 'ProjectForm',
@@ -32111,7 +32074,7 @@
 	module.exports = ProjectForm;
 
 /***/ },
-/* 244 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32141,7 +32104,7 @@
 	// RegEx to match filename at the end of full path: .match(/[^\\/]+\.[^\\/]+$/)[0];
 
 /***/ },
-/* 245 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32157,14 +32120,12 @@
 	    var project = this.props.location.state.projects.find((function (project) {
 	      return this.props.location.query.id == project.id;
 	    }).bind(this));
-	    debugger;
 	    return { title: project.title,
 	      description: project.description,
 	      significance: project.significance };
 	  },
 	
 	  handleSubmit: function (e) {
-	    debugger;
 	    e.preventDefault();
 	    var data = {
 	      project: {
@@ -32178,7 +32139,7 @@
 	  },
 	
 	  handleChange: function (e) {
-	    // debugger
+	
 	    // this.setState({ e.target.dataset["name"] : e.target.value});
 	    if (e.target.dataset["name"] === "title") {
 	      this.setState({ title: e.target.value });
@@ -32187,7 +32148,7 @@
 	    } else {
 	      this.setState({ significance: e.target.value });
 	    }
-	    // debugger;
+	    ;
 	    // this.setState(e.target.value
 	  },
 	
@@ -32196,7 +32157,7 @@
 	  },
 	
 	  render: function () {
-	    // debugger
+	
 	    return React.createElement(
 	      'div',
 	      null,
@@ -32243,6 +32204,55 @@
 	});
 	
 	module.exports = ProjectEdit;
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(212);
+	
+	var ApiAction = {
+	  receiveAllProjects: function (projects) {
+	    Dispatcher.dispatch({
+	      actionType: "PROJECTS_RECEIVED",
+	      projects: projects
+	    });
+	  },
+	
+	  receiveProject: function (project) {
+	    Dispatcher.dispatch({
+	      actionType: "PROJECT_RECEIVED",
+	      project: project
+	    });
+	  },
+	
+	  receiveMedia: function (media) {
+	    Dispatcher.dispatch({
+	      actionType: "MEDIA_RECEIVED",
+	      media: media
+	    });
+	  },
+	  receiveMedium: function (medium) {
+	    Dispatcher.dispatch({
+	      actionType: "MEDIUM_RECEIVED",
+	      medium: medium
+	    });
+	  },
+	  receiveTwits: function (twits) {
+	    Dispatcher.dispatch({
+	      actionType: "TWITS_RECEIVED",
+	      twits: twits
+	    });
+	  },
+	  receiveTwit: function (twit) {
+	    Dispatcher.dispatch({
+	      actionType: "TWIT_RECEIVED",
+	      twit: twit
+	    });
+	  }
+	};
+	
+	module.exports = ApiAction;
 
 /***/ }
 /******/ ]);

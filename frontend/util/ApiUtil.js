@@ -63,41 +63,31 @@ var ApiUtil = {
       type: "POST",
       url: "api/twits",
       data: twit_data,
-      success: function (resp) {
-        // debugger
-        ApiActions.receiveTwit(resp);
-        // callback(resp.project_id);
-      }
+      success: ApiActions.receiveTwit
       // error: function (resp){
       //   console.log(resp);
       // }
     })
   },
 
-  // deleteTwit: function (twit_id, callback) {
-  //   $.ajax({
-  //     type: "DELETE",
-  //     url: "api/twits",
-  //     id: twit_id,
-      // success: function (resp) {
-        // debugger
-        // ApiActions.deleteTwit(resp);
+  deleteTwit: function (twit_id) {
+    $.ajax({
+      type: "DELETE",
+      url: "api/twits/"+twit_id,
+      success: ApiActions.receiveTwits
         // callback(resp.project_id);
-      // }
       // error: function (resp){
       //   console.log(resp);
       // }
-  //   })
-  // },
+    })
+  },
 
   changeProject: function (proj_data, callback) {
-    // debugger
     $.ajax({
       type: "PATCH",
       url: "api/projects/"+proj_data.project.id,
       data: proj_data,
       success: function (resp) {
-        // debugger
         ApiActions.receiveProject(resp);
         // ProjectForm.afterSubmit(resp.id);
         callback(resp.id);

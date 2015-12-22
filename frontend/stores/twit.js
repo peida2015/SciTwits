@@ -21,7 +21,6 @@ TwitsStore.resetAllTwits = function (twits) {
 };
 
 TwitsStore.addTwit = function (twit) {
-  // debugger
   var twit_idx = _twits.indexOf(twit)
   if (twit_idx === -1) {
     _twits.push(twit)
@@ -31,7 +30,6 @@ TwitsStore.addTwit = function (twit) {
 TwitsStore.__onDispatch = function (payload) {
   switch (payload.actionType) {
     case "TWITS_RECEIVED":
-    debugger
       this.resetAllTwits(payload.twits);
       TwitsStore.__emitChange();
       break;

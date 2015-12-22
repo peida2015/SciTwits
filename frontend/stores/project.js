@@ -9,10 +9,11 @@ ProjectStore.all = function () {
   return _projects;
 };
 
-ProjectStore.find = function (id){
+ProjectStore.find = function (id, callback){
   return _projects.find(function (project){
     return (project.id == id)
   })
+
   // debugger
 },
 

@@ -22,7 +22,9 @@ class Api::TwitsController < ApplicationController
 
   def destroy
     @twit = Twit.find(params[:id])
-    render :show
+    @twit.destroy
+    @twits = Project.find(@twit.project_id).twits
+    render :index
   end
 
   private
