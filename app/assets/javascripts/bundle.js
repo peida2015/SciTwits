@@ -24465,11 +24465,10 @@
 	    return { projects: [] };
 	  },
 	
-	  redirectToView: function (e) {
-	    // debugger
-	    e.preventDefault();
-	    var project_id = e.target.parentElement.dataset.project_id;
-	    this.props.history.pushState(this.state, 'projects/' + project_id);
+	  redirectToView: function (id) {
+	    // debugger;
+	    // e.preventDefault();
+	    this.props.history.pushState(this.state, 'projects/' + id);
 	  },
 	
 	  componentDidMount: function () {
@@ -24532,7 +24531,7 @@
 	      { key: idx },
 	      React.createElement(
 	        'div',
-	        { className: 'project', onClick: this.redirectToView, 'data-project_id': project.id },
+	        { className: 'project', onClick: this.redirectToView.bind(null, project.id) },
 	        React.createElement(
 	          'strong',
 	          null,
