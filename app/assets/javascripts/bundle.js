@@ -51,8 +51,8 @@
 	var IndexRoute = __webpack_require__(159).IndexRoute;
 	// var Link = require('react-router').Link;
 	var ProjectsIndex = __webpack_require__(210);
-	var ProjectView = __webpack_require__(211);
-	var ProjectForm = __webpack_require__(242);
+	var ProjectView = __webpack_require__(235);
+	var ProjectForm = __webpack_require__(243);
 	var ProjectEdit = __webpack_require__(245);
 	// debugger
 	
@@ -24452,8 +24452,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ProjectStore = __webpack_require__(212);
-	var ProjectActions = __webpack_require__(235);
+	var ProjectStore = __webpack_require__(211);
+	var ProjectActions = __webpack_require__(232);
 	// var History = require('react-router').History;
 	
 	var ProjectsIndex = React.createClass({
@@ -24609,151 +24609,8 @@
 /* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
-	var ProjectStore = __webpack_require__(212);
-	var MediaStore = __webpack_require__(233);
-	var TwitsStore = __webpack_require__(234);
-	var ProjectActions = __webpack_require__(235);
-	var TwitForm = __webpack_require__(238);
-	var Twits = __webpack_require__(240);
-	var TwitsActions = __webpack_require__(239);
-	var MediaActions = __webpack_require__(243);
-	
-	var ProjectView = React.createClass({
-	  displayName: 'ProjectView',
-	
-	  getInitialState: function () {
-	    return { title: "", description: "", significance: "", media: "", twits: "" };
-	  },
-	  //return find result from store using this.props.params.id
-	
-	  // getProject: function () {
-	  // },
-	  //fetch projects on mount
-	
-	  componentDidMount: function () {
-	    this.MediaToken = MediaStore.addListener(this.fetchMedia);
-	    this.TwitsToken = TwitsStore.addListener(this.fetchTwits);
-	    // debugger
-	    // }.bind(this));
-	    TwitsActions.fetchTwits(this.props.params.id);
-	    ProjectActions.fetchAllProjects();
-	    MediaActions.fetchMedia(this.props.params.id);
-	    var project = ProjectStore.find(this.props.params.id);
-	    this.setState({
-	      title: project.title,
-	      description: project.description,
-	      significance: project.significance
-	    });
-	    // this.fetchTwits();
-	    // this.fetchMedia();
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.MediaToken.remove();
-	    this.TwitsToken.remove();
-	  },
-	
-	  fetchMedia: function () {
-	    console.log("Fetched");
-	    this.setState({ media: MediaStore.getProjectMedia(this.props.params.id) });
-	    // this.render()
-	  },
-	
-	  fetchTwits: function () {
-	    // debugger
-	    this.setState({ twits: TwitsStore.getProjectTwits(this.props.params.id) });
-	    // this.render()
-	  },
-	
-	  buildProject: function () {
-	    // debugger
-	    var cropped_url = "http://res.cloudinary.com/" + CLOUDINARY_OPTIONS.cloud_name + "/image/upload/";
-	    if (this.props.location.state.media) {
-	      var media_tags = this.props.location.state.media.map(function (medium, idx) {
-	        return React.createElement('img', { key: idx, src: cropped_url + "/w_300,h_300,c_fill/" + medium.medium.link });
-	      });
-	    }
-	    //get project info from this.state.project
-	    //check if this.state.project is undefined
-	    //if so return empty div or loading or spinner
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { className: 'project' },
-	        React.createElement(
-	          'strong',
-	          null,
-	          'Title:'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'title' },
-	          this.state.title
-	        ),
-	        React.createElement(
-	          'strong',
-	          null,
-	          'Description:'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'description' },
-	          this.state.description
-	        ),
-	        React.createElement(
-	          'strong',
-	          null,
-	          'Significance:'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'significance' },
-	          this.state.significance
-	        ),
-	        '// ',
-	        React.createElement(
-	          'strong',
-	          null,
-	          'Project Leader:'
-	        ),
-	        '// ',
-	        React.createElement('div', { className: 'leader' }),
-	        React.createElement(
-	          'div',
-	          null,
-	          media_tags
-	        )
-	      )
-	    );
-	  },
-	
-	  // sendTwits: function () {
-	  //   return this.state.twits !== undefined ? this.state.twits : (<div>loading...</div>)
-	  // },
-	
-	  render: function () {
-	    console.log("ProjectView");
-	    return React.createElement(
-	      'div',
-	      null,
-	      this.buildProject(),
-	      React.createElement(TwitForm, { project_id: this.props.params.id }),
-	      React.createElement(Twits, { twits: this.state.twits })
-	    );
-	  }
-	});
-	
-	module.exports = ProjectView;
-
-/***/ },
-/* 212 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(213);
-	var Store = __webpack_require__(217).Store;
+	var Dispatcher = __webpack_require__(212);
+	var Store = __webpack_require__(216).Store;
 	
 	var _projects = [];
 	
@@ -24802,17 +24659,17 @@
 	module.exports = ProjectStore;
 
 /***/ },
-/* 213 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(214).Dispatcher;
+	var Dispatcher = __webpack_require__(213).Dispatcher;
 	
 	var AppDispatcher = new Dispatcher();
 	
 	module.exports = AppDispatcher;
 
 /***/ },
-/* 214 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24824,11 +24681,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(215);
+	module.exports.Dispatcher = __webpack_require__(214);
 
 
 /***/ },
-/* 215 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24850,7 +24707,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(215);
 	
 	var _prefix = 'ID_';
 	
@@ -25065,7 +24922,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 216 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25120,7 +24977,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 217 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25132,15 +24989,15 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(218);
-	module.exports.MapStore = __webpack_require__(221);
-	module.exports.Mixin = __webpack_require__(232);
-	module.exports.ReduceStore = __webpack_require__(222);
-	module.exports.Store = __webpack_require__(223);
+	module.exports.Container = __webpack_require__(217);
+	module.exports.MapStore = __webpack_require__(220);
+	module.exports.Mixin = __webpack_require__(231);
+	module.exports.ReduceStore = __webpack_require__(221);
+	module.exports.Store = __webpack_require__(222);
 
 
 /***/ },
-/* 218 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25162,10 +25019,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(219);
+	var FluxStoreGroup = __webpack_require__(218);
 	
-	var invariant = __webpack_require__(216);
-	var shallowEqual = __webpack_require__(220);
+	var invariant = __webpack_require__(215);
+	var shallowEqual = __webpack_require__(219);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -25323,7 +25180,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 219 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25342,7 +25199,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(215);
 	
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -25404,7 +25261,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 220 */
+/* 219 */
 /***/ function(module, exports) {
 
 	/**
@@ -25459,7 +25316,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 221 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25480,10 +25337,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(222);
-	var Immutable = __webpack_require__(231);
+	var FluxReduceStore = __webpack_require__(221);
+	var Immutable = __webpack_require__(230);
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(215);
 	
 	/**
 	 * This is a simple store. It allows caching key value pairs. An implementation
@@ -25609,7 +25466,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 222 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25630,10 +25487,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(223);
+	var FluxStore = __webpack_require__(222);
 	
-	var abstractMethod = __webpack_require__(230);
-	var invariant = __webpack_require__(216);
+	var abstractMethod = __webpack_require__(229);
+	var invariant = __webpack_require__(215);
 	
 	var FluxReduceStore = (function (_FluxStore) {
 	  _inherits(FluxReduceStore, _FluxStore);
@@ -25716,7 +25573,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 223 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25735,11 +25592,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(224);
+	var _require = __webpack_require__(223);
 	
 	var EventEmitter = _require.EventEmitter;
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(215);
 	
 	/**
 	 * This class should be extended by the stores in your application, like so:
@@ -25899,7 +25756,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 224 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25912,14 +25769,14 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(225)
+	  EventEmitter: __webpack_require__(224)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 225 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25938,11 +25795,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(226);
-	var EventSubscriptionVendor = __webpack_require__(228);
+	var EmitterSubscription = __webpack_require__(225);
+	var EventSubscriptionVendor = __webpack_require__(227);
 	
-	var emptyFunction = __webpack_require__(229);
-	var invariant = __webpack_require__(216);
+	var emptyFunction = __webpack_require__(228);
+	var invariant = __webpack_require__(215);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -26116,7 +25973,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 226 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26137,7 +25994,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(227);
+	var EventSubscription = __webpack_require__(226);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -26169,7 +26026,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 227 */
+/* 226 */
 /***/ function(module, exports) {
 
 	/**
@@ -26220,7 +26077,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 228 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26239,7 +26096,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(215);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -26329,7 +26186,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 229 */
+/* 228 */
 /***/ function(module, exports) {
 
 	/**
@@ -26372,7 +26229,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 230 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26389,7 +26246,7 @@
 	
 	'use strict';
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(215);
 	
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
@@ -26399,7 +26256,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 231 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31386,7 +31243,7 @@
 	}));
 
 /***/ },
-/* 232 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -31403,9 +31260,9 @@
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(219);
+	var FluxStoreGroup = __webpack_require__(218);
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(215);
 	
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
@@ -31509,108 +31366,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 233 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(213);
-	var Store = __webpack_require__(217).Store;
-	
-	var _media = [];
-	
-	var MediaStore = new Store(Dispatcher);
-	
-	MediaStore.all = function () {
-	  return _media;
-	};
-	
-	MediaStore.getProjectMedia = function (project_id) {
-	  debugger;
-	  return _media.filter(function (medium) {
-	    return medium.project_id == project_id;
-	  });
-	};
-	
-	MediaStore.resetAllMedia = function (media) {
-	  _media = media;
-	};
-	
-	MediaStore.addMedium = function (medium) {
-	  var medium_idx = _media.indexOf(medium);
-	  if (medium_idx === -1) {
-	    _media.push(medium);
-	  }
-	};
-	
-	MediaStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case "MEDIA_RECEIVED":
-	      this.resetAllMedia(payload.media);
-	      MediaStore.__emitChange();
-	      break;
-	    case "MEDIUM_RECEIVED":
-	      this.addMedium(payload.medium);
-	      MediaStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = MediaStore;
-
-/***/ },
-/* 234 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(213);
-	var Store = __webpack_require__(217).Store;
-	
-	var _twits = [];
-	
-	var TwitsStore = new Store(Dispatcher);
-	
-	TwitsStore.all = function () {
-	  return _twits;
-	};
-	
-	TwitsStore.getProjectTwits = function (project_id) {
-	  return _twits.filter(function (twit) {
-	    // debugger
-	    return twit.project_id == project_id;
-	  });
-	};
-	
-	TwitsStore.resetAllTwits = function (twits) {
-	  _twits = twits;
-	};
-	
-	TwitsStore.addTwit = function (twit) {
-	  // debugger
-	  var twit_idx = _twits.indexOf(twit);
-	  if (twit_idx === -1) {
-	    _twits.push(twit);
-	  }
-	};
-	
-	TwitsStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case "TWITS_RECEIVED":
-	      debugger;
-	      this.resetAllTwits(payload.twits);
-	      TwitsStore.__emitChange();
-	      break;
-	    case "TWIT_RECEIVED":
-	      this.addTwit(payload.twit);
-	      TwitsStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = TwitsStore;
-
-/***/ },
-/* 235 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ApiUtil = __webpack_require__(236);
+	var ApiUtil = __webpack_require__(233);
 	
 	var ProjectActions = {
 	  fetchAllProjects: function () {
@@ -31633,10 +31392,10 @@
 	module.exports = ProjectActions;
 
 /***/ },
-/* 236 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ApiActions = __webpack_require__(237);
+	var ApiActions = __webpack_require__(234);
 	// var ProjectForm = require('../components/projects/ProjectForm');
 	
 	var ApiUtil = {
@@ -31755,10 +31514,10 @@
 	module.exports = ApiUtil;
 
 /***/ },
-/* 237 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(213);
+	var Dispatcher = __webpack_require__(212);
 	
 	var ApiAction = {
 	  receiveAllProjects: function (projects) {
@@ -31804,6 +31563,250 @@
 	module.exports = ApiAction;
 
 /***/ },
+/* 235 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ProjectStore = __webpack_require__(211);
+	var MediaStore = __webpack_require__(236);
+	var TwitsStore = __webpack_require__(237);
+	var ProjectActions = __webpack_require__(232);
+	var TwitForm = __webpack_require__(238);
+	var Twits = __webpack_require__(240);
+	var TwitsActions = __webpack_require__(239);
+	var MediaActions = __webpack_require__(242);
+	
+	var ProjectView = React.createClass({
+	  displayName: 'ProjectView',
+	
+	  getInitialState: function () {
+	    return { title: "", description: "", significance: "", media: "", twits: "" };
+	  },
+	  //return find result from store using this.props.params.id
+	
+	  // getProject: function () {
+	  // },
+	  //fetch projects on mount
+	
+	  componentDidMount: function () {
+	    this.MediaToken = MediaStore.addListener(this.fetchMedia);
+	    this.TwitsToken = TwitsStore.addListener(this.fetchTwits);
+	    this.ProjectToken = ProjectStore.addListener((function () {
+	      var project = ProjectStore.find(this.props.params.id);
+	      this.setState({
+	        title: project.title,
+	        description: project.description,
+	        significance: project.significance
+	      });
+	    }).bind(this));
+	    // debugger
+	    // }.bind(this));
+	    TwitsActions.fetchTwits(this.props.params.id);
+	    ProjectActions.fetchAllProjects();
+	    MediaActions.fetchMedia(this.props.params.id);
+	    debugger;
+	    // this.fetchTwits();
+	    // this.fetchMedia();
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.MediaToken.remove();
+	    this.TwitsToken.remove();
+	  },
+	
+	  fetchMedia: function () {
+	    console.log("Fetched");
+	    this.setState({ media: MediaStore.getProjectMedia(this.props.params.id) });
+	    // this.render()
+	  },
+	
+	  fetchTwits: function () {
+	    // debugger
+	    this.setState({ twits: TwitsStore.getProjectTwits(this.props.params.id) });
+	    // this.render()
+	  },
+	
+	  buildProject: function () {
+	    // debugger
+	    var cropped_url = "http://res.cloudinary.com/" + CLOUDINARY_OPTIONS.cloud_name + "/image/upload/";
+	    if (this.props.location.state.media) {
+	      var media_tags = this.props.location.state.media.map(function (medium, idx) {
+	        return React.createElement('img', { key: idx, src: cropped_url + "/w_300,h_300,c_fill/" + medium.medium.link });
+	      });
+	    }
+	    //get project info from this.state.project
+	    //check if this.state.project is undefined
+	    //if so return empty div or loading or spinner
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'project' },
+	        React.createElement(
+	          'strong',
+	          null,
+	          'Title:'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'title' },
+	          this.state.title
+	        ),
+	        React.createElement(
+	          'strong',
+	          null,
+	          'Description:'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'description' },
+	          this.state.description
+	        ),
+	        React.createElement(
+	          'strong',
+	          null,
+	          'Significance:'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'significance' },
+	          this.state.significance
+	        ),
+	        '// ',
+	        React.createElement(
+	          'strong',
+	          null,
+	          'Project Leader:'
+	        ),
+	        '// ',
+	        React.createElement('div', { className: 'leader' }),
+	        React.createElement(
+	          'div',
+	          null,
+	          media_tags
+	        )
+	      )
+	    );
+	  },
+	
+	  // sendTwits: function () {
+	  //   return this.state.twits !== undefined ? this.state.twits : (<div>loading...</div>)
+	  // },
+	
+	  render: function () {
+	    console.log("ProjectView");
+	    return React.createElement(
+	      'div',
+	      null,
+	      this.buildProject(),
+	      React.createElement(TwitForm, { project_id: this.props.params.id }),
+	      React.createElement(Twits, { twits: this.state.twits })
+	    );
+	  }
+	});
+	
+	module.exports = ProjectView;
+
+/***/ },
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(212);
+	var Store = __webpack_require__(216).Store;
+	
+	var _media = [];
+	
+	var MediaStore = new Store(Dispatcher);
+	
+	MediaStore.all = function () {
+	  return _media;
+	};
+	
+	MediaStore.getProjectMedia = function (project_id) {
+	  debugger;
+	  return _media.filter(function (medium) {
+	    return medium.project_id == project_id;
+	  });
+	};
+	
+	MediaStore.resetAllMedia = function (media) {
+	  _media = media;
+	};
+	
+	MediaStore.addMedium = function (medium) {
+	  var medium_idx = _media.indexOf(medium);
+	  if (medium_idx === -1) {
+	    _media.push(medium);
+	  }
+	};
+	
+	MediaStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "MEDIA_RECEIVED":
+	      this.resetAllMedia(payload.media);
+	      MediaStore.__emitChange();
+	      break;
+	    case "MEDIUM_RECEIVED":
+	      this.addMedium(payload.medium);
+	      MediaStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = MediaStore;
+
+/***/ },
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(212);
+	var Store = __webpack_require__(216).Store;
+	
+	var _twits = [];
+	
+	var TwitsStore = new Store(Dispatcher);
+	
+	TwitsStore.all = function () {
+	  return _twits;
+	};
+	
+	TwitsStore.getProjectTwits = function (project_id) {
+	  return _twits.filter(function (twit) {
+	    // debugger
+	    return twit.project_id == project_id;
+	  });
+	};
+	
+	TwitsStore.resetAllTwits = function (twits) {
+	  _twits = twits;
+	};
+	
+	TwitsStore.addTwit = function (twit) {
+	  // debugger
+	  var twit_idx = _twits.indexOf(twit);
+	  if (twit_idx === -1) {
+	    _twits.push(twit);
+	  }
+	};
+	
+	TwitsStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "TWITS_RECEIVED":
+	      debugger;
+	      this.resetAllTwits(payload.twits);
+	      TwitsStore.__emitChange();
+	      break;
+	    case "TWIT_RECEIVED":
+	      this.addTwit(payload.twit);
+	      TwitsStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = TwitsStore;
+
+/***/ },
 /* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -31831,6 +31834,7 @@
 	      }
 	    };
 	    TwitsActions.saveTwit(twit);
+	    this.setState({ body: "" });
 	  },
 	
 	  render: function () {
@@ -31853,7 +31857,7 @@
 /* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ApiUtil = __webpack_require__(236);
+	var ApiUtil = __webpack_require__(233);
 	
 	var TwitsActions = {
 	  saveTwit: function (data) {
@@ -31936,10 +31940,37 @@
 /* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var ApiUtil = __webpack_require__(233);
+	
+	var MediaActions = {
+	  saveMedia: function (media_data, callback) {
+	    var proj_id = media_data[1];
+	
+	    //This iterates through each uploaded image and get ApiUtil to send POST request to DB through saveMedium.  Should receive the object back after save.
+	    media_data[0].forEach(function (medium) {
+	      medium.medium.project_id = proj_id;
+	      debugger;
+	      ApiUtil.saveMedium(medium, function (proj_id) {
+	        console.log("medium saved for: " + proj_id);
+	        callback(proj_id);
+	      });
+	    });
+	  },
+	  fetchMedia: function (project_id) {
+	    ApiUtil.fetchMedia(project_id);
+	  }
+	};
+	
+	module.exports = MediaActions;
+
+/***/ },
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
-	var ProjectActions = __webpack_require__(235);
+	var ProjectActions = __webpack_require__(232);
 	var History = __webpack_require__(159).History;
-	var MediaActions = __webpack_require__(243);
+	var MediaActions = __webpack_require__(242);
 	var UploadButton = __webpack_require__(244);
 	
 	var ProjectForm = React.createClass({
@@ -32099,33 +32130,6 @@
 	module.exports = ProjectForm;
 
 /***/ },
-/* 243 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ApiUtil = __webpack_require__(236);
-	
-	var MediaActions = {
-	  saveMedia: function (media_data, callback) {
-	    var proj_id = media_data[1];
-	
-	    //This iterates through each uploaded image and get ApiUtil to send POST request to DB through saveMedium.  Should receive the object back after save.
-	    media_data[0].forEach(function (medium) {
-	      medium.medium.project_id = proj_id;
-	      debugger;
-	      ApiUtil.saveMedium(medium, function (proj_id) {
-	        console.log("medium saved for: " + proj_id);
-	        callback(proj_id);
-	      });
-	    });
-	  },
-	  fetchMedia: function (project_id) {
-	    ApiUtil.fetchMedia(project_id);
-	  }
-	};
-	
-	module.exports = MediaActions;
-
-/***/ },
 /* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -32160,7 +32164,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ProjectActions = __webpack_require__(235);
+	var ProjectActions = __webpack_require__(232);
 	// var History = require('react-router').History;
 	
 	var ProjectEdit = React.createClass({

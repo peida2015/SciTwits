@@ -20,6 +20,7 @@ var TwitForm = React.createClass ({
       }
     };
     TwitsActions.saveTwit(twit);
+    this.setState({ body:""})
   },
 
   render: function () {
