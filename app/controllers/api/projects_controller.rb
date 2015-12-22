@@ -19,7 +19,7 @@ class Api::ProjectsController < ApplicationController
     if @project.save
       render :show
     else
-      flash[:errors] = @project.errors.full_message
+      render json: { errors: @project.errors }
     end
   end
 

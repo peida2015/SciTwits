@@ -8,9 +8,14 @@ var MediaActions = {
     media_data[0].forEach(function (medium){
       medium.medium.project_id = proj_id;
       debugger
-      ApiUtil.saveMedium(medium, function(proj_id){ console.log("medium saved for: "+proj_id);});
-      callback(proj_id)
+      ApiUtil.saveMedium(medium, function(proj_id){
+        console.log("medium saved for: "+proj_id);
+        callback(proj_id)
+      });
     })
+  },
+  fetchMedia: function (project_id) {
+    ApiUtil.fetchMedia(project_id);
   }
 }
 

@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   validates :session_token, uniqueness:true
   validates :username, uniqueness: true
 
+  has_many :twits
   has_many :projects,
     foreign_key: :owner_id
 

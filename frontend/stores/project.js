@@ -13,6 +13,7 @@ ProjectStore.find = function (id){
   return _projects.find(function (project){
     return (project.id == id)
   })
+  // debugger
 },
 
 ProjectStore.resetAllProjects = function (projects) {

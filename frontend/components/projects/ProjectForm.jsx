@@ -28,7 +28,7 @@ var ProjectForm = React.createClass({
       }
     };
     ProjectActions.createProject(data, function (proj_id) {
-      MediaActions.saveMedia([that.state.media, proj_id], that.redirectToShow)
+      MediaActions.saveMedia([that.state.media, proj_id], that.redirectToView)
       debugger
     });
   },
@@ -47,7 +47,7 @@ var ProjectForm = React.createClass({
     // this.setState(e.target.value
   },
 
-  redirectToShow: function(id) {
+  redirectToView: function(id) {
     this.props.history.pushState(this.state, 'projects/'+id);
   },
 

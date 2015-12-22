@@ -11,8 +11,8 @@ class Api::MediaController < ApplicationController
     @medium = Medium.new(medium_params)
     if @medium.save
       render :show
-    # else
-    #   render :json @medium.errors
+    else
+      render json: {errors: @medium.errors}
     end
   end
 

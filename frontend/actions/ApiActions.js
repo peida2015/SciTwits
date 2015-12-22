@@ -28,6 +28,18 @@ var ApiAction = {
       medium:medium
     })
   },
+  receiveTwits: function (twits){
+    Dispatcher.dispatch({
+      actionType: "TWITS_RECEIVED",
+      twits: twits
+    })
+  },
+  receiveTwit: function (twit){
+    Dispatcher.dispatch({
+      actionType: "TWIT_RECEIVED",
+      twit:twit
+    })
+  },
 }
 
 module.exports = ApiAction;

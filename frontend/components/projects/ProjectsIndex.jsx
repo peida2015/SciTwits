@@ -10,11 +10,17 @@ var ProjectsIndex = React.createClass({
     return ({ projects: [] });
   },
 
+  redirectToView: function (e) {
+    // debugger
+    e.preventDefault();
+    var project_id =e.target.parentElement.dataset.project_id
+    this.props.history.pushState(this.state, 'projects/'+project_id);
+  },
+
   componentDidMount: function () {
     // debugger
     ProjectActions.fetchAllProjects();
     this.listenerToken = ProjectStore.addListener(this.handleStoreChange);
-    // document.addListener("Click", this.handleClick);
   },
 
   componentWillUnmount: function () {
@@ -22,12 +28,12 @@ var ProjectsIndex = React.createClass({
   },
 
   handleStoreChange: function () {
-    console.log("Store changed");
+    // console.log("Store changed");
     this.setState({ projects: ProjectStore.all() })
   },
 
   handleDelete: function (e) {
-    console.log("Clicked Remove");
+    // console.log("Clicked Remove");
     ProjectActions.deleteProject(e.target.id)
   },
 
@@ -61,18 +67,19 @@ var ProjectsIndex = React.createClass({
   buildProject: function (project, idx) {
     // debugger
     var buttons = this.buildButtons(project);
+
     return (
-      <div key={idx}>
-        <div className="project">
-          <strong>Title:</strong>
-          <div className="title">{ project.title }</div>
-          <strong>Description:</strong>
-          <div className="description">{ project.description }</div>
-          <strong>Significance:</strong>
-          <div className="significance">{ project.significance }</div>
-          // <strong>Project Leader:</strong>
-          // <div className="leader"></div>
-        </div>
+      <div key={idx} >
+          <div className="project" onClick={this.redirectToView} data-project_id={project.id}>
+            <strong>Title:</strong>
+            <div className="title">{ project.title }</div>
+            <strong>Description:</strong>
+            <div className="description">{ project.description }</div>
+            <strong>Significance:</strong>
+            <div className="significance">{ project.significance }</div>
+            // <strong>Project Leader:</strong>
+            // <div className="leader"></div>
+          </div>
         {buttons[0]}
         {buttons[1]}
       </div>

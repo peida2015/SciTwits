@@ -3,6 +3,7 @@ class Project < ActiveRecord::Base
   validates :significance, length: { maximum: 1000 }
 
   has_many :media, dependent: :destroy
+  has_many :twits, dependent: :destroy
   belongs_to :owner,
       class_name: "User",
       primary_key: :id,
