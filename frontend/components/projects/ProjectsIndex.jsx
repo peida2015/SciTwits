@@ -77,8 +77,7 @@ var ProjectsIndex = React.createClass({
             <div className="description">{ project.description }</div>
             <strong>Significance:</strong>
             <div className="significance">{ project.significance }</div>
-            // <strong>Project Leader:</strong>
-            // <div className="leader"></div>
+
           </div>
         {buttons[0]}
         {buttons[1]}
@@ -94,7 +93,7 @@ var ProjectsIndex = React.createClass({
       <div>
         <a href="#projects/form"><h5>Create New</h5></a>
 
-        <h4>ProjectsIndex</h4>
+        <h4>Projects Index</h4>
         { proj_view }
       </div>
     )

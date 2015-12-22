@@ -17,7 +17,7 @@
 <%= cloudinary_js_config %>
 
 <% if current_user %>
-Logged in: <%= current_user.username %>
+<div><h5>Logged in: <%= current_user.username %></h5></div>
 <%= button_to "Logout", sessions_url, method:"delete" %>
 <% else %>
 <%= button_to "Login", new_sessions_url, method:'get' %>

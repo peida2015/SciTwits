@@ -24562,15 +24562,7 @@
 	          'div',
 	          { className: 'significance' },
 	          project.significance
-	        ),
-	        '// ',
-	        React.createElement(
-	          'strong',
-	          null,
-	          'Project Leader:'
-	        ),
-	        '// ',
-	        React.createElement('div', { className: 'leader' })
+	        )
 	      ),
 	      buttons[0],
 	      buttons[1]
@@ -24596,7 +24588,7 @@
 	      React.createElement(
 	        'h4',
 	        null,
-	        'ProjectsIndex'
+	        'Projects Index'
 	      ),
 	      proj_view
 	    );
@@ -31591,20 +31583,17 @@
 	  componentDidMount: function () {
 	    this.MediaToken = MediaStore.addListener(this.fetchMedia);
 	    this.TwitsToken = TwitsStore.addListener(this.fetchTwits);
-	    this.ProjectToken = ProjectStore.addListener((function () {
-	      var project = ProjectStore.find(this.props.params.id);
-	      this.setState({
-	        title: project.title,
-	        description: project.description,
-	        significance: project.significance
-	      });
-	    }).bind(this));
 	    // debugger
 	    // }.bind(this));
 	    TwitsActions.fetchTwits(this.props.params.id);
 	    ProjectActions.fetchAllProjects();
 	    MediaActions.fetchMedia(this.props.params.id);
-	    debugger;
+	    var project = ProjectStore.find(this.props.params.id);
+	    this.setState({
+	      title: project.title,
+	      description: project.description,
+	      significance: project.significance
+	    });
 	    // this.fetchTwits();
 	    // this.fetchMedia();
 	  },
@@ -31673,14 +31662,6 @@
 	          { className: 'significance' },
 	          this.state.significance
 	        ),
-	        '// ',
-	        React.createElement(
-	          'strong',
-	          null,
-	          'Project Leader:'
-	        ),
-	        '// ',
-	        React.createElement('div', { className: 'leader' }),
 	        React.createElement(
 	          'div',
 	          null,
@@ -31698,7 +31679,7 @@
 	    console.log("ProjectView");
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'container' },
 	      this.buildProject(),
 	      React.createElement(TwitForm, { project_id: this.props.params.id }),
 	      React.createElement(Twits, { twits: this.state.twits })

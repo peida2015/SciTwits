@@ -22,20 +22,17 @@ var ProjectView = React.createClass({
   componentDidMount: function () {
     this.MediaToken = MediaStore.addListener(this.fetchMedia);
     this.TwitsToken = TwitsStore.addListener(this.fetchTwits);
-    this.ProjectToken = ProjectStore.addListener(function () {
-      var project = ProjectStore.find(this.props.params.id);
-      this.setState({
-        title: project.title,
-        description: project.description,
-        significance: project.significance
-      })
-    }.bind(this));
       // debugger
       // }.bind(this));
     TwitsActions.fetchTwits(this.props.params.id);
     ProjectActions.fetchAllProjects();
     MediaActions.fetchMedia(this.props.params.id);
-    debugger
+    var project = ProjectStore.find(this.props.params.id);
+    this.setState({
+      title: project.title,
+      description: project.description,
+      significance: project.significance
+    })
     // this.fetchTwits();
     // this.fetchMedia();
   },
@@ -77,8 +74,6 @@ var ProjectView = React.createClass({
           <div className="description">{ this.state.description }</div>
           <strong>Significance:</strong>
           <div className="significance">{ this.state.significance }</div>
-          // <strong>Project Leader:</strong>
-          // <div className="leader"></div>
           <div>{media_tags}</div>
         </div>
       </div>
@@ -92,7 +87,7 @@ var ProjectView = React.createClass({
   render: function () {
 console.log("ProjectView");
     return(
-      <div>
+      <div className="container">
         {this.buildProject()}
         <TwitForm project_id={this.props.params.id}/>
         <Twits twits={this.state.twits}/>
