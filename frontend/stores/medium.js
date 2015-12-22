@@ -10,7 +10,6 @@ MediaStore.all = function () {
 };
 
 MediaStore.getProjectMedia = function (project_id) {
-  debugger
   return _media.filter(function (medium) {
     return medium.project_id == project_id
   })

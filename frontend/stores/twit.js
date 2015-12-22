@@ -17,6 +17,7 @@ TwitsStore.getProjectTwits = function (project_id) {
 };
 
 TwitsStore.resetAllTwits = function (twits) {
+  // debugger
   _twits = twits;
 };
 

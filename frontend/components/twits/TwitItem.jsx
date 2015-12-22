@@ -4,15 +4,21 @@ var TwitsActions = require('../../actions/TwitsActions');
 var TwitItem = React.createClass ({
 
   handleDelete: function (e) {
-    TwitsActions.deleteTwit(e.target.id)
+    TwitsActions.deleteTwit(e.target.id);
   },
 
   render: function () {
+    if (this.props.twit.user_id == this.props.user_id) {
+      var deleteButton = <button className="delete" onClick={this.handleDelete}
+          id={this.props.twit.id}>
+          Delete</button>
+    } else {
+      var deleteButton = "";
+    }
+    // debugger
     return (<div className="twit">
       {this.props.twit.body}
-      <button className="delete" onClick={this.handleDelete}
-        id={this.props.twit.id}>
-        Delete</button>
+      {deleteButton}
       <br></br>
 
     by: {this.props.twit.user}<br></br>

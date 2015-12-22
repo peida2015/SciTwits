@@ -66,9 +66,7 @@ var ProjectView = React.createClass({
         return (<img key={idx} src={cropped_url+ "/w_300,h_300,c_fill/"+medium.medium.link}></img>)
       });
     }
-    //get project info from this.state.project
-    //check if this.state.project is undefined
-    //if so return empty div or loading or spinner
+
     return (
       <div>
         <div className="project">
@@ -84,18 +82,15 @@ var ProjectView = React.createClass({
     )
   },
 
-  // sendTwits: function () {
-  //   return this.state.twits !== undefined ? this.state.twits : (<div>loading...</div>)
-  // },
-
   render: function () {
-console.log("ProjectView");
+// console.log("ProjectView");
+    // debugger
     return(
       <div className="container">
         <a href="#/"><h5>Back to Index</h5></a>
         {this.buildProject()}
         <TwitForm project_id={this.props.params.id}/>
-        <Twits twits={this.state.twits}/>
+        <Twits twits={this.state.twits} user_id={this.props.routes[0].indexRoute.user_id}/>
       </div>
     )
   }

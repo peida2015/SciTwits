@@ -8,8 +8,11 @@ var Twits = React.createClass ({
     // debugger
     if (this.props.twits !== "") {
       var twits_tags = this.props.twits.map(function (twit, idx) {
-        return (<TwitItem key={idx} twit={twit} />)
-      });
+// debugger
+        return (
+          <TwitItem key={idx} twit={twit} user_id={this.props.user_id}/>
+          )
+      }.bind(this));
       return (
         <div>
           {twits_tags}

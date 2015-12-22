@@ -13,7 +13,7 @@ var ProjectsIndex = React.createClass({
   redirectToView: function (id) {
     // debugger;
     // e.preventDefault();
-    this.props.history.pushState(this.state, 'projects/'+id);
+    this.props.history.pushState(this.state, 'projects/'+id, {user_id: this.props.route.user_id});
   },
 
   componentDidMount: function () {
