@@ -31898,19 +31898,19 @@
 	var React = __webpack_require__(1);
 	
 	var TwitItem = React.createClass({
-	  displayName: 'TwitItem',
+	  displayName: "TwitItem",
 	
 	  render: function () {
 	    // debugger
 	    return React.createElement(
-	      'div',
-	      null,
+	      "div",
+	      { className: "twit" },
 	      this.props.twit.body,
-	      ' ',
-	      React.createElement('br', null),
-	      'by: ',
+	      " ",
+	      React.createElement("br", null),
+	      "by: ",
 	      this.props.twit.user,
-	      React.createElement('br', null)
+	      React.createElement("br", null)
 	    );
 	  }
 	});
