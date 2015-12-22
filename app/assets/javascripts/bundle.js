@@ -31595,6 +31595,7 @@
 	  componentWillUnmount: function () {
 	    this.MediaToken.remove();
 	    this.TwitsToken.remove();
+	    this.ProjectToken.remove();
 	  },
 	
 	  fetchMedia: function () {
