@@ -96,6 +96,10 @@ var ProjectForm = React.createClass({
       var media_tags = ""
     }
 
+    var submitButton = this.state.uploadResult.match("Success") ?
+    (<input type="submit" value="Create Project" />) :
+    (<input className="disabled" type="submit" value="Create Project" disabled />)
+
     // debugger
     return (
       <div>
@@ -125,7 +129,7 @@ var ProjectForm = React.createClass({
                 {uploaded}<br></br>
                 {media_tags}
           <br></br>
-          <button>Share Your Progress</button>
+          {submitButton}
         </form>
       </div>
     )

@@ -1,6 +1,7 @@
 var React = require('react');
 var ProjectStore = require('../../stores/project');
 var ProjectsActions = require('../../actions/ProjectsActions');
+var FollowButton = require('./FollowButton');
 // var History = require('react-router').History;
 
 var ProjectsIndex = React.createClass({
@@ -46,6 +47,15 @@ var ProjectsIndex = React.createClass({
     }
   },
 
+  followButton: function (project_id) {
+    if (this.props.route.user_id) {
+      return (<FollowButton project_id={project_id}
+                user_id={this.props.route.user_id}/>)
+    } else {
+      return ""
+    }
+  },
+
   buildButtons: function (project) {
     if (this.props.route.user_id == project.owner_id) {
       var removeButton =(
@@ -76,8 +86,8 @@ var ProjectsIndex = React.createClass({
             <div className="description">{ project.description }</div>
             <strong>Significance:</strong>
             <div className="significance">{ project.significance }</div>
-
           </div>
+        {this.followButton(project.id)}
         {buttons[0]}
         {buttons[1]}
       </div>

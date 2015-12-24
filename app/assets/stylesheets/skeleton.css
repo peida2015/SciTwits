@@ -35,6 +35,10 @@
   margin: 0 auto;
   padding: 0 20px;
   box-sizing: border-box; }
+.container.follow {
+  display:inline-block;
+  width: auto;
+}
 .project {
   padding: 0 20px;
   width: 900px;
@@ -237,6 +241,10 @@ input[type="button"].button-primary:focus {
   color: #FFF;
   background-color: #1EAEDB;
   border-color: #1EAEDB; }
+input[disabled], input[disabled]:hover {
+  color: lightgray;
+  border-color: lightgray;
+}
 
 
 /* Forms

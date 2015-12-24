@@ -18,14 +18,14 @@ var FollowButton = React.createClass({
 
   _onChange: function () {
     var follow_id = FollowsStore.getFollowId(this.props.project_id, this.props.user_id);
-console.log("_onChange");
+    // console.log("_onChange");
 
     if (follow_id === -1) {
       this.setState({ followed: false })
     } else {
       this.setState({ followed: true })
     }
-    console.log(this.state.followed);    
+    console.log(this.state.followed);
   },
 
   toggleFollowButton: function (e) {
@@ -38,8 +38,7 @@ console.log("_onChange");
     } else {
       FollowsActions.saveFollow(this.props.project_id, this.props.user_id);
     }
-
-    console.log("clicked");
+    // console.log("clicked");
   },
 
   buildButton: function () {
@@ -52,7 +51,7 @@ console.log("_onChange");
 
   render: function () {
     return (
-      <div className="Follow">
+      <div className="container follow">
         {this.buildButton()}
       </div>
     );

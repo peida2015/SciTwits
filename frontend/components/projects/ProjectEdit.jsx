@@ -68,7 +68,7 @@ var ProjectEdit = React.createClass({
                     value={this.state.significance}
                     data-name="significance"
                     onChange={this.handleChange}></textarea>
-                  <button>Update Project!</button>
+                  <button>Share Your Progress</button>
         </form>
       </div>
     )

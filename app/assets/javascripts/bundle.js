@@ -24454,6 +24454,7 @@
 	var React = __webpack_require__(1);
 	var ProjectStore = __webpack_require__(211);
 	var ProjectsActions = __webpack_require__(232);
+	var FollowButton = __webpack_require__(246);
 	// var History = require('react-router').History;
 	
 	var ProjectsIndex = React.createClass({
@@ -24498,6 +24499,15 @@
 	      this.props.history.pushState(this.state, 'projects/edit', { id: e.target.id });
 	    } else {
 	      alert("project doesn't exist!");
+	    }
+	  },
+	
+	  followButton: function (project_id) {
+	    if (this.props.route.user_id) {
+	      return React.createElement(FollowButton, { project_id: project_id,
+	        user_id: this.props.route.user_id });
+	    } else {
+	      return "";
 	    }
 	  },
 	
@@ -24563,6 +24573,7 @@
 	          project.significance
 	        )
 	      ),
+	      this.followButton(project.id),
 	      buttons[0],
 	      buttons[1]
 	    );
@@ -32247,7 +32258,7 @@
 	
 	  _onChange: function () {
 	    var follow_id = FollowsStore.getFollowId(this.props.project_id, this.props.user_id);
-	    console.log("_onChange");
+	    // console.log("_onChange");
 	
 	    if (follow_id === -1) {
 	      this.setState({ followed: false });
@@ -32267,8 +32278,7 @@
 	    } else {
 	      FollowsActions.saveFollow(this.props.project_id, this.props.user_id);
 	    }
-	
-	    console.log("clicked");
+	    // console.log("clicked");
 	  },
 	
 	  buildButton: function () {
@@ -32290,7 +32300,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'Follow' },
+	      { className: 'container follow' },
 	      this.buildButton()
 	    );
 	  }
@@ -32403,6 +32413,8 @@
 	      var media_tags = "";
 	    }
 	
+	    var submitButton = this.state.uploadResult.match("Success") ? React.createElement('input', { type: 'submit', value: 'Create Project' }) : React.createElement('input', { className: 'disabled', type: 'submit', value: 'Create Project', disabled: true });
+	
 	    // debugger
 	    return React.createElement(
 	      'div',
@@ -32461,11 +32473,7 @@
 	        React.createElement('br', null),
 	        media_tags,
 	        React.createElement('br', null),
-	        React.createElement(
-	          'button',
-	          null,
-	          'Share Your Progress'
-	        )
+	        submitButton
 	      )
 	    );
 	  }
@@ -32605,7 +32613,7 @@
 	        React.createElement(
 	          'button',
 	          null,
-	          'Update Project!'
+	          'Share Your Progress'
 	        )
 	      )
 	    );
