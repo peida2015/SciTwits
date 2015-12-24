@@ -23,8 +23,12 @@ var Tags = React.createClass({
   render: function () {
     // debugger
     var tags_elements = this.state.tags.map(function (tag, idx) {
-      return (<span key={idx}>{tag.name + "#"}</span>)
-    });
+      if (this.state.tags.length -1 === idx) {
+        return (<span key={idx}>{"#" + tag.name}</span>)
+      } else {
+        return (<span key={idx}>{"#" + tag.name + ", "}</span>)
+      }
+    }.bind(this));
 
     return (
       <div>

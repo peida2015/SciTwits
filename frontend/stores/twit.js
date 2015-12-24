@@ -22,7 +22,9 @@ TwitsStore.resetAllTwits = function (twits) {
 };
 
 TwitsStore.addTwit = function (twit) {
+
   var twit_idx = _twits.indexOf(twit)
+  // debugger
   if (twit_idx === -1) {
     _twits.push(twit)
   }

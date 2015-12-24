@@ -52,8 +52,8 @@
 	// var Link = require('react-router').Link;
 	var ProjectsIndex = __webpack_require__(210);
 	var ProjectView = __webpack_require__(235);
-	var ProjectForm = __webpack_require__(245);
-	var ProjectEdit = __webpack_require__(247);
+	var ProjectForm = __webpack_require__(246);
+	var ProjectEdit = __webpack_require__(248);
 	// debugger
 	
 	$(function () {
@@ -31619,7 +31619,7 @@
 	var Twits = __webpack_require__(242);
 	var TwitsActions = __webpack_require__(239);
 	var MediaActions = __webpack_require__(244);
-	var Tags = __webpack_require__(248);
+	var Tags = __webpack_require__(245);
 	
 	var ProjectView = React.createClass({
 	  displayName: 'ProjectView',
@@ -31820,7 +31820,9 @@
 	};
 	
 	TwitsStore.addTwit = function (twit) {
+	
 	  var twit_idx = _twits.indexOf(twit);
+	  // debugger
 	  if (twit_idx === -1) {
 	    _twits.push(twit);
 	  }
@@ -31990,8 +31992,14 @@
 	};
 	
 	TagsStore.addTwit = function (tag) {
+	  var is_found = false;
+	  _tags.forEach(function (el) {
+	    if (el.name === tag.name) {
+	      is_found = true;
+	    }
+	  });
 	  var tag_idx = _tags.indexOf(tag);
-	  if (tag_idx === -1) {
+	  if (!is_found) {
 	    _tags.push(tag);
 	  }
 	};
@@ -32119,10 +32127,65 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var TagsStore = __webpack_require__(241);
+	var TagsActions = __webpack_require__(240);
+	
+	var Tags = React.createClass({
+	  displayName: 'Tags',
+	
+	  getInitialState: function () {
+	    return { tags: [] };
+	  },
+	  componentDidMount: function () {
+	    TagsActions.fetchTags(this.props.project_id);
+	    this.TagsToken = TagsStore.addListener(this.reloadTags);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.TagsToken.remove();
+	  },
+	
+	  reloadTags: function () {
+	    this.setState({ tags: TagsStore.all() });
+	  },
+	
+	  render: function () {
+	    // debugger
+	    var tags_elements = this.state.tags.map((function (tag, idx) {
+	      if (this.state.tags.length - 1 === idx) {
+	        return React.createElement(
+	          'span',
+	          { key: idx },
+	          "#" + tag.name
+	        );
+	      } else {
+	        return React.createElement(
+	          'span',
+	          { key: idx },
+	          "#" + tag.name + ", "
+	        );
+	      }
+	    }).bind(this));
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      tags_elements
+	    );
+	  }
+	});
+	
+	module.exports = Tags;
+
+/***/ },
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
 	var ProjectsActions = __webpack_require__(232);
 	var History = __webpack_require__(159).History;
 	var MediaActions = __webpack_require__(244);
-	var UploadButton = __webpack_require__(246);
+	var UploadButton = __webpack_require__(247);
 	
 	var ProjectForm = React.createClass({
 	  displayName: 'ProjectForm',
@@ -32290,7 +32353,7 @@
 	module.exports = ProjectForm;
 
 /***/ },
-/* 246 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32320,7 +32383,7 @@
 	// RegEx to match filename at the end of full path: .match(/[^\\/]+\.[^\\/]+$/)[0];
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32429,53 +32492,6 @@
 	});
 	
 	module.exports = ProjectEdit;
-
-/***/ },
-/* 248 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var TagsStore = __webpack_require__(241);
-	var TagsActions = __webpack_require__(240);
-	
-	var Tags = React.createClass({
-	  displayName: 'Tags',
-	
-	  getInitialState: function () {
-	    return { tags: [] };
-	  },
-	  componentDidMount: function () {
-	    TagsActions.fetchTags(this.props.project_id);
-	    this.TagsToken = TagsStore.addListener(this.reloadTags);
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.TagsToken.remove();
-	  },
-	
-	  reloadTags: function () {
-	    this.setState({ tags: TagsStore.all() });
-	  },
-	
-	  render: function () {
-	    // debugger
-	    var tags_elements = this.state.tags.map(function (tag, idx) {
-	      return React.createElement(
-	        'span',
-	        { key: idx },
-	        tag.name + "#"
-	      );
-	    });
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      tags_elements
-	    );
-	  }
-	});
-	
-	module.exports = Tags;
 
 /***/ }
 /******/ ]);

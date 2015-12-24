@@ -8,6 +8,6 @@ class Tagging < ActiveRecord::Base
   def Tagging.find_by_Ids(params)
     tagging = Tagging.where(project_id: params[:project_id],
               tag_id: params[:tag_id])
-    tagging.empty? ? nil : tagging
+    tagging.empty? ? nil : tagging.first
   end
 end

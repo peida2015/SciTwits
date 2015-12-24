@@ -22,8 +22,14 @@ TagsStore.resetAllTags = function (tags) {
 };
 
 TagsStore.addTwit = function (tag) {
+  var is_found = false;
+  _tags.forEach(function (el) {
+    if (el.name === tag.name ) {
+      is_found = true;
+    }
+  })
   var tag_idx = _tags.indexOf(tag)
-  if (tag_idx === -1) {
+  if (!is_found) {
     _tags.push(tag)
   }
 };
