@@ -150,6 +150,35 @@ var ApiUtil = {
         console.log(resp);
       }
     })
+  },
+
+  fetchFollows: function () {
+    $.ajax({
+      type: "GET",
+      url: "api/follows",
+      success: ApiActions.receiveFollows
+    })
+  },
+
+  saveFollow: function (follow_data) {
+    $.ajax({
+      type: "POST",
+      url: "api/follows",
+      data: follow_data,
+      success: ApiActions.receiveFollow
+      // function (resp) {
+
+        // console.log(resp);
+      // }
+    })
+  },
+
+  unFollow: function (follow_id) {
+    $.ajax({
+      type: "DELETE",
+      url: "api/follows/"+follow_id,
+      success: ApiActions.receiveFollows
+    })
   }
 
 }

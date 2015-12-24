@@ -8,6 +8,8 @@ var Twits = require('../twits/Twits');
 var TwitsActions = require('../../actions/TwitsActions');
 var MediaActions = require('../../actions/MediaActions');
 var Tags = require('../tags/Tags');
+var FollowButton = require('./FollowButton');
+
 
 var ProjectView = React.createClass({
 
@@ -82,6 +84,8 @@ var ProjectView = React.createClass({
     // debugger
     return(
       <div className="container">
+        <FollowButton project_id={this.props.params.id}
+          user_id={this.props.routes[0].indexRoute.user_id}/>
         <a href="#/"><h5>Back to Index</h5></a>
         {this.buildProject()}
         <TwitForm project_id={this.props.params.id}/>

@@ -6,6 +6,8 @@ class Project < ActiveRecord::Base
   has_many :twits, dependent: :destroy
   has_many :taggings
   has_many :tags, through: :taggings
+  has_many :follows
+  has_many :followers, through: :follows, source: :user
 
   belongs_to :owner,
       class_name: "User",

@@ -51,6 +51,18 @@ var ApiAction = {
       actionType: "TAG_RECEIVED",
       tag:tag
     })
+  },
+  receiveFollows: function (follows) {
+    Dispatcher.dispatch({
+      actionType: "FOLLOWS_RECEIVED",
+      follows:follows
+    })
+  },
+  receiveFollow: function (follow) {
+    Dispatcher.dispatch({
+      actionType: "FOLLOW_RECEIVED",
+      follow:follow
+    })
   }
 }
 

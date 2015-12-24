@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   has_many :twits
   has_many :projects,
     foreign_key: :owner_id
+  has_many :follows
+  has_many :followed_projects, through: :follows, source: :project
 
   after_initialize :ensure_token
 

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     resources :twits, only:[:create, :destroy, :index]
     resources :tags, only:[:create, :index]
     resources :taggings, only:[:create, :index]
+    resources :follows, only:[:create, :destroy, :index]
   end
 
   resource :sessions, only: [:create, :destroy, :new]

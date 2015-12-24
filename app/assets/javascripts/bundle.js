@@ -52,8 +52,8 @@
 	// var Link = require('react-router').Link;
 	var ProjectsIndex = __webpack_require__(210);
 	var ProjectView = __webpack_require__(235);
-	var ProjectForm = __webpack_require__(246);
-	var ProjectEdit = __webpack_require__(248);
+	var ProjectForm = __webpack_require__(247);
+	var ProjectEdit = __webpack_require__(249);
 	// debugger
 	
 	$(function () {
@@ -31539,6 +31539,35 @@
 	        console.log(resp);
 	      }
 	    });
+	  },
+	
+	  fetchFollows: function () {
+	    $.ajax({
+	      type: "GET",
+	      url: "api/follows",
+	      success: ApiActions.receiveFollows
+	    });
+	  },
+	
+	  saveFollow: function (follow_data) {
+	    $.ajax({
+	      type: "POST",
+	      url: "api/follows",
+	      data: follow_data,
+	      success: ApiActions.receiveFollow
+	      // function (resp) {
+	
+	      // console.log(resp);
+	      // }
+	    });
+	  },
+	
+	  unFollow: function (follow_id) {
+	    $.ajax({
+	      type: "DELETE",
+	      url: "api/follows/" + follow_id,
+	      success: ApiActions.receiveFollows
+	    });
 	  }
 	
 	};
@@ -31601,6 +31630,18 @@
 	      actionType: "TAG_RECEIVED",
 	      tag: tag
 	    });
+	  },
+	  receiveFollows: function (follows) {
+	    Dispatcher.dispatch({
+	      actionType: "FOLLOWS_RECEIVED",
+	      follows: follows
+	    });
+	  },
+	  receiveFollow: function (follow) {
+	    Dispatcher.dispatch({
+	      actionType: "FOLLOW_RECEIVED",
+	      follow: follow
+	    });
 	  }
 	};
 	
@@ -31620,6 +31661,7 @@
 	var TwitsActions = __webpack_require__(239);
 	var MediaActions = __webpack_require__(244);
 	var Tags = __webpack_require__(245);
+	var FollowButton = __webpack_require__(246);
 	
 	var ProjectView = React.createClass({
 	  displayName: 'ProjectView',
@@ -31726,6 +31768,8 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'container' },
+	      React.createElement(FollowButton, { project_id: this.props.params.id,
+	        user_id: this.props.routes[0].indexRoute.user_id }),
 	      React.createElement(
 	        'a',
 	        { href: '#/' },
@@ -31998,7 +32042,7 @@
 	      is_found = true;
 	    }
 	  });
-	  var tag_idx = _tags.indexOf(tag);
+	
 	  if (!is_found) {
 	    _tags.push(tag);
 	  }
@@ -32182,10 +32226,87 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var FollowsActions = __webpack_require__(250);
+	var FollowsStore = __webpack_require__(251);
+	
+	var FollowButton = React.createClass({
+	  displayName: 'FollowButton',
+	
+	  getInitialState: function () {
+	    return { followed: false };
+	  },
+	
+	  componentDidMount: function () {
+	    this.FollowsToken = FollowsStore.addListener(this._onChange);
+	    FollowsActions.fetchFollows();
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.FollowsToken.remove();
+	  },
+	
+	  _onChange: function () {
+	    var follow_id = FollowsStore.getFollowId(this.props.project_id, this.props.user_id);
+	    console.log("_onChange");
+	
+	    if (follow_id === -1) {
+	      this.setState({ followed: false });
+	    } else {
+	      this.setState({ followed: true });
+	    }
+	    console.log(this.state.followed);
+	  },
+	
+	  toggleFollowButton: function (e) {
+	    e.preventDefault();
+	    // debugger
+	    // return;
+	    if (this.state.followed) {
+	      var follow_id = FollowsStore.getFollowId(this.props.project_id, this.props.user_id);
+	      FollowsActions.unFollow(follow_id);
+	    } else {
+	      FollowsActions.saveFollow(this.props.project_id, this.props.user_id);
+	    }
+	
+	    console.log("clicked");
+	  },
+	
+	  buildButton: function () {
+	    if (this.state.followed) {
+	      return React.createElement(
+	        'button',
+	        { onClick: this.toggleFollowButton },
+	        'Unfollow -'
+	      );
+	    } else {
+	      return React.createElement(
+	        'button',
+	        { onClick: this.toggleFollowButton },
+	        'Follow +'
+	      );
+	    }
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'Follow' },
+	      this.buildButton()
+	    );
+	  }
+	});
+	
+	module.exports = FollowButton;
+
+/***/ },
+/* 247 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
 	var ProjectsActions = __webpack_require__(232);
 	var History = __webpack_require__(159).History;
 	var MediaActions = __webpack_require__(244);
-	var UploadButton = __webpack_require__(247);
+	var UploadButton = __webpack_require__(248);
 	
 	var ProjectForm = React.createClass({
 	  displayName: 'ProjectForm',
@@ -32353,7 +32474,7 @@
 	module.exports = ProjectForm;
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32383,7 +32504,7 @@
 	// RegEx to match filename at the end of full path: .match(/[^\\/]+\.[^\\/]+$/)[0];
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32492,6 +32613,92 @@
 	});
 	
 	module.exports = ProjectEdit;
+
+/***/ },
+/* 250 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(233);
+	
+	var FollowsActions = {
+	  fetchFollows: function () {
+	    ApiUtil.fetchFollows();
+	  },
+	  saveFollow: function (project_id, user_id) {
+	    var follow_data = {
+	      follow: {
+	        project_id: project_id,
+	        user_id: user_id
+	      }
+	    };
+	    ApiUtil.saveFollow(follow_data);
+	  },
+	  unFollow: function (follow_id) {
+	    // debugger
+	    ApiUtil.unFollow(follow_id);
+	  }
+	};
+	
+	module.exports = FollowsActions;
+
+/***/ },
+/* 251 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(212);
+	var Store = __webpack_require__(216).Store;
+	
+	var _follows = [];
+	
+	var FollowsStore = new Store(Dispatcher);
+	
+	FollowsStore.all = function () {
+	  return _follows;
+	};
+	
+	FollowsStore.getFollowId = function (project_id, user_id) {
+	  var follow_id = -1;
+	  _follows.forEach(function (follow) {
+	    if (follow.project_id == project_id && follow.user_id == user_id) {
+	      follow_id = follow.id;
+	    }
+	  });
+	  return follow_id;
+	};
+	
+	FollowsStore.getUserFollows = function (user_id) {
+	  return _follows.filter(function (follow) {
+	    // debugger
+	    return follow.user_id == user_id;
+	  });
+	};
+	
+	FollowsStore.resetAllFollows = function (follows) {
+	  _follows = follows;
+	};
+	
+	FollowsStore.addFollow = function (follow) {
+	  var follow_idx = _follows.indexOf(follow);
+	  if (follow_idx === -1) {
+	    _follows.push(follow);
+	  }
+	  // debugger
+	};
+	
+	FollowsStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "FOLLOWS_RECEIVED":
+	      this.resetAllFollows(payload.follows);
+	      FollowsStore.__emitChange();
+	      break;
+	    case "FOLLOW_RECEIVED":
+	      this.addFollow(payload.follow);
+	      FollowsStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = FollowsStore;
 
 /***/ }
 /******/ ]);

@@ -27,8 +27,8 @@ TagsStore.addTwit = function (tag) {
     if (el.name === tag.name ) {
       is_found = true;
     }
-  })
-  var tag_idx = _tags.indexOf(tag)
+  });
+
   if (!is_found) {
     _tags.push(tag)
   }
