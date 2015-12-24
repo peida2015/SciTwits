@@ -11,7 +11,7 @@ TagsStore.all = function () {
 
 TagsStore.getProjectTags = function (project_id) {
   return _tags.filter(function (tag) {
-    // debugger
+    debugger
     return (tag.project_id == project_id)
   })
 };

@@ -4,19 +4,31 @@ var TagsActions = require('../../actions/TagsActions');
 
 var Tags = React.createClass({
 
+  getInitialState: function () {
+    return ({ tags: [] })
+  },
   componentDidMount: function () {
-    TagsActions.fetchAllTags();
+    TagsActions.fetchTags(this.props.project_id);
     this.TagsToken = TagsStore.addListener(this.reloadTags);
   },
 
+  componentWillUnmount: function () {
+    this.TagsToken.remove()
+  },
+
   reloadTags: function () {
-    this.tags = TagsStore.find("PROJECT_ID !!!!!!!!!!!!!");
+    this.setState({ tags: TagsStore.all() });
   },
 
   render: function () {
+    // debugger
+    var tags_elements = this.state.tags.map(function (tag, idx) {
+      return (<span key={idx}>{tag.name + "#"}</span>)
+    });
+
     return (
       <div>
-        {this.tags}
+        {tags_elements}
       </div>
     )
   }

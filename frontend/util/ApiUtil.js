@@ -109,7 +109,6 @@ var ApiUtil = {
     $.ajax({
       type: "GET",
       url: "api/tags",
-      data: "",
       success: ApiActions.receiveTags
     })
   },

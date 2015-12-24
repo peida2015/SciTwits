@@ -7,17 +7,13 @@ var TwitForm = require('../twits/TwitForm');
 var Twits = require('../twits/Twits');
 var TwitsActions = require('../../actions/TwitsActions');
 var MediaActions = require('../../actions/MediaActions');
+var Tags = require('../tags/Tags');
 
 var ProjectView = React.createClass({
 
   getInitialState: function () {
     return ({title: "", description: "", significance: "", media:"", twits: ""})
   },
-  //return find result from store using this.props.params.id
-
-  // getProject: function () {
-  // },
-  //fetch projects on mount
 
   componentDidMount: function () {
     this.MediaToken = MediaStore.addListener(this.fetchMedia);
@@ -90,6 +86,7 @@ var ProjectView = React.createClass({
         {this.buildProject()}
         <TwitForm project_id={this.props.params.id}/>
         <Twits twits={this.state.twits} user_id={this.props.routes[0].indexRoute.user_id}/>
+        <Tags project_id={this.props.params.id} />
       </div>
     )
   }

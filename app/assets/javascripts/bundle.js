@@ -31498,7 +31498,6 @@
 	    $.ajax({
 	      type: "GET",
 	      url: "api/tags",
-	      data: "",
 	      success: ApiActions.receiveTags
 	    });
 	  },
@@ -31620,6 +31619,7 @@
 	var Twits = __webpack_require__(242);
 	var TwitsActions = __webpack_require__(239);
 	var MediaActions = __webpack_require__(244);
+	var Tags = __webpack_require__(248);
 	
 	var ProjectView = React.createClass({
 	  displayName: 'ProjectView',
@@ -31627,11 +31627,6 @@
 	  getInitialState: function () {
 	    return { title: "", description: "", significance: "", media: "", twits: "" };
 	  },
-	  //return find result from store using this.props.params.id
-	
-	  // getProject: function () {
-	  // },
-	  //fetch projects on mount
 	
 	  componentDidMount: function () {
 	    this.MediaToken = MediaStore.addListener(this.fetchMedia);
@@ -31742,7 +31737,8 @@
 	      ),
 	      this.buildProject(),
 	      React.createElement(TwitForm, { project_id: this.props.params.id }),
-	      React.createElement(Twits, { twits: this.state.twits, user_id: this.props.routes[0].indexRoute.user_id })
+	      React.createElement(Twits, { twits: this.state.twits, user_id: this.props.routes[0].indexRoute.user_id }),
+	      React.createElement(Tags, { project_id: this.props.params.id })
 	    );
 	  }
 	});
@@ -31948,7 +31944,7 @@
 	  },
 	
 	  fetchTags: function (project_id) {
-	    ApiUtil.fetchTags();
+	    ApiUtil.fetchTags(project_id);
 	  },
 	
 	  saveTags: function (tags, project_id) {
@@ -31983,7 +31979,7 @@
 	
 	TagsStore.getProjectTags = function (project_id) {
 	  return _tags.filter(function (tag) {
-	    // debugger
+	    debugger;
 	    return tag.project_id == project_id;
 	  });
 	};
@@ -32433,6 +32429,53 @@
 	});
 	
 	module.exports = ProjectEdit;
+
+/***/ },
+/* 248 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var TagsStore = __webpack_require__(241);
+	var TagsActions = __webpack_require__(240);
+	
+	var Tags = React.createClass({
+	  displayName: 'Tags',
+	
+	  getInitialState: function () {
+	    return { tags: [] };
+	  },
+	  componentDidMount: function () {
+	    TagsActions.fetchTags(this.props.project_id);
+	    this.TagsToken = TagsStore.addListener(this.reloadTags);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.TagsToken.remove();
+	  },
+	
+	  reloadTags: function () {
+	    this.setState({ tags: TagsStore.all() });
+	  },
+	
+	  render: function () {
+	    // debugger
+	    var tags_elements = this.state.tags.map(function (tag, idx) {
+	      return React.createElement(
+	        'span',
+	        { key: idx },
+	        tag.name + "#"
+	      );
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      tags_elements
+	    );
+	  }
+	});
+	
+	module.exports = Tags;
 
 /***/ }
 /******/ ]);

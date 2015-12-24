@@ -7,7 +7,7 @@ var TagsActions = {
   },
 
   fetchTags: function (project_id) {
-    ApiUtil.fetchTags();
+    ApiUtil.fetchTags(project_id);
   },
 
   saveTags: function (tags, project_id) {

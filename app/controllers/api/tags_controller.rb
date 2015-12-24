@@ -5,7 +5,7 @@ class Api::TagsController < ApplicationController
   end
 
   def index
-    @tags = Tag.all
+    @tags = Project.find(params[:project_id]).tags
     render :index
   end
 
