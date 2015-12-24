@@ -40,6 +40,18 @@ var ApiAction = {
       twit:twit
     })
   },
+  receiveTags: function (tags) {
+    Dispatcher.dispatch({
+      actionType: "TAGS_RECEIVED",
+      tags:tags
+    })
+  },
+  receiveTag: function (tag) {
+    Dispatcher.dispatch({
+      actionType: "TAG_RECEIVED",
+      tag:tag
+    })
+  }
 }
 
 module.exports = ApiAction;

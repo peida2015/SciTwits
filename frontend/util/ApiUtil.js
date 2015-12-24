@@ -10,6 +10,7 @@ var ApiUtil = {
       success: ApiActions.receiveAllProjects
     })
   },
+
   saveProject: function (proj_data, callback) {
     $.ajax({
       type: "POST",
@@ -26,6 +27,28 @@ var ApiUtil = {
       // }
     })
   },
+
+  changeProject: function (proj_data, callback) {
+    $.ajax({
+      type: "PATCH",
+      url: "api/projects/"+proj_data.project.id,
+      data: proj_data,
+      success: function (resp) {
+        ApiActions.receiveProject(resp);
+        // ProjectForm.afterSubmit(resp.id);
+        callback(resp.id);
+      }
+    })
+  },
+
+  destroyProject: function (proj_id) {
+    $.ajax({
+      type: "DELETE",
+      url: "api/projects/"+proj_id,
+      success: ApiActions.receiveAllProjects
+    })
+  },
+
   fetchMedia: function (project_id) {
     $.ajax({
       type: "GET",
@@ -82,26 +105,54 @@ var ApiUtil = {
     })
   },
 
-  changeProject: function (proj_data, callback) {
+  fetchAllTags: function () {
     $.ajax({
-      type: "PATCH",
-      url: "api/projects/"+proj_data.project.id,
-      data: proj_data,
+      type: "GET",
+      url: "api/tags",
+      data: "",
+      success: ApiActions.receiveTags
+    })
+  },
+
+  fetchTags: function (project_id) {
+    $.ajax({
+      type: "GET",
+      url: "api/tags",
+      data: {project_id: project_id},
+      success: ApiActions.receiveTags
+    })
+  },
+
+  saveTag: function (tag_data, project_id, saveTagCallback) {
+    $.ajax({
+      type: "POST",
+      url: "api/tags",
+      data: tag_data,
       success: function (resp) {
-        ApiActions.receiveProject(resp);
-        // ProjectForm.afterSubmit(resp.id);
-        callback(resp.id);
+        ApiActions.receiveTag(resp);
+        // debugger
+        saveTagCallback(resp, project_id)
       }
     })
   },
 
-  destroyProject: function (proj_id) {
+  saveTagging: function (tag_data, project_id) {
+    var tagging = { tagging: {
+      tag_id: tag_data.id,
+      project_id: project_id
+    }};
+
     $.ajax({
-      type: "DELETE",
-      url: "api/projects/"+proj_id,
-      success: ApiActions.receiveAllProjects
+      type: "POST",
+      url: "api/taggings",
+      data: tagging,
+      success: function (resp) {
+        // ApiActions.receiveTag(resp);
+        console.log(resp);
+      }
     })
   }
+
 }
 
 module.exports = ApiUtil;

@@ -1,5 +1,5 @@
 var React = require('react');
-var ProjectActions = require('../../actions/ProjectActions');
+var ProjectsActions = require('../../actions/ProjectsActions');
 var History = require('react-router').History;
 var MediaActions = require('../../actions/MediaActions');
 var UploadButton = require('./UploadButton');
@@ -27,7 +27,7 @@ var ProjectForm = React.createClass({
         media: this.state.media
       }
     };
-    ProjectActions.createProject(data, function (proj_id) {
+    ProjectsActions.createProject(data, function (proj_id) {
       MediaActions.saveMedia([that.state.media, proj_id], that.redirectToView)
       debugger
     });

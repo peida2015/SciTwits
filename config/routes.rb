@@ -3,6 +3,8 @@ Rails.application.routes.draw do
     resources :projects, only:[:create, :index, :destroy, :update, :show]
     resources :media, only:[:create, :destroy, :index]
     resources :twits, only:[:create, :destroy, :index]
+    resources :tags, only:[:create, :destroy, :index]
+    resources :taggings, only:[:create, :destroy, :index]
   end
 
   resource :sessions, only: [:create, :destroy, :new]

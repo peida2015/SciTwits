@@ -1,6 +1,6 @@
 var ApiUtil = require('../util/ApiUtil');
 
-var ProjectActions = {
+var ProjectsActions = {
   fetchAllProjects: function () {
     ApiUtil.fetchAll();
   },
@@ -18,4 +18,4 @@ var ProjectActions = {
   }
 
 }
-module.exports = ProjectActions;
+module.exports = ProjectsActions;

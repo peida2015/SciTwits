@@ -4,6 +4,9 @@ class Project < ActiveRecord::Base
 
   has_many :media, dependent: :destroy
   has_many :twits, dependent: :destroy
+  has_many :taggings
+  has_many :tags, through: :taggings
+
   belongs_to :owner,
       class_name: "User",
       primary_key: :id,

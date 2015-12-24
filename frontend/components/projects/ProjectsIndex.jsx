@@ -1,6 +1,6 @@
 var React = require('react');
 var ProjectStore = require('../../stores/project');
-var ProjectActions = require('../../actions/ProjectActions');
+var ProjectsActions = require('../../actions/ProjectsActions');
 // var History = require('react-router').History;
 
 var ProjectsIndex = React.createClass({
@@ -18,7 +18,7 @@ var ProjectsIndex = React.createClass({
 
   componentDidMount: function () {
     // debugger
-    ProjectActions.fetchAllProjects();
+    ProjectsActions.fetchAllProjects();
     this.listenerToken = ProjectStore.addListener(this.handleStoreChange);
   },
 
@@ -33,7 +33,7 @@ var ProjectsIndex = React.createClass({
 
   handleDelete: function (e) {
     // console.log("Clicked Remove");
-    ProjectActions.deleteProject(e.target.id)
+    ProjectsActions.deleteProject(e.target.id)
   },
 
   handleEditClick: function (e){

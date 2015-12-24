@@ -1,5 +1,5 @@
 var React = require('react');
-var ProjectActions = require('../../actions/ProjectActions');
+var ProjectsActions = require('../../actions/ProjectsActions');
 // var History = require('react-router').History;
 
 var ProjectEdit = React.createClass({
@@ -24,7 +24,7 @@ var ProjectEdit = React.createClass({
         significance: e.target[2].value
       }
     };
-    ProjectActions.updateProject(data, this.redirectToShow);
+    ProjectsActions.updateProject(data, this.redirectToShow);
   },
 
   handleChange: function (e) {

@@ -52,8 +52,8 @@
 	// var Link = require('react-router').Link;
 	var ProjectsIndex = __webpack_require__(210);
 	var ProjectView = __webpack_require__(235);
-	var ProjectForm = __webpack_require__(242);
-	var ProjectEdit = __webpack_require__(244);
+	var ProjectForm = __webpack_require__(245);
+	var ProjectEdit = __webpack_require__(247);
 	// debugger
 	
 	$(function () {
@@ -24453,7 +24453,7 @@
 
 	var React = __webpack_require__(1);
 	var ProjectStore = __webpack_require__(211);
-	var ProjectActions = __webpack_require__(232);
+	var ProjectsActions = __webpack_require__(232);
 	// var History = require('react-router').History;
 	
 	var ProjectsIndex = React.createClass({
@@ -24473,7 +24473,7 @@
 	
 	  componentDidMount: function () {
 	    // debugger
-	    ProjectActions.fetchAllProjects();
+	    ProjectsActions.fetchAllProjects();
 	    this.listenerToken = ProjectStore.addListener(this.handleStoreChange);
 	  },
 	
@@ -24488,7 +24488,7 @@
 	
 	  handleDelete: function (e) {
 	    // console.log("Clicked Remove");
-	    ProjectActions.deleteProject(e.target.id);
+	    ProjectsActions.deleteProject(e.target.id);
 	  },
 	
 	  handleEditClick: function (e) {
@@ -31363,7 +31363,7 @@
 
 	var ApiUtil = __webpack_require__(233);
 	
-	var ProjectActions = {
+	var ProjectsActions = {
 	  fetchAllProjects: function () {
 	    ApiUtil.fetchAll();
 	  },
@@ -31381,7 +31381,7 @@
 	  }
 	
 	};
-	module.exports = ProjectActions;
+	module.exports = ProjectsActions;
 
 /***/ },
 /* 233 */
@@ -31399,6 +31399,7 @@
 	      success: ApiActions.receiveAllProjects
 	    });
 	  },
+	
 	  saveProject: function (proj_data, callback) {
 	    $.ajax({
 	      type: "POST",
@@ -31415,6 +31416,28 @@
 	      // }
 	    });
 	  },
+	
+	  changeProject: function (proj_data, callback) {
+	    $.ajax({
+	      type: "PATCH",
+	      url: "api/projects/" + proj_data.project.id,
+	      data: proj_data,
+	      success: function (resp) {
+	        ApiActions.receiveProject(resp);
+	        // ProjectForm.afterSubmit(resp.id);
+	        callback(resp.id);
+	      }
+	    });
+	  },
+	
+	  destroyProject: function (proj_id) {
+	    $.ajax({
+	      type: "DELETE",
+	      url: "api/projects/" + proj_id,
+	      success: ApiActions.receiveAllProjects
+	    });
+	  },
+	
 	  fetchMedia: function (project_id) {
 	    $.ajax({
 	      type: "GET",
@@ -31471,26 +31494,54 @@
 	    });
 	  },
 	
-	  changeProject: function (proj_data, callback) {
+	  fetchAllTags: function () {
 	    $.ajax({
-	      type: "PATCH",
-	      url: "api/projects/" + proj_data.project.id,
-	      data: proj_data,
+	      type: "GET",
+	      url: "api/tags",
+	      data: "",
+	      success: ApiActions.receiveTags
+	    });
+	  },
+	
+	  fetchTags: function (project_id) {
+	    $.ajax({
+	      type: "GET",
+	      url: "api/tags",
+	      data: { project_id: project_id },
+	      success: ApiActions.receiveTags
+	    });
+	  },
+	
+	  saveTag: function (tag_data, project_id, saveTagCallback) {
+	    $.ajax({
+	      type: "POST",
+	      url: "api/tags",
+	      data: tag_data,
 	      success: function (resp) {
-	        ApiActions.receiveProject(resp);
-	        // ProjectForm.afterSubmit(resp.id);
-	        callback(resp.id);
+	        ApiActions.receiveTag(resp);
+	        // debugger
+	        saveTagCallback(resp, project_id);
 	      }
 	    });
 	  },
 	
-	  destroyProject: function (proj_id) {
+	  saveTagging: function (tag_data, project_id) {
+	    var tagging = { tagging: {
+	        tag_id: tag_data.id,
+	        project_id: project_id
+	      } };
+	
 	    $.ajax({
-	      type: "DELETE",
-	      url: "api/projects/" + proj_id,
-	      success: ApiActions.receiveAllProjects
+	      type: "POST",
+	      url: "api/taggings",
+	      data: tagging,
+	      success: function (resp) {
+	        // ApiActions.receiveTag(resp);
+	        console.log(resp);
+	      }
 	    });
 	  }
+	
 	};
 	
 	module.exports = ApiUtil;
@@ -31539,6 +31590,18 @@
 	      actionType: "TWIT_RECEIVED",
 	      twit: twit
 	    });
+	  },
+	  receiveTags: function (tags) {
+	    Dispatcher.dispatch({
+	      actionType: "TAGS_RECEIVED",
+	      tags: tags
+	    });
+	  },
+	  receiveTag: function (tag) {
+	    Dispatcher.dispatch({
+	      actionType: "TAG_RECEIVED",
+	      tag: tag
+	    });
 	  }
 	};
 	
@@ -31552,11 +31615,11 @@
 	var ProjectStore = __webpack_require__(211);
 	var MediaStore = __webpack_require__(236);
 	var TwitsStore = __webpack_require__(237);
-	var ProjectActions = __webpack_require__(232);
+	var ProjectsActions = __webpack_require__(232);
 	var TwitForm = __webpack_require__(238);
-	var Twits = __webpack_require__(240);
+	var Twits = __webpack_require__(242);
 	var TwitsActions = __webpack_require__(239);
-	var MediaActions = __webpack_require__(241);
+	var MediaActions = __webpack_require__(244);
 	
 	var ProjectView = React.createClass({
 	  displayName: 'ProjectView',
@@ -31577,7 +31640,7 @@
 	
 	    // }.bind(this));
 	    TwitsActions.fetchTwits(this.props.params.id);
-	    ProjectActions.fetchAllProjects();
+	    ProjectsActions.fetchAllProjects();
 	    MediaActions.fetchMedia(this.props.params.id);
 	    // this.fetchTwits();
 	    // this.fetchMedia();
@@ -31599,9 +31662,7 @@
 	  },
 	
 	  fetchMedia: function () {
-	    console.log("Fetched");
 	    this.setState({ media: MediaStore.getProjectMedia(this.props.params.id) });
-	    // this.render()
 	  },
 	
 	  fetchTwits: function () {
@@ -31790,16 +31851,21 @@
 
 	var React = __webpack_require__(1);
 	var TwitsActions = __webpack_require__(239);
+	var TagsActions = __webpack_require__(240);
 	
 	var TwitForm = React.createClass({
 	  displayName: 'TwitForm',
 	
 	  getInitialState: function () {
-	    return { body: "", project_id: this.props.project_id };
+	    return { body: "", project_id: this.props.project_id, tags: "" };
 	  },
 	
 	  changeHandler: function (e) {
 	    this.setState({ body: e.target.value });
+	  },
+	
+	  handleTagChange: function (e) {
+	    this.setState({ tags: e.target.value });
 	  },
 	
 	  handleSubmit: function (e) {
@@ -31811,8 +31877,13 @@
 	        project_id: this.state.project_id
 	      }
 	    };
+	    var tags = this.state.tags.split(",").map(function (tag) {
+	      return tag.trim();
+	    });
+	
+	    TagsActions.saveTags(tags, this.state.project_id);
 	    TwitsActions.saveTwit(twit);
-	    this.setState({ body: "" });
+	    this.setState({ body: "", tags: "" });
 	  },
 	
 	  render: function () {
@@ -31822,7 +31893,17 @@
 	      React.createElement(
 	        'form',
 	        { onSubmit: this.handleSubmit },
-	        React.createElement('input', { type: 'text', onChange: this.changeHandler, value: this.state.body, placeholder: 'Be brief: max 150 chars' }),
+	        React.createElement('input', { type: 'text', onChange: this.changeHandler,
+	          value: this.state.body,
+	          placeholder: 'Be brief: max 150 chars' }),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Tags:'
+	        ),
+	        React.createElement('input', { type: 'text', onChange: this.handleTagChange,
+	          value: this.state.tags,
+	          placeholder: 'Ex: energy, promising, mindblowing' }),
 	        React.createElement('input', { type: 'submit', value: 'Submit Twit' })
 	      )
 	    );
@@ -31858,8 +31939,88 @@
 /* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var ApiUtil = __webpack_require__(233);
+	var TagsStore = __webpack_require__(241);
+	
+	var TagsActions = {
+	  fetchAllTags: function () {
+	    ApiUtil.fetchAllTags();
+	  },
+	
+	  fetchTags: function (project_id) {
+	    ApiUtil.fetchTags();
+	  },
+	
+	  saveTags: function (tags, project_id) {
+	    // debugger
+	    tags.forEach((function (tag) {
+	      var tag_data = { tag: { name: tag } };
+	      ApiUtil.saveTag(tag_data, project_id, this.saveTagging);
+	    }).bind(this));
+	  },
+	  saveTagging: function (tag, project_id) {
+	    // debugger
+	    ApiUtil.saveTagging(tag, project_id);
+	  }
+	};
+	
+	module.exports = TagsActions;
+
+/***/ },
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(212);
+	var Store = __webpack_require__(216).Store;
+	
+	var _tags = [];
+	
+	var TagsStore = new Store(Dispatcher);
+	
+	TagsStore.all = function () {
+	  return _tags;
+	};
+	
+	TagsStore.getProjectTags = function (project_id) {
+	  return _tags.filter(function (tag) {
+	    // debugger
+	    return tag.project_id == project_id;
+	  });
+	};
+	
+	TagsStore.resetAllTags = function (tags) {
+	  // debugger
+	  _tags = tags;
+	};
+	
+	TagsStore.addTwit = function (tag) {
+	  var tag_idx = _tags.indexOf(tag);
+	  if (tag_idx === -1) {
+	    _tags.push(tag);
+	  }
+	};
+	
+	TagsStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "TAGS_RECEIVED":
+	      this.resetAllTags(payload.tags);
+	      TagsStore.__emitChange();
+	      break;
+	    case "TAG_RECEIVED":
+	      this.addTwit(payload.tag);
+	      TagsStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = TagsStore;
+
+/***/ },
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
-	var TwitItem = __webpack_require__(245);
+	var TwitItem = __webpack_require__(243);
 	// var TwitsStore = require('../../stores/twit');
 	
 	var Twits = React.createClass({
@@ -31890,7 +32051,48 @@
 	module.exports = Twits;
 
 /***/ },
-/* 241 */
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var TwitsActions = __webpack_require__(239);
+	
+	var TwitItem = React.createClass({
+	  displayName: 'TwitItem',
+	
+	  handleDelete: function (e) {
+	    TwitsActions.deleteTwit(e.target.id);
+	  },
+	
+	  render: function () {
+	    if (this.props.twit.user_id == this.props.user_id) {
+	      var deleteButton = React.createElement(
+	        'button',
+	        { className: 'delete', onClick: this.handleDelete,
+	          id: this.props.twit.id },
+	        'Delete'
+	      );
+	    } else {
+	      var deleteButton = "";
+	    }
+	    // debugger
+	    return React.createElement(
+	      'div',
+	      { className: 'twit' },
+	      this.props.twit.body,
+	      deleteButton,
+	      React.createElement('br', null),
+	      'by: ',
+	      this.props.twit.user,
+	      React.createElement('br', null)
+	    );
+	  }
+	});
+	
+	module.exports = TwitItem;
+
+/***/ },
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ApiUtil = __webpack_require__(233);
@@ -31917,14 +32119,14 @@
 	module.exports = MediaActions;
 
 /***/ },
-/* 242 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ProjectActions = __webpack_require__(232);
+	var ProjectsActions = __webpack_require__(232);
 	var History = __webpack_require__(159).History;
-	var MediaActions = __webpack_require__(241);
-	var UploadButton = __webpack_require__(243);
+	var MediaActions = __webpack_require__(244);
+	var UploadButton = __webpack_require__(246);
 	
 	var ProjectForm = React.createClass({
 	  displayName: 'ProjectForm',
@@ -31951,7 +32153,7 @@
 	        media: this.state.media
 	      }
 	    };
-	    ProjectActions.createProject(data, function (proj_id) {
+	    ProjectsActions.createProject(data, function (proj_id) {
 	      MediaActions.saveMedia([that.state.media, proj_id], that.redirectToView);
 	      debugger;
 	    });
@@ -32092,7 +32294,7 @@
 	module.exports = ProjectForm;
 
 /***/ },
-/* 243 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32122,11 +32324,11 @@
 	// RegEx to match filename at the end of full path: .match(/[^\\/]+\.[^\\/]+$/)[0];
 
 /***/ },
-/* 244 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ProjectActions = __webpack_require__(232);
+	var ProjectsActions = __webpack_require__(232);
 	// var History = require('react-router').History;
 	
 	var ProjectEdit = React.createClass({
@@ -32153,7 +32355,7 @@
 	        significance: e.target[2].value
 	      }
 	    };
-	    ProjectActions.updateProject(data, this.redirectToShow);
+	    ProjectsActions.updateProject(data, this.redirectToShow);
 	  },
 	
 	  handleChange: function (e) {
@@ -32231,47 +32433,6 @@
 	});
 	
 	module.exports = ProjectEdit;
-
-/***/ },
-/* 245 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var TwitsActions = __webpack_require__(239);
-	
-	var TwitItem = React.createClass({
-	  displayName: 'TwitItem',
-	
-	  handleDelete: function (e) {
-	    TwitsActions.deleteTwit(e.target.id);
-	  },
-	
-	  render: function () {
-	    if (this.props.twit.user_id == this.props.user_id) {
-	      var deleteButton = React.createElement(
-	        'button',
-	        { className: 'delete', onClick: this.handleDelete,
-	          id: this.props.twit.id },
-	        'Delete'
-	      );
-	    } else {
-	      var deleteButton = "";
-	    }
-	    // debugger
-	    return React.createElement(
-	      'div',
-	      { className: 'twit' },
-	      this.props.twit.body,
-	      deleteButton,
-	      React.createElement('br', null),
-	      'by: ',
-	      this.props.twit.user,
-	      React.createElement('br', null)
-	    );
-	  }
-	});
-	
-	module.exports = TwitItem;
 
 /***/ }
 /******/ ]);

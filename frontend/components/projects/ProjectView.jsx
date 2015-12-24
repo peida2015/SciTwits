@@ -2,7 +2,7 @@ var React = require('react');
 var ProjectStore = require('../../stores/project');
 var MediaStore = require('../../stores/medium');
 var TwitsStore = require('../../stores/twit');
-var ProjectActions = require('../../actions/ProjectActions');
+var ProjectsActions = require('../../actions/ProjectsActions');
 var TwitForm = require('../twits/TwitForm');
 var Twits = require('../twits/Twits');
 var TwitsActions = require('../../actions/TwitsActions');
@@ -26,7 +26,7 @@ var ProjectView = React.createClass({
 
       // }.bind(this));
     TwitsActions.fetchTwits(this.props.params.id);
-    ProjectActions.fetchAllProjects();
+    ProjectsActions.fetchAllProjects();
     MediaActions.fetchMedia(this.props.params.id);
     // this.fetchTwits();
     // this.fetchMedia();
@@ -48,9 +48,7 @@ var ProjectView = React.createClass({
   },
 
   fetchMedia: function () {
-    console.log("Fetched");
     this.setState ({ media: MediaStore.getProjectMedia(this.props.params.id) });
-    // this.render()
   },
 
   fetchTwits: function () {
