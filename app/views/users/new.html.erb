@@ -1,9 +1,22 @@
-<form class="" action="/users" method="post">
-  <h3>Sign Up!</h3>
-  <%= auth_token %>
-  <label>Username</label>
-  <input type="text" name="user[username]" value=""><br></br>
-  <label>Password</label>
-  <input type="password" name="user[password]" value=""><br></br>
-  <input type="submit" value="Create Account">
-</form>
+<div class="fullscreen-bg">
+    <video loop muted autoplay class="fullscreen-bg__video">
+        <source src="../assets/SolarFlare.webm" type="video/webm">
+        <!-- <source src="video/big_buck_bunny.mp4" type="video/mp4">
+        <source src="video/big_buck_bunny.ogv" type="video/ogg"> -->
+    </video>
+    <!-- <%= video_tag 'GalaxyEvolutionAnimation[360p].webm' %> -->
+</div>
+
+<div class="container">
+  <form class="" action="/users" method="post">
+    <h3>Sign Up!</h3>
+    <%= auth_token %>
+    <label>Username</label>
+    <input type="text" name="user[username]" value=""><br></br>
+    <label>Password</label>
+    <input type="password" name="user[password]" value=""><br></br>
+    <div class="submit-wrapper">
+      <button type="submit" class="icon fa-user">Create Account</button>
+    </div>
+  </form>
+</div>

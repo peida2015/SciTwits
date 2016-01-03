@@ -60,12 +60,16 @@ var ProjectsIndex = React.createClass({
     if (this.props.route.user_id == project.owner_id) {
       var removeButton =(
         <button onClick={this.handleDelete}
+          className='icon fa-remove fa-2x tooltip'
+          value="Delete"
           id={project.id}>
-          Remove Project</button>)
+        </button>)
       var editButton =(
         <button onClick={this.handleEditClick}
+          className='icon fa-edit fa-2x tooltip'
+          value="Edit"
           id={project.id}>
-          Edit Project</button>)
+        </button>)
     } else {
       var removeButton = "";
       var editButton = ""
@@ -78,8 +82,8 @@ var ProjectsIndex = React.createClass({
     var buttons = this.buildButtons(project);
 
     return (
-      <div key={idx} >
-          <div className="project" onClick={this.redirectToView.bind(null, project.id)}>
+      <div key={idx} className="project five columns box">
+          <div onClick={this.redirectToView.bind(null, project.id)}>
             <strong>Title:</strong>
             <div className="title">{ project.title }</div>
             <strong>Description:</strong>
@@ -98,9 +102,10 @@ var ProjectsIndex = React.createClass({
     // debugger
     var proj_view = this.state.projects.map(this.buildProject);
     // console.log("ProjectsIndex");
+    
     return (
       <div>
-        <a href="#projects/form"><h5>Create New</h5></a>
+        <h5><a href="#projects/form">Create New</a></h5>
 
         <h4>Projects Index</h4>
         { proj_view }

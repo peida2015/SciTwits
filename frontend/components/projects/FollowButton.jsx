@@ -25,7 +25,7 @@ var FollowButton = React.createClass({
     } else {
       this.setState({ followed: true })
     }
-    console.log(this.state.followed);
+    // console.log(this.state.followed);
   },
 
   toggleFollowButton: function (e) {
@@ -43,9 +43,15 @@ var FollowButton = React.createClass({
 
   buildButton: function () {
     if (this.state.followed) {
-      return (<button onClick={this.toggleFollowButton}>Unfollow -</button>)
+      return (<button className='icon fa-plus fa-2x tooltip'
+                      value="Unfollow Project"
+                      onClick={this.toggleFollowButton}>
+              </button>)
     } else {
-      return (<button onClick={this.toggleFollowButton}>Follow +</button>)
+      return (<button className='icon fa-plus fa-2x tooltip'
+                      value="Follow Project"
+                      onClick={this.toggleFollowButton}>
+              </button>)
     }
   },
 
