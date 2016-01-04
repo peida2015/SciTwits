@@ -39,7 +39,7 @@
 }
 .container.follow {
   display:inline-block;
-  width: auto;
+  width: 75px;
 }
 .project {
   padding: 0 20px;
@@ -112,8 +112,12 @@
 .submit-wrapper {
   text-align: center;
 }
-
-
+.buttons-wrapper {
+  float:right;
+  width: 70px;
+  /*position: absolute;
+  right: 0;*/
+}
 .icon::before {
   display: inline-block;
   margin-right: .5em;
@@ -128,20 +132,23 @@
   display: block;
   background: black;
   color: white;
-  padding: 5px;
+  padding: 0px 10px;
   content: attr(value);
   z-index: 5;
   position: relative;
-  top: 10%;
-  right: 0%;
+  top: -40px;
+  right: 120px;
   font-size: 10px;
-  opacity: 0.4;
+  opacity: 0.6;
+  border-radius: 8px;
+  width:80px;
 }
 #root {
   width: 1050px;
   margin: 0 auto;
   overflow: auto;
 }
+
 
 
 /* For devices larger than 400px */
@@ -232,7 +239,9 @@ body {
   position: relative;
   top: 0;
   background-image: url(http://imgsrc.hubblesite.org/hu/db/images/hs-2006-14-a-1280x800_wallpaper.jpg);
-  min-height: 620px;
+  background-size: 100%;
+  background-attachment: fixed;
+  min-height: 660px;
   overflow-y:inherit;
 }
 
@@ -299,7 +308,8 @@ input[type="button"] {
   border: 1px solid #bbb;
   cursor: pointer;
   box-sizing: border-box;
-  background-color: white
+  background-color: white;
+  min-width: 75px;
 }
 .button:hover,
 button:hover,
@@ -315,6 +325,7 @@ input[type="button"]:focus {
   border-color: #888;
   outline: 0;
   background-color: #164;
+  width: inherit;
 }
 .button.button-primary,
 button.button-primary,
@@ -341,6 +352,7 @@ input[type="button"].button-primary:focus {
 input[disabled], input[disabled]:hover {
   color: lightgray;
   border-color: lightgray;
+  background-color: white;
 }
 
 /* Forms

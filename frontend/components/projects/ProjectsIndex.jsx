@@ -60,15 +60,17 @@ var ProjectsIndex = React.createClass({
     if (this.props.route.user_id == project.owner_id) {
       var removeButton =(
         <button onClick={this.handleDelete}
-          className='icon fa-remove fa-2x tooltip'
+          className='tooltip'
           value="Delete"
           id={project.id}>
+          <i className="fa fa-remove fa-2x" />
         </button>)
       var editButton =(
         <button onClick={this.handleEditClick}
-          className='icon fa-edit fa-2x tooltip'
+          className='tooltip'
           value="Edit"
           id={project.id}>
+          <i className="fa fa-edit fa-2x" />
         </button>)
     } else {
       var removeButton = "";
@@ -83,17 +85,28 @@ var ProjectsIndex = React.createClass({
 
     return (
       <div key={idx} className="project five columns box">
-          <div onClick={this.redirectToView.bind(null, project.id)}>
-            <strong>Title:</strong>
-            <div className="title">{ project.title }</div>
-            <strong>Description:</strong>
-            <div className="description">{ project.description }</div>
-            <strong>Significance:</strong>
-            <div className="significance">{ project.significance }</div>
+          <div className="ten columns" onClick={this.redirectToView.bind(null, project.id)}>
+            <div className="title">
+              <strong>Title:</strong><br/>
+              { project.title }
+            </div>
+
+            <div className="description">
+              <strong>Description:</strong><br/>
+              { project.description }
+            </div>
+
+            <div className="significance">
+              <strong>Significance:</strong><br/>
+              { project.significance }
+            </div>
           </div>
-        {this.followButton(project.id)}
-        {buttons[0]}
-        {buttons[1]}
+
+          <div className="buttons-wrapper one column">
+            {this.followButton(project.id)}
+            {buttons[0]}
+            {buttons[1]}
+          </div>
       </div>
     )
   },
@@ -102,7 +115,7 @@ var ProjectsIndex = React.createClass({
     // debugger
     var proj_view = this.state.projects.map(this.buildProject);
     // console.log("ProjectsIndex");
-    
+
     return (
       <div>
         <h5><a href="#projects/form">Create New</a></h5>

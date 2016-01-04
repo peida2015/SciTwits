@@ -24207,14 +24207,22 @@
 	
 	  buildButtons: function (project) {
 	    if (this.props.route.user_id == project.owner_id) {
-	      var removeButton = React.createElement('button', { onClick: this.handleDelete,
-	        className: 'icon fa-remove fa-2x tooltip',
-	        value: 'Delete',
-	        id: project.id });
-	      var editButton = React.createElement('button', { onClick: this.handleEditClick,
-	        className: 'icon fa-edit fa-2x tooltip',
-	        value: 'Edit',
-	        id: project.id });
+	      var removeButton = React.createElement(
+	        'button',
+	        { onClick: this.handleDelete,
+	          className: 'tooltip',
+	          value: 'Delete',
+	          id: project.id },
+	        React.createElement('i', { className: 'fa fa-remove fa-2x' })
+	      );
+	      var editButton = React.createElement(
+	        'button',
+	        { onClick: this.handleEditClick,
+	          className: 'tooltip',
+	          value: 'Edit',
+	          id: project.id },
+	        React.createElement('i', { className: 'fa fa-edit fa-2x' })
+	      );
 	    } else {
 	      var removeButton = "";
 	      var editButton = "";
@@ -24231,41 +24239,48 @@
 	      { key: idx, className: 'project five columns box' },
 	      React.createElement(
 	        'div',
-	        { onClick: this.redirectToView.bind(null, project.id) },
-	        React.createElement(
-	          'strong',
-	          null,
-	          'Title:'
-	        ),
+	        { className: 'ten columns', onClick: this.redirectToView.bind(null, project.id) },
 	        React.createElement(
 	          'div',
 	          { className: 'title' },
+	          React.createElement(
+	            'strong',
+	            null,
+	            'Title:'
+	          ),
+	          React.createElement('br', null),
 	          project.title
-	        ),
-	        React.createElement(
-	          'strong',
-	          null,
-	          'Description:'
 	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'description' },
+	          React.createElement(
+	            'strong',
+	            null,
+	            'Description:'
+	          ),
+	          React.createElement('br', null),
 	          project.description
-	        ),
-	        React.createElement(
-	          'strong',
-	          null,
-	          'Significance:'
 	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'significance' },
+	          React.createElement(
+	            'strong',
+	            null,
+	            'Significance:'
+	          ),
+	          React.createElement('br', null),
 	          project.significance
 	        )
 	      ),
-	      this.followButton(project.id),
-	      buttons[0],
-	      buttons[1]
+	      React.createElement(
+	        'div',
+	        { className: 'buttons-wrapper one column' },
+	        this.followButton(project.id),
+	        buttons[0],
+	        buttons[1]
+	      )
 	    );
 	  },
 	
@@ -31400,13 +31415,21 @@
 	
 	  buildButton: function () {
 	    if (this.state.followed) {
-	      return React.createElement('button', { className: 'icon fa-plus fa-2x tooltip',
-	        value: 'Unfollow Project',
-	        onClick: this.toggleFollowButton });
+	      return React.createElement(
+	        'button',
+	        { className: 'tooltip',
+	          value: 'Unfollow',
+	          onClick: this.toggleFollowButton },
+	        React.createElement('i', { className: 'fa fa-minus fa-2x' })
+	      );
 	    } else {
-	      return React.createElement('button', { className: 'icon fa-plus fa-2x tooltip',
-	        value: 'Follow Project',
-	        onClick: this.toggleFollowButton });
+	      return React.createElement(
+	        'button',
+	        { className: 'tooltip',
+	          value: 'Follow',
+	          onClick: this.toggleFollowButton },
+	        React.createElement('i', { className: 'fa fa-plus fa-2x' })
+	      );
 	    }
 	  },
 	
