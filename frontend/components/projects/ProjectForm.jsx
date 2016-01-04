@@ -104,7 +104,8 @@ var ProjectForm = React.createClass({
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <a href="#/"><h5>Back to Index</h5></a>
+          <h5><a className="back-button" href="#/">&#xf00a; Back to Index</a></h5>
+          <br></br><br></br>
           <label>Title:</label>
           <input type="text" value={this.state.title}
                   onChange={this.handleChange}

@@ -55,9 +55,16 @@
 }
 .twit {
   padding: 10px;
-  width: 500px;
-  margin: auto;
+  width: inherit;
+  margin: 0 auto;
   border: 1px solid #bbb;
+  background-color: white
+}
+.twits-box {
+  height: 200px;
+  overflow: auto;
+  margin: 0 auto;
+  text-align:left;
 }
 .column,
 .columns {
@@ -143,6 +150,9 @@
   opacity: 0.6;
   border-radius: 8px;
   width:80px;
+}
+.back-button {
+  display: block;
 }
 #root {
   width: 1050px;
@@ -253,8 +263,9 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   margin-bottom: 2rem;
   font-weight: 400;
-  font-family: 'Play', serif;
+  font-family: 'Play', serif, FontAwesome;
   text-align: center;
+  display: inherit;
 }
 h1 { font-size: 4.0rem; line-height: 1.2;  letter-spacing: -.1rem;}
 h2 { font-size: 3.6rem; line-height: 1.25; letter-spacing: -.1rem; }
@@ -282,7 +293,27 @@ p {
 a {
   color: #1EAEDB; }
 a:hover {
-  color: #0FA0CE; }
+  color: #0FA0CE;
+  background-color:inherit;
+}
+header a {
+  padding: 3px 18px;
+  border: 3px solid blue;
+  background: #3333cc;
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  margin: 0 auto;
+}
+a.back-button {
+  padding: 0px 18px;
+  border: 1px solid black;
+  background: white;
+  color: #888;
+  text-decoration: none;
+  float: left;
+  border-radius: 5px;
+}
 
 
 /* Buttons
@@ -329,8 +360,8 @@ input[type="button"]:focus {
   border-color: #888;
   outline: 0;
   background-color: #164;
-  width: inherit;
 }
+.small:hover{ width: inherit; }
 .button.button-primary,
 button.button-primary,
 input[type="submit"].button-primary,

@@ -50,7 +50,7 @@ var ProjectEdit = React.createClass({
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <a href="#/"><h5>Back to Index</h5></a>
+          <h5><a href="#/">Back to Index</a></h5>
           <label>Title:</label>
           <input type="text" value={this.state.title}
                   onChange={this.handleChange}

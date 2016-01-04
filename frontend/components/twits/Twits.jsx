@@ -7,14 +7,13 @@ var Twits = React.createClass ({
   render: function () {
     // debugger
     if (this.props.twits !== "") {
-      var twits_tags = this.props.twits.map(function (twit, idx) {
-// debugger
+      var twits_tags = this.props.twits.reverse().map(function (twit, idx) {
         return (
           <TwitItem key={idx} twit={twit} user_id={this.props.user_id}/>
           )
       }.bind(this));
       return (
-        <div>
+        <div className='twits-box'>
           {twits_tags}
         </div>
       )

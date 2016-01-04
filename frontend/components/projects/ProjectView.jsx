@@ -65,17 +65,17 @@ var ProjectView = React.createClass({
     }
 
     return (
-      <div>
-        <div className="project">
+      // <div>
+        <div className="project six columns">
           <strong>Title:</strong>
           <div className="title">{ this.state.title }</div>
           <strong>Description:</strong>
           <div className="description">{ this.state.description }</div>
           <strong>Significance:</strong>
           <div className="significance">{ this.state.significance }</div>
-          <div>{media_tags}</div>
+          <div className="media-file">{media_tags}</div>
         </div>
-      </div>
+      // </div>
     )
   },
 
@@ -86,11 +86,16 @@ var ProjectView = React.createClass({
       <div className="container">
         <FollowButton project_id={this.props.params.id}
           user_id={this.props.routes[0].indexRoute.user_id}/>
-        <a href="#/"><h5>Back to Index</h5></a>
+        <div className="ten columns">
+          <h5><a className="back-button" href="#/">&#xf00a; Back to Index</a></h5>
+        </div>
+        <br></br><br></br>
         {this.buildProject()}
-        <TwitForm project_id={this.props.params.id}/>
-        <Twits twits={this.state.twits} user_id={this.props.routes[0].indexRoute.user_id}/>
-        <Tags project_id={this.props.params.id} />
+        <div className="five columns">
+          <TwitForm project_id={this.props.params.id}/>
+          <Twits twits={this.state.twits} user_id={this.props.routes[0].indexRoute.user_id}/>
+          <Tags project_id={this.props.params.id} />
+        </div>
       </div>
     )
   }

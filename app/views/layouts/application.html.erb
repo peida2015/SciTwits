@@ -22,11 +22,11 @@
     <nav class='header-nav'>
       <img src="../assets/SciTwits.png" alt="" class="logo"/>
       <% if current_user %>
-      <label>Logged in: <%= current_user.username %></label>
-      <%= button_to "&#xf08b; &nbsp; Logout".html_safe,
-      sessions_url,
-      method:"delete",
-      class: "button-primary" %>
+        <label>Logged in: <%= current_user.username %></label>
+        <%= button_to "&#xf08b; &nbsp; Logout".html_safe, sessions_url,
+            method:"delete",
+            class: "button-primary" %>
+        <h5><a href="#projects/form">&#xf0a1; &nbsp; Create New</a></h5>
       <% else %>
       <br>
       <%= button_to "&#xf090; &nbsp; Login".html_safe,
@@ -49,6 +49,7 @@
       Logo: Science Icons graphic by
       <a href="http://www.freepik.com/">Freepik</a> from <a href="http://www.flaticon.com/">Flaticon</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a>. Made with <a href="http://logomakr.com" title="Logo Maker">Logo Maker</a></br>
       Background videos and images are public domain resources downloaded from <a href="http://www.nasa.gov/multimedia/guidelines/index.html">NASA</a>.
+      <h6>&#xf1f9;  2015. All Rights Reserved.</h6>
     </div>
   </footer>
   <%= render 'layouts/errors' %>

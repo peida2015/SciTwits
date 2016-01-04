@@ -24210,7 +24210,7 @@
 	      var removeButton = React.createElement(
 	        'button',
 	        { onClick: this.handleDelete,
-	          className: 'tooltip',
+	          className: 'tooltip small',
 	          value: 'Delete',
 	          id: project.id },
 	        React.createElement('i', { className: 'fa fa-remove fa-2x' })
@@ -24218,7 +24218,7 @@
 	      var editButton = React.createElement(
 	        'button',
 	        { onClick: this.handleEditClick,
-	          className: 'tooltip',
+	          className: 'tooltip small',
 	          value: 'Edit',
 	          id: project.id },
 	        React.createElement('i', { className: 'fa fa-edit fa-2x' })
@@ -24292,24 +24292,7 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(
-	        'header',
-	        { className: 'header' },
-	        React.createElement(
-	          'h5',
-	          null,
-	          React.createElement(
-	            'a',
-	            { href: '#projects/form' },
-	            'Create New'
-	          )
-	        ),
-	        React.createElement(
-	          'h4',
-	          null,
-	          'Projects Index'
-	        )
-	      ),
+	      React.createElement('br', null),
 	      proj_view
 	    );
 	  }
@@ -31421,7 +31404,7 @@
 	    if (this.state.followed) {
 	      return React.createElement(
 	        'button',
-	        { className: 'tooltip',
+	        { className: 'tooltip small',
 	          value: 'Unfollow',
 	          onClick: this.toggleFollowButton },
 	        React.createElement('i', { className: 'fa fa-minus fa-2x' })
@@ -31429,7 +31412,7 @@
 	    } else {
 	      return React.createElement(
 	        'button',
-	        { className: 'tooltip',
+	        { className: 'tooltip small',
 	          value: 'Follow',
 	          onClick: this.toggleFollowButton },
 	        React.createElement('i', { className: 'fa fa-plus fa-2x' })
@@ -31604,12 +31587,11 @@
 	      });
 	    }
 	
-	    return React.createElement(
-	      'div',
-	      null,
+	    return(
+	      // <div>
 	      React.createElement(
 	        'div',
-	        { className: 'project' },
+	        { className: 'project six columns' },
 	        React.createElement(
 	          'strong',
 	          null,
@@ -31642,10 +31624,12 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          null,
+	          { className: 'media-file' },
 	          media_tags
 	        )
 	      )
+	      // </div>
+	
 	    );
 	  },
 	
@@ -31658,18 +31642,28 @@
 	      React.createElement(FollowButton, { project_id: this.props.params.id,
 	        user_id: this.props.routes[0].indexRoute.user_id }),
 	      React.createElement(
-	        'a',
-	        { href: '#/' },
+	        'div',
+	        { className: 'ten columns' },
 	        React.createElement(
 	          'h5',
 	          null,
-	          'Back to Index'
+	          React.createElement(
+	            'a',
+	            { className: 'back-button', href: '#/' },
+	            ' Back to Index'
+	          )
 	        )
 	      ),
+	      React.createElement('br', null),
+	      React.createElement('br', null),
 	      this.buildProject(),
-	      React.createElement(TwitForm, { project_id: this.props.params.id }),
-	      React.createElement(Twits, { twits: this.state.twits, user_id: this.props.routes[0].indexRoute.user_id }),
-	      React.createElement(Tags, { project_id: this.props.params.id })
+	      React.createElement(
+	        'div',
+	        { className: 'five columns' },
+	        React.createElement(TwitForm, { project_id: this.props.params.id }),
+	        React.createElement(Twits, { twits: this.state.twits, user_id: this.props.routes[0].indexRoute.user_id }),
+	        React.createElement(Tags, { project_id: this.props.params.id })
+	      )
 	    );
 	  }
 	});
@@ -31964,13 +31958,12 @@
 	  render: function () {
 	    // debugger
 	    if (this.props.twits !== "") {
-	      var twits_tags = this.props.twits.map((function (twit, idx) {
-	        // debugger
+	      var twits_tags = this.props.twits.reverse().map((function (twit, idx) {
 	        return React.createElement(TwitItem, { key: idx, twit: twit, user_id: this.props.user_id });
 	      }).bind(this));
 	      return React.createElement(
 	        'div',
-	        null,
+	        { className: 'twits-box' },
 	        twits_tags
 	      );
 	    } else {
@@ -32223,14 +32216,16 @@
 	        'form',
 	        { onSubmit: this.handleSubmit },
 	        React.createElement(
-	          'a',
-	          { href: '#/' },
+	          'h5',
+	          null,
 	          React.createElement(
-	            'h5',
-	            null,
-	            'Back to Index'
+	            'a',
+	            { className: 'back-button', href: '#/' },
+	            ' Back to Index'
 	          )
 	        ),
+	        React.createElement('br', null),
+	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
 	          null,
@@ -32373,11 +32368,11 @@
 	        'form',
 	        { onSubmit: this.handleSubmit },
 	        React.createElement(
-	          'a',
-	          { href: '#/' },
+	          'h5',
+	          null,
 	          React.createElement(
-	            'h5',
-	            null,
+	            'a',
+	            { href: '#/' },
 	            'Back to Index'
 	          )
 	        ),
