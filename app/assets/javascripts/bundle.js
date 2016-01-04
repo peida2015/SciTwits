@@ -24293,18 +24293,22 @@
 	      'div',
 	      null,
 	      React.createElement(
-	        'h5',
-	        null,
+	        'header',
+	        { className: 'header' },
 	        React.createElement(
-	          'a',
-	          { href: '#projects/form' },
-	          'Create New'
+	          'h5',
+	          null,
+	          React.createElement(
+	            'a',
+	            { href: '#projects/form' },
+	            'Create New'
+	          )
+	        ),
+	        React.createElement(
+	          'h4',
+	          null,
+	          'Projects Index'
 	        )
-	      ),
-	      React.createElement(
-	        'h4',
-	        null,
-	        'Projects Index'
 	      ),
 	      proj_view
 	    );

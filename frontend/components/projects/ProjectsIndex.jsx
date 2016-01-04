@@ -118,9 +118,11 @@ var ProjectsIndex = React.createClass({
 
     return (
       <div>
-        <h5><a href="#projects/form">Create New</a></h5>
+        <header className="header">
+          <h5><a href="#projects/form">Create New</a></h5>
+          <h4>Projects Index</h4>
+        </header>
 
-        <h4>Projects Index</h4>
         { proj_view }
       </div>
     )

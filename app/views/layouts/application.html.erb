@@ -25,16 +25,18 @@
       <label>Logged in: <%= current_user.username %></label>
       <%= button_to "&#xf08b; &nbsp; Logout".html_safe,
       sessions_url,
-      method:"delete" %>
+      method:"delete",
+      class: "button-primary" %>
       <% else %>
       <br>
       <%= button_to "&#xf090; &nbsp; Login".html_safe,
       new_sessions_url,
       method:'get',
-      class: "icon fa-user" %>
+      class: "button-primary" %>
       <%= button_to "&#xf007; &nbsp; Sign Up".html_safe,
       new_user_url,
-      method:'get' %>
+      method:'get',
+      class: "button-primary"%>
       <% end %>
     </nav>
   </header>
@@ -42,7 +44,11 @@
   <%= yield %><br></br>
 
   <footer class='footer'>
-    <div class='credit'>Logo Credit: Science Icons graphic by <a href="http://www.freepik.com/">Freepik</a> from <a href="http://www.flaticon.com/">Flaticon</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a>. Made with <a href="http://logomakr.com" title="Logo Maker">Logo Maker</a>
+    <div class='footer-credit'>
+      Credits:</br>
+      Logo: Science Icons graphic by
+      <a href="http://www.freepik.com/">Freepik</a> from <a href="http://www.flaticon.com/">Flaticon</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a>. Made with <a href="http://logomakr.com" title="Logo Maker">Logo Maker</a></br>
+      Background videos and images are public domain resources downloaded from <a href="http://www.nasa.gov/multimedia/guidelines/index.html">NASA</a>.
     </div>
   </footer>
   <%= render 'layouts/errors' %>
