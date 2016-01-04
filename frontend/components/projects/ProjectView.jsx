@@ -46,7 +46,6 @@ var ProjectView = React.createClass({
   },
 
   fetchMedia: function () {
-    console.log("fetchMedia called");
     this.setState ({ media: MediaStore.getProjectMedia(this.props.params.id) });
   },
 
