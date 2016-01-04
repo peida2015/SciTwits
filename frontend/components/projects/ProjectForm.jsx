@@ -86,7 +86,7 @@ var ProjectForm = React.createClass({
   },
 
   render: function () {
-    console.log("Form rendered");
+    // console.log("Form rendered");
 
     if (this.state.media.length !== 0) {
       var uploaded = "Uploaded so far:";

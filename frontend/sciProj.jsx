@@ -40,6 +40,7 @@ $(function () {
   if (root) {
     // debugger
     ReactDOM.render(<Router>{routes}</Router>, root);
+
   }
   // ReactDOM.render(<div>"This is what I want you to see"</div>, header);
 })

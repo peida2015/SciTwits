@@ -33,13 +33,19 @@
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
-  padding: 0 20px;
+
   box-sizing: border-box;
   margin-top: 0;
 }
+.container.intro { color: white; padding-top: 70px;}
 .container.follow {
   display:inline-block;
   width: 75px;
+}
+.content {
+  width: 1050px;
+  margin: 0 auto;
+  overflow: hidden;
 }
 .project {
   padding: 0 20px;
@@ -49,7 +55,7 @@
   background: white;
 }
 .box {
-  height:280px;
+  min-height: 280px;
   margin: 20px;
   padding: 30px;
 }
@@ -62,7 +68,8 @@
 }
 .twits-box {
   height: 200px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   margin: 0 auto;
   text-align:left;
 }
@@ -103,19 +110,21 @@
     overflow: hidden;
     z-index: -10;
 }
+.fullscreen-bg__video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+}
 .logo {
   width:80px;
   height:auto;
   display: inline-block;
   float: left;
   padding: 20px;
-}
-.fullscreen-bg__video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: auto;
+  -webkit-filter: grayscale(80%);
+  filter: grayscale(80%);
 }
 .submit-wrapper {
   text-align: center;
@@ -145,14 +154,37 @@
   z-index: 5;
   position: relative;
   top: -40px;
-  right: 120px;
+  right: 130px;
   font-size: 10px;
   opacity: 0.6;
   border-radius: 8px;
   width:80px;
 }
+.tooltip:hover:before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  bottom: 40%;
+  border-top: 5px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 0px solid black;
+  border-left: 10px solid black;
+  opacity: 0.6;
+}
 .back-button {
   display: block;
+}
+.twit-delete {
+  float: right;
+  margin-right: 20%;
+}
+.errors {
+  color: yellow;
+  background: transparent;
+  position: fixed;
+  bottom: 0px;
+  left: 60%;
+  padding: 10px;
 }
 #root {
   width: 1050px;
@@ -249,14 +281,23 @@ body {
   color: #222;
   position: relative;
   top: 0;
-  background-image: url(http://imgsrc.hubblesite.org/hu/db/images/hs-2006-14-a-1280x800_wallpaper.jpg);
-  background-size: 100%;
-  background-attachment: fixed;
   min-height: 660px;
   overflow-y:inherit;
 }
 
-
+body::after {
+  content: "";
+  background-image: url(http://imgsrc.hubblesite.org/hu/db/images/hs-2006-14-a-1280x800_wallpaper.jpg);
+  background-size: 100%;
+  background-attachment: fixed;
+  opacity: 1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -15;
+}
 /* Typography
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 h1, h2, h3, h4, h5, h6 {

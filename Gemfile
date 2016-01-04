@@ -35,9 +35,18 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'newrelic_rpm'
 gem 'pg'
 
-# for cloudinary file upload
+# For cloudinary file upload
 gem 'figaro'
 gem 'cloudinary'
+
+# MagnificPopup
+# gem 'magnific-popup-rails'
+
+# ipsum for seeding
+gem 'ipsum', '~> 2.0'
+
+# deployment
+gem 'thin'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

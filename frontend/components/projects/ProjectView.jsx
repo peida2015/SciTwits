@@ -46,6 +46,7 @@ var ProjectView = React.createClass({
   },
 
   fetchMedia: function () {
+    console.log("fetchMedia called");
     this.setState ({ media: MediaStore.getProjectMedia(this.props.params.id) });
   },
 
@@ -56,17 +57,21 @@ var ProjectView = React.createClass({
   },
 
   buildProject: function () {
-
     var cropped_url = "http://res.cloudinary.com/"+CLOUDINARY_OPTIONS.cloud_name+"/image/upload/";
-    if (this.props.location.state.media) {
-      var media_tags = this.props.location.state.media.map(function (medium, idx) {
-        return (<img key={idx} src={cropped_url+ "/w_300,h_300,c_fill/"+medium.medium.link}></img>)
+
+    if (this.state.media !== "") {
+      var media_tags = this.state.media.map(function (medium, idx) {
+        // debugger
+        return (
+          <a className='thumbnail' href={cropped_url+medium.link}>
+            <img key={idx} src={cropped_url+ "/w_300,h_300,c_fill/"+medium.link}></img>
+          </a>
+        )
       });
     }
-
     return (
       // <div>
-        <div className="project six columns">
+        <div className="project six columns box">
           <strong>Title:</strong>
           <div className="title">{ this.state.title }</div>
           <strong>Description:</strong>
@@ -81,7 +86,7 @@ var ProjectView = React.createClass({
 
   render: function () {
 // console.log("ProjectView");
-    // debugger
+
     return(
       <div className="container">
         <FollowButton project_id={this.props.params.id}
@@ -91,6 +96,7 @@ var ProjectView = React.createClass({
         </div>
         <br></br><br></br>
         {this.buildProject()}
+
         <div className="five columns">
           <TwitForm project_id={this.props.params.id}/>
           <Twits twits={this.state.twits} user_id={this.props.routes[0].indexRoute.user_id}/>

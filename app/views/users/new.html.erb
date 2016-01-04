@@ -6,21 +6,26 @@
     </video>
     <!-- <%= video_tag 'GalaxyEvolutionAnimation[360p].webm' %> -->
 </div>
-
-<div class="container">
-  <form class="" action="/users" method="post">
-    </br>
-    </br>
-    <h3>Sign Up!</h3>
-    <%= auth_token %>
-    <label>Username</label>
-    <input type="text" name="user[username]" value=""><br></br>
-    <label>Password</label>
-    <input type="password" name="user[password]" value=""><br></br>
-    <div class="submit-wrapper">
-      <button type="submit" class="icon fa-user">Create Account</button>
-    </div>
-    </br>
-    </br>
-  </form>
+<div class="content">
+  <div class="container six columns intro">
+    <h5>Everyday thousands of scientists around the world make AMAZING discoveries.</h5>
+    <h5>Everyday millions of people wonder where the edge of our knowledge is.</h5>
+    <h5>Explore and share. Let your curiosity burn.</h5>
+  </div>
+  <div class="container six columns">
+    <form class="" action="/users" method="post">
+      </br></br>
+      <h3>Sign Up!</h3>
+      <%= auth_token %>
+      <label>Username</label>
+      <input type="text" name="user[username]" value=""><br></br>
+      <label>Password</label>
+      <input type="password" name="user[password]" value=""><br></br>
+      <div class="submit-wrapper">
+        <button type="submit" class="icon fa-user">Create Account</button>
+      </div>
+      </br>
+      </br>
+    </form>
+  </div>
 </div>

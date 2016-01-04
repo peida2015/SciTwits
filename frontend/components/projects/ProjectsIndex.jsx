@@ -90,12 +90,7 @@ var ProjectsIndex = React.createClass({
               <strong>Title:</strong><br/>
               { project.title }
             </div>
-
-            <div className="description">
-              <strong>Description:</strong><br/>
-              { project.description }
-            </div>
-
+<br/>
             <div className="significance">
               <strong>Significance:</strong><br/>
               { project.significance }
@@ -104,8 +99,12 @@ var ProjectsIndex = React.createClass({
 
           <div className="buttons-wrapper one column">
             {this.followButton(project.id)}
-            {buttons[0]}
-            {buttons[1]}
+            <div className='container'>
+              {buttons[0]}
+            </div>
+            <div className='container'>
+              {buttons[1]}
+            </div>
           </div>
       </div>
     )
@@ -118,7 +117,7 @@ var ProjectsIndex = React.createClass({
 
     return (
       <div>
-        
+
         <br></br>
         { proj_view }
       </div>

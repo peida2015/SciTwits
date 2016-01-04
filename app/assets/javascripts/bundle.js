@@ -24251,17 +24251,7 @@
 	          React.createElement('br', null),
 	          project.title
 	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'description' },
-	          React.createElement(
-	            'strong',
-	            null,
-	            'Description:'
-	          ),
-	          React.createElement('br', null),
-	          project.description
-	        ),
+	        React.createElement('br', null),
 	        React.createElement(
 	          'div',
 	          { className: 'significance' },
@@ -24278,8 +24268,16 @@
 	        'div',
 	        { className: 'buttons-wrapper one column' },
 	        this.followButton(project.id),
-	        buttons[0],
-	        buttons[1]
+	        React.createElement(
+	          'div',
+	          { className: 'container' },
+	          buttons[0]
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'container' },
+	          buttons[1]
+	        )
 	      )
 	    );
 	  },
@@ -31569,6 +31567,7 @@
 	  },
 	
 	  fetchMedia: function () {
+	    console.log("fetchMedia called");
 	    this.setState({ media: MediaStore.getProjectMedia(this.props.params.id) });
 	  },
 	
@@ -31579,19 +31578,23 @@
 	  },
 	
 	  buildProject: function () {
-	
 	    var cropped_url = "http://res.cloudinary.com/" + CLOUDINARY_OPTIONS.cloud_name + "/image/upload/";
-	    if (this.props.location.state.media) {
-	      var media_tags = this.props.location.state.media.map(function (medium, idx) {
-	        return React.createElement('img', { key: idx, src: cropped_url + "/w_300,h_300,c_fill/" + medium.medium.link });
+	
+	    if (this.state.media !== "") {
+	      var media_tags = this.state.media.map(function (medium, idx) {
+	        // debugger
+	        return React.createElement(
+	          'a',
+	          { className: 'thumbnail', href: cropped_url + medium.link },
+	          React.createElement('img', { key: idx, src: cropped_url + "/w_300,h_300,c_fill/" + medium.link })
+	        );
 	      });
 	    }
-	
 	    return(
 	      // <div>
 	      React.createElement(
 	        'div',
-	        { className: 'project six columns' },
+	        { className: 'project six columns box' },
 	        React.createElement(
 	          'strong',
 	          null,
@@ -31635,7 +31638,7 @@
 	
 	  render: function () {
 	    // console.log("ProjectView");
-	    // debugger
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'container' },
@@ -31996,9 +31999,9 @@
 	    if (this.props.twit.user_id == this.props.user_id) {
 	      var deleteButton = React.createElement(
 	        'button',
-	        { className: 'delete', onClick: this.handleDelete,
+	        { className: 'small', onClick: this.handleDelete,
 	          id: this.props.twit.id },
-	        'Delete'
+	        React.createElement('i', { className: 'fa fa-remove fa-2x' })
 	      );
 	    } else {
 	      var deleteButton = "";
@@ -32008,7 +32011,11 @@
 	      'div',
 	      { className: 'twit' },
 	      this.props.twit.body,
-	      deleteButton,
+	      React.createElement(
+	        'div',
+	        { className: 'container one column twit-delete' },
+	        deleteButton
+	      ),
 	      React.createElement('br', null),
 	      'by: ',
 	      this.props.twit.user,
@@ -32196,7 +32203,7 @@
 	  },
 	
 	  render: function () {
-	    console.log("Form rendered");
+	    // console.log("Form rendered");
 	
 	    if (this.state.media.length !== 0) {
 	      var uploaded = "Uploaded so far:";
