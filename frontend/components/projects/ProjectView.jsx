@@ -2,11 +2,13 @@ var React = require('react');
 var ProjectStore = require('../../stores/project');
 var MediaStore = require('../../stores/medium');
 var TwitsStore = require('../../stores/twit');
+var FollowsStore = require('../../stores/follow');
 var ProjectsActions = require('../../actions/ProjectsActions');
-var TwitForm = require('../twits/TwitForm');
 var Twits = require('../twits/Twits');
+var FollowsActions = require('../../actions/FollowsActions');
 var TwitsActions = require('../../actions/TwitsActions');
 var MediaActions = require('../../actions/MediaActions');
+var TwitForm = require('../twits/TwitForm');
 var Tags = require('../tags/Tags');
 var FollowButton = require('./FollowButton');
 
@@ -14,18 +16,20 @@ var FollowButton = require('./FollowButton');
 var ProjectView = React.createClass({
 
   getInitialState: function () {
-    return ({title: "", description: "", significance: "", media:"", twits: ""})
+    return ({title: "", description: "", significance: "", media:"", twits: "", follows: [], hiddenPic:"" })
   },
 
   componentDidMount: function () {
     this.MediaToken = MediaStore.addListener(this.fetchMedia);
     this.TwitsToken = TwitsStore.addListener(this.fetchTwits);
+    this.FollowsToken = FollowsStore.addListener(this.fetchFollows);
     this.ProjectToken = ProjectStore.addListener(this.parseProject);
 
       // }.bind(this));
     TwitsActions.fetchTwits(this.props.params.id);
     ProjectsActions.fetchAllProjects();
     MediaActions.fetchMedia(this.props.params.id);
+    FollowsActions.fetchFollows();
     // this.fetchTwits();
     // this.fetchMedia();
   },
@@ -43,6 +47,7 @@ var ProjectView = React.createClass({
     this.MediaToken.remove();
     this.TwitsToken.remove();
     this.ProjectToken.remove();
+    this.FollowsToken.remove();
   },
 
   fetchMedia: function () {
@@ -50,9 +55,21 @@ var ProjectView = React.createClass({
   },
 
   fetchTwits: function () {
-
     this.setState({ twits: TwitsStore.getProjectTwits(this.props.params.id) });
-    // this.render()
+  },
+
+  fetchFollows: function () {
+    this.setState({ follows: FollowsStore.getProjectFollows(this.props.params.id) });
+  },
+
+  showImage: function(e) {
+    console.log("clicked");
+    $("body").css({opacity:0.7});
+
+
+    //   .css({ content:"", position:"fixed", left: "0px", top: "0px",
+    //   border:"1px solid black", width:"auto", height: "auto", margin: "auto", opacity: 0.7
+    // })
   },
 
   buildProject: function () {
@@ -68,18 +85,21 @@ var ProjectView = React.createClass({
         )
       });
     }
+
     return (
-      // <div>
         <div className="project six columns box">
-          <strong>Title:</strong>
-          <div className="title">{ this.state.title }</div>
+          <div className="center-align follow-box">
+            <h6>{ this.state.follows.length + " followers" }</h6>
+          </div>
+          <strong onClick={this.showImage}>Title:</strong>
+          <div className="title">{ this.state.title }</div><br/>
           <strong>Description:</strong>
-          <div className="description">{ this.state.description }</div>
+          <div className="description">{ this.state.description }</div><br/>
           <strong>Significance:</strong>
-          <div className="significance">{ this.state.significance }</div>
+          <div className="significance">{ this.state.significance }</div><br/>
           <div className="media-file">{media_tags}</div>
+          <Tags project_id={this.props.params.id} />
         </div>
-      // </div>
     )
   },
 
@@ -99,7 +119,9 @@ var ProjectView = React.createClass({
         <div className="five columns">
           <TwitForm project_id={this.props.params.id}/>
           <Twits twits={this.state.twits} user_id={this.props.routes[0].indexRoute.user_id}/>
-          <Tags project_id={this.props.params.id} />
+        </div>
+        <div className="hidden-pic">
+          {this.state.hiddenPic}
         </div>
       </div>
     )

@@ -36,7 +36,7 @@ var TwitForm = React.createClass ({
   render: function () {
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
+        <form  className="center-align" onSubmit={this.handleSubmit}>
           <input type="text" onChange={this.changeHandler}
                   value={this.state.body}
                   placeholder="Be brief: max 150 chars">

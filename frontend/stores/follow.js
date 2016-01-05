@@ -26,6 +26,13 @@ FollowsStore.getUserFollows = function (user_id) {
   })
 };
 
+FollowsStore.getProjectFollows = function (project_id) {
+  return _follows.filter(function (follow) {
+    // debugger
+    return (follow.project_id == project_id)
+  })
+};
+
 FollowsStore.resetAllFollows = function (follows) {
   _follows = follows;
 };

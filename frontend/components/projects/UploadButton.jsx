@@ -8,7 +8,7 @@ var UploadButton = React.createClass({
   render: function () {
     return (
       <div className="upload-form">
-        <button onClick={this.upload}>Upload new medium!</button>
+        <button className='icon fa-cloud-upload fa-lg u-full-width' onClick={this.upload}>Upload new medium!</button>
       </div>
     );
   }

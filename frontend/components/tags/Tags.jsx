@@ -30,9 +30,18 @@ var Tags = React.createClass({
       }
     }.bind(this));
 
+    var tags_title = "";
+
+    if (this.state.tags.length !==0) {
+      tags_title = (<strong>Tags:</strong>)
+    }
+
     return (
       <div>
-        {tags_elements}
+        {tags_title}
+        <div>
+          {tags_elements}
+        </div>
       </div>
     )
   }

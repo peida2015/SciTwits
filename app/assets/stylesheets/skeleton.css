@@ -81,6 +81,8 @@
 .header {
   opacity: 1;
   overflow:hidden;
+  position:relative;
+  display: block;
 }
 .header-nav {
   width: 1050px;
@@ -91,7 +93,6 @@
 .footer {
   opacity:1;
   position:relative;
-  bottom: -25px;
 }
 .footer-credit {
   color: white;
@@ -125,9 +126,6 @@
   padding: 20px;
   -webkit-filter: grayscale(80%);
   filter: grayscale(80%);
-}
-.submit-wrapper {
-  text-align: center;
 }
 .buttons-wrapper {
   float:right;
@@ -186,11 +184,27 @@
   left: 60%;
   padding: 10px;
 }
+.follow-box {
+  font-size: 12px;
+  padding: 0px 5px;
+  background: #660066;
+  color: white;
+  border 2px solid black;
+  border-radius: 4px;
+}
+.hidden-pic {
+  content: "";
+  position:fixed;
+  width: 500px;
+  height: 500px;
+  margin: 0 auto;
+}
 #root {
   width: 1050px;
   margin: 0 auto;
   overflow: auto;
 }
+
 
 
 
@@ -446,7 +460,7 @@ input[type="password"],
 textarea,
 select {
   height: 38px;
-  width: 300px;
+  width: 350px;
   padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
   background-color: #fff;
   border: 1px solid #D1D1D1;
@@ -566,7 +580,7 @@ p,
 ul,
 ol,
 form {
-  width: 300px;
+  width: 350px;
   margin: auto;
   /*margin-bottom: 10rem;*/
   font-family: 'Montserrat', sans-serif, FontAwesome;
@@ -592,6 +606,7 @@ form.button_to {
   float: right; }
 .u-pull-left {
   float: left; }
+.center-align { text-align: center }
 
 
 /* Misc
@@ -643,16 +658,3 @@ there.
 
 /* Imported webfonts from weloveiconfonts.com and Google Fonts */
 @import url(https://fonts.googleapis.com/css?family=Montserrat:400,700|Play:400,700);
-
-@import url(http://weloveiconfonts.com/api/?family=entypo|fontawesome);
-
-/* entypo */
-[class*="entypo-"]:before {
-  font-family: 'entypo', sans-serif;
-  display: inline;
-}
-
-/* fontawesome */
-[class*="fontawesome-"]:before {
-  font-family: 'FontAwesome', sans-serif;
-}

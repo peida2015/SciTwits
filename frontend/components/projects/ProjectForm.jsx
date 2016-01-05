@@ -130,7 +130,9 @@ var ProjectForm = React.createClass({
                 {uploaded}<br></br>
                 {media_tags}
           <br></br>
-          {submitButton}
+          <div className="center-align">
+            {submitButton}
+          </div>
         </form>
       </div>
     )

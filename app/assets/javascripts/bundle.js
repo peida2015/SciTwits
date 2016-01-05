@@ -52,8 +52,8 @@
 	// var Link = require('react-router').Link;
 	var ProjectsIndex = __webpack_require__(208);
 	var ProjectView = __webpack_require__(236);
-	var ProjectForm = __webpack_require__(247);
-	var ProjectEdit = __webpack_require__(249);
+	var ProjectForm = __webpack_require__(237);
+	var ProjectEdit = __webpack_require__(240);
 	// debugger
 	
 	$(function () {
@@ -31488,6 +31488,13 @@
 	  });
 	};
 	
+	FollowsStore.getProjectFollows = function (project_id) {
+	  return _follows.filter(function (follow) {
+	    // debugger
+	    return follow.project_id == project_id;
+	  });
+	};
+	
 	FollowsStore.resetAllFollows = function (follows) {
 	  _follows = follows;
 	};
@@ -31521,32 +31528,36 @@
 
 	var React = __webpack_require__(1);
 	var ProjectStore = __webpack_require__(209);
-	var MediaStore = __webpack_require__(237);
-	var TwitsStore = __webpack_require__(238);
+	var MediaStore = __webpack_require__(241);
+	var TwitsStore = __webpack_require__(242);
+	var FollowsStore = __webpack_require__(235);
 	var ProjectsActions = __webpack_require__(230);
-	var TwitForm = __webpack_require__(239);
 	var Twits = __webpack_require__(243);
-	var TwitsActions = __webpack_require__(240);
-	var MediaActions = __webpack_require__(245);
-	var Tags = __webpack_require__(246);
+	var FollowsActions = __webpack_require__(234);
+	var TwitsActions = __webpack_require__(245);
+	var MediaActions = __webpack_require__(238);
+	var TwitForm = __webpack_require__(246);
+	var Tags = __webpack_require__(249);
 	var FollowButton = __webpack_require__(233);
 	
 	var ProjectView = React.createClass({
 	  displayName: 'ProjectView',
 	
 	  getInitialState: function () {
-	    return { title: "", description: "", significance: "", media: "", twits: "" };
+	    return { title: "", description: "", significance: "", media: "", twits: "", follows: [], hiddenPic: "" };
 	  },
 	
 	  componentDidMount: function () {
 	    this.MediaToken = MediaStore.addListener(this.fetchMedia);
 	    this.TwitsToken = TwitsStore.addListener(this.fetchTwits);
+	    this.FollowsToken = FollowsStore.addListener(this.fetchFollows);
 	    this.ProjectToken = ProjectStore.addListener(this.parseProject);
 	
 	    // }.bind(this));
 	    TwitsActions.fetchTwits(this.props.params.id);
 	    ProjectsActions.fetchAllProjects();
 	    MediaActions.fetchMedia(this.props.params.id);
+	    FollowsActions.fetchFollows();
 	    // this.fetchTwits();
 	    // this.fetchMedia();
 	  },
@@ -31564,6 +31575,7 @@
 	    this.MediaToken.remove();
 	    this.TwitsToken.remove();
 	    this.ProjectToken.remove();
+	    this.FollowsToken.remove();
 	  },
 	
 	  fetchMedia: function () {
@@ -31571,9 +31583,20 @@
 	  },
 	
 	  fetchTwits: function () {
-	
 	    this.setState({ twits: TwitsStore.getProjectTwits(this.props.params.id) });
-	    // this.render()
+	  },
+	
+	  fetchFollows: function () {
+	    this.setState({ follows: FollowsStore.getProjectFollows(this.props.params.id) });
+	  },
+	
+	  showImage: function (e) {
+	    console.log("clicked");
+	    $("body").css({ opacity: 0.7 });
+	
+	    //   .css({ content:"", position:"fixed", left: "0px", top: "0px",
+	    //   border:"1px solid black", width:"auto", height: "auto", margin: "auto", opacity: 0.7
+	    // })
 	  },
 	
 	  buildProject: function () {
@@ -31589,49 +31612,58 @@
 	        );
 	      });
 	    }
-	    return(
-	      // <div>
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'project six columns box' },
 	      React.createElement(
 	        'div',
-	        { className: 'project six columns box' },
+	        { className: 'center-align follow-box' },
 	        React.createElement(
-	          'strong',
+	          'h6',
 	          null,
-	          'Title:'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'title' },
-	          this.state.title
-	        ),
-	        React.createElement(
-	          'strong',
-	          null,
-	          'Description:'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'description' },
-	          this.state.description
-	        ),
-	        React.createElement(
-	          'strong',
-	          null,
-	          'Significance:'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'significance' },
-	          this.state.significance
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'media-file' },
-	          media_tags
+	          this.state.follows.length + " followers"
 	        )
-	      )
-	      // </div>
-	
+	      ),
+	      React.createElement(
+	        'strong',
+	        { onClick: this.showImage },
+	        'Title:'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'title' },
+	        this.state.title
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'strong',
+	        null,
+	        'Description:'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'description' },
+	        this.state.description
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'strong',
+	        null,
+	        'Significance:'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'significance' },
+	        this.state.significance
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'div',
+	        { className: 'media-file' },
+	        media_tags
+	      ),
+	      React.createElement(Tags, { project_id: this.props.params.id })
 	    );
 	  },
 	
@@ -31663,8 +31695,12 @@
 	        'div',
 	        { className: 'five columns' },
 	        React.createElement(TwitForm, { project_id: this.props.params.id }),
-	        React.createElement(Twits, { twits: this.state.twits, user_id: this.props.routes[0].indexRoute.user_id }),
-	        React.createElement(Tags, { project_id: this.props.params.id })
+	        React.createElement(Twits, { twits: this.state.twits, user_id: this.props.routes[0].indexRoute.user_id })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'hidden-pic' },
+	        this.state.hiddenPic
 	      )
 	    );
 	  }
@@ -31676,446 +31712,11 @@
 /* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(210);
-	var Store = __webpack_require__(214).Store;
-	
-	var _media = [];
-	
-	var MediaStore = new Store(Dispatcher);
-	
-	MediaStore.all = function () {
-	  return _media;
-	};
-	
-	MediaStore.getProjectMedia = function (project_id) {
-	  return _media.filter(function (medium) {
-	    return medium.project_id == project_id;
-	  });
-	};
-	
-	MediaStore.resetAllMedia = function (media) {
-	  _media = media;
-	};
-	
-	MediaStore.addMedium = function (medium) {
-	  var medium_idx = _media.indexOf(medium);
-	  if (medium_idx === -1) {
-	    _media.push(medium);
-	  }
-	};
-	
-	MediaStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case "MEDIA_RECEIVED":
-	      this.resetAllMedia(payload.media);
-	      MediaStore.__emitChange();
-	      break;
-	    case "MEDIUM_RECEIVED":
-	      this.addMedium(payload.medium);
-	      MediaStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = MediaStore;
-
-/***/ },
-/* 238 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(210);
-	var Store = __webpack_require__(214).Store;
-	
-	var _twits = [];
-	
-	var TwitsStore = new Store(Dispatcher);
-	
-	TwitsStore.all = function () {
-	  return _twits;
-	};
-	
-	TwitsStore.getProjectTwits = function (project_id) {
-	  return _twits.filter(function (twit) {
-	    // debugger
-	    return twit.project_id == project_id;
-	  });
-	};
-	
-	TwitsStore.resetAllTwits = function (twits) {
-	  // debugger
-	  _twits = twits;
-	};
-	
-	TwitsStore.addTwit = function (twit) {
-	
-	  var twit_idx = _twits.indexOf(twit);
-	  // debugger
-	  if (twit_idx === -1) {
-	    _twits.push(twit);
-	  }
-	};
-	
-	TwitsStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case "TWITS_RECEIVED":
-	      this.resetAllTwits(payload.twits);
-	      TwitsStore.__emitChange();
-	      break;
-	    case "TWIT_RECEIVED":
-	      this.addTwit(payload.twit);
-	      TwitsStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = TwitsStore;
-
-/***/ },
-/* 239 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var TwitsActions = __webpack_require__(240);
-	var TagsActions = __webpack_require__(241);
-	
-	var TwitForm = React.createClass({
-	  displayName: 'TwitForm',
-	
-	  getInitialState: function () {
-	    return { body: "", project_id: this.props.project_id, tags: "" };
-	  },
-	
-	  changeHandler: function (e) {
-	    this.setState({ body: e.target.value });
-	  },
-	
-	  handleTagChange: function (e) {
-	    this.setState({ tags: e.target.value });
-	  },
-	
-	  handleSubmit: function (e) {
-	    // debugger
-	    e.preventDefault();
-	    var twit = {
-	      twit: {
-	        body: this.state.body,
-	        project_id: this.state.project_id
-	      }
-	    };
-	    var tags = this.state.tags.split(",").map(function (tag) {
-	      return tag.trim();
-	    });
-	
-	    TagsActions.saveTags(tags, this.state.project_id);
-	    TwitsActions.saveTwit(twit);
-	    this.setState({ body: "", tags: "" });
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'form',
-	        { onSubmit: this.handleSubmit },
-	        React.createElement('input', { type: 'text', onChange: this.changeHandler,
-	          value: this.state.body,
-	          placeholder: 'Be brief: max 150 chars' }),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Tags:'
-	        ),
-	        React.createElement('input', { type: 'text', onChange: this.handleTagChange,
-	          value: this.state.tags,
-	          placeholder: 'Ex: energy, promising, mindblowing' }),
-	        React.createElement('input', { type: 'submit', value: 'Submit Twit' })
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = TwitForm;
-
-/***/ },
-/* 240 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ApiUtil = __webpack_require__(231);
-	
-	var TwitsActions = {
-	  saveTwit: function (data) {
-	    ApiUtil.saveTwit(data);
-	  },
-	
-	  fetchTwits: function (project_id) {
-	    ApiUtil.fetchTwits(project_id);
-	  },
-	
-	  deleteTwit: function (id) {
-	    ApiUtil.deleteTwit(id);
-	  }
-	
-	};
-	
-	module.exports = TwitsActions;
-
-/***/ },
-/* 241 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ApiUtil = __webpack_require__(231);
-	var TagsStore = __webpack_require__(242);
-	
-	var TagsActions = {
-	  fetchAllTags: function () {
-	    ApiUtil.fetchAllTags();
-	  },
-	
-	  fetchTags: function (project_id) {
-	    ApiUtil.fetchTags(project_id);
-	  },
-	
-	  saveTags: function (tags, project_id) {
-	    // debugger
-	    tags.forEach((function (tag) {
-	      var tag_data = { tag: { name: tag } };
-	      ApiUtil.saveTag(tag_data, project_id, this.saveTagging);
-	    }).bind(this));
-	  },
-	  saveTagging: function (tag, project_id) {
-	    // debugger
-	    ApiUtil.saveTagging(tag, project_id);
-	  }
-	};
-	
-	module.exports = TagsActions;
-
-/***/ },
-/* 242 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(210);
-	var Store = __webpack_require__(214).Store;
-	
-	var _tags = [];
-	
-	var TagsStore = new Store(Dispatcher);
-	
-	TagsStore.all = function () {
-	  return _tags;
-	};
-	
-	TagsStore.getProjectTags = function (project_id) {
-	  return _tags.filter(function (tag) {
-	    debugger;
-	    return tag.project_id == project_id;
-	  });
-	};
-	
-	TagsStore.resetAllTags = function (tags) {
-	  // debugger
-	  _tags = tags;
-	};
-	
-	TagsStore.addTwit = function (tag) {
-	  var is_found = false;
-	  _tags.forEach(function (el) {
-	    if (el.name === tag.name) {
-	      is_found = true;
-	    }
-	  });
-	
-	  if (!is_found) {
-	    _tags.push(tag);
-	  }
-	};
-	
-	TagsStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case "TAGS_RECEIVED":
-	      this.resetAllTags(payload.tags);
-	      TagsStore.__emitChange();
-	      break;
-	    case "TAG_RECEIVED":
-	      this.addTwit(payload.tag);
-	      TagsStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = TagsStore;
-
-/***/ },
-/* 243 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var TwitItem = __webpack_require__(244);
-	// var TwitsStore = require('../../stores/twit');
-	
-	var Twits = React.createClass({
-	  displayName: 'Twits',
-	
-	  render: function () {
-	    // debugger
-	    if (this.props.twits !== "") {
-	      var twits_tags = this.props.twits.reverse().map((function (twit, idx) {
-	        return React.createElement(TwitItem, { key: idx, twit: twit, user_id: this.props.user_id });
-	      }).bind(this));
-	      return React.createElement(
-	        'div',
-	        { className: 'twits-box' },
-	        twits_tags
-	      );
-	    } else {
-	      return React.createElement(
-	        'div',
-	        null,
-	        'loading...'
-	      );
-	    }
-	  }
-	});
-	
-	module.exports = Twits;
-
-/***/ },
-/* 244 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var TwitsActions = __webpack_require__(240);
-	
-	var TwitItem = React.createClass({
-	  displayName: 'TwitItem',
-	
-	  handleDelete: function (e) {
-	    TwitsActions.deleteTwit(e.target.id);
-	  },
-	
-	  render: function () {
-	    if (this.props.twit.user_id == this.props.user_id) {
-	      var deleteButton = React.createElement(
-	        'button',
-	        { className: 'small', onClick: this.handleDelete,
-	          id: this.props.twit.id },
-	        React.createElement('i', { className: 'fa fa-remove fa-2x' })
-	      );
-	    } else {
-	      var deleteButton = "";
-	    }
-	    // debugger
-	    return React.createElement(
-	      'div',
-	      { className: 'twit' },
-	      this.props.twit.body,
-	      React.createElement(
-	        'div',
-	        { className: 'container one column twit-delete' },
-	        deleteButton
-	      ),
-	      React.createElement('br', null),
-	      'by: ',
-	      this.props.twit.user,
-	      React.createElement('br', null)
-	    );
-	  }
-	});
-	
-	module.exports = TwitItem;
-
-/***/ },
-/* 245 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ApiUtil = __webpack_require__(231);
-	
-	var MediaActions = {
-	  saveMedia: function (media_data, callback) {
-	    var proj_id = media_data[1];
-	
-	    //This iterates through each uploaded image and get ApiUtil to send POST request to DB through saveMedium.  Should receive the object back after save.
-	    media_data[0].forEach(function (medium) {
-	      medium.medium.project_id = proj_id;
-	      debugger;
-	      ApiUtil.saveMedium(medium, function (proj_id) {
-	        console.log("medium saved for: " + proj_id);
-	        callback(proj_id);
-	      });
-	    });
-	  },
-	  fetchMedia: function (project_id) {
-	    ApiUtil.fetchMedia(project_id);
-	  }
-	};
-	
-	module.exports = MediaActions;
-
-/***/ },
-/* 246 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var TagsStore = __webpack_require__(242);
-	var TagsActions = __webpack_require__(241);
-	
-	var Tags = React.createClass({
-	  displayName: 'Tags',
-	
-	  getInitialState: function () {
-	    return { tags: [] };
-	  },
-	  componentDidMount: function () {
-	    TagsActions.fetchTags(this.props.project_id);
-	    this.TagsToken = TagsStore.addListener(this.reloadTags);
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.TagsToken.remove();
-	  },
-	
-	  reloadTags: function () {
-	    this.setState({ tags: TagsStore.all() });
-	  },
-	
-	  render: function () {
-	    // debugger
-	    var tags_elements = this.state.tags.map((function (tag, idx) {
-	      if (this.state.tags.length - 1 === idx) {
-	        return React.createElement(
-	          'span',
-	          { key: idx },
-	          "#" + tag.name
-	        );
-	      } else {
-	        return React.createElement(
-	          'span',
-	          { key: idx },
-	          "#" + tag.name + ", "
-	        );
-	      }
-	    }).bind(this));
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      tags_elements
-	    );
-	  }
-	});
-	
-	module.exports = Tags;
-
-/***/ },
-/* 247 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var React = __webpack_require__(1);
 	var ProjectsActions = __webpack_require__(230);
 	var History = __webpack_require__(159).History;
-	var MediaActions = __webpack_require__(245);
-	var UploadButton = __webpack_require__(248);
+	var MediaActions = __webpack_require__(238);
+	var UploadButton = __webpack_require__(239);
 	
 	var ProjectForm = React.createClass({
 	  displayName: 'ProjectForm',
@@ -32274,7 +31875,11 @@
 	        React.createElement('br', null),
 	        media_tags,
 	        React.createElement('br', null),
-	        submitButton
+	        React.createElement(
+	          'div',
+	          { className: 'center-align' },
+	          submitButton
+	        )
 	      )
 	    );
 	  }
@@ -32283,7 +31888,34 @@
 	module.exports = ProjectForm;
 
 /***/ },
-/* 248 */
+/* 238 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(231);
+	
+	var MediaActions = {
+	  saveMedia: function (media_data, callback) {
+	    var proj_id = media_data[1];
+	
+	    //This iterates through each uploaded image and get ApiUtil to send POST request to DB through saveMedium.  Should receive the object back after save.
+	    media_data[0].forEach(function (medium) {
+	      medium.medium.project_id = proj_id;
+	      debugger;
+	      ApiUtil.saveMedium(medium, function (proj_id) {
+	        console.log("medium saved for: " + proj_id);
+	        callback(proj_id);
+	      });
+	    });
+	  },
+	  fetchMedia: function (project_id) {
+	    ApiUtil.fetchMedia(project_id);
+	  }
+	};
+	
+	module.exports = MediaActions;
+
+/***/ },
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32301,7 +31933,7 @@
 	      { className: "upload-form" },
 	      React.createElement(
 	        "button",
-	        { onClick: this.upload },
+	        { className: "icon fa-cloud-upload fa-lg u-full-width", onClick: this.upload },
 	        "Upload new medium!"
 	      )
 	    );
@@ -32313,7 +31945,7 @@
 	// RegEx to match filename at the end of full path: .match(/[^\\/]+\.[^\\/]+$/)[0];
 
 /***/ },
-/* 249 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32422,6 +32054,429 @@
 	});
 	
 	module.exports = ProjectEdit;
+
+/***/ },
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(210);
+	var Store = __webpack_require__(214).Store;
+	
+	var _media = [];
+	
+	var MediaStore = new Store(Dispatcher);
+	
+	MediaStore.all = function () {
+	  return _media;
+	};
+	
+	MediaStore.getProjectMedia = function (project_id) {
+	  return _media.filter(function (medium) {
+	    return medium.project_id == project_id;
+	  });
+	};
+	
+	MediaStore.resetAllMedia = function (media) {
+	  _media = media;
+	};
+	
+	MediaStore.addMedium = function (medium) {
+	  var medium_idx = _media.indexOf(medium);
+	  if (medium_idx === -1) {
+	    _media.push(medium);
+	  }
+	};
+	
+	MediaStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "MEDIA_RECEIVED":
+	      this.resetAllMedia(payload.media);
+	      MediaStore.__emitChange();
+	      break;
+	    case "MEDIUM_RECEIVED":
+	      this.addMedium(payload.medium);
+	      MediaStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = MediaStore;
+
+/***/ },
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(210);
+	var Store = __webpack_require__(214).Store;
+	
+	var _twits = [];
+	
+	var TwitsStore = new Store(Dispatcher);
+	
+	TwitsStore.all = function () {
+	  return _twits;
+	};
+	
+	TwitsStore.getProjectTwits = function (project_id) {
+	  return _twits.filter(function (twit) {
+	    // debugger
+	    return twit.project_id == project_id;
+	  });
+	};
+	
+	TwitsStore.resetAllTwits = function (twits) {
+	  // debugger
+	  _twits = twits;
+	};
+	
+	TwitsStore.addTwit = function (twit) {
+	
+	  var twit_idx = _twits.indexOf(twit);
+	  // debugger
+	  if (twit_idx === -1) {
+	    _twits.push(twit);
+	  }
+	};
+	
+	TwitsStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "TWITS_RECEIVED":
+	      this.resetAllTwits(payload.twits);
+	      TwitsStore.__emitChange();
+	      break;
+	    case "TWIT_RECEIVED":
+	      this.addTwit(payload.twit);
+	      TwitsStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = TwitsStore;
+
+/***/ },
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var TwitItem = __webpack_require__(244);
+	// var TwitsStore = require('../../stores/twit');
+	
+	var Twits = React.createClass({
+	  displayName: 'Twits',
+	
+	  render: function () {
+	    // debugger
+	    if (this.props.twits !== "") {
+	      var twits_tags = this.props.twits.reverse().map((function (twit, idx) {
+	        return React.createElement(TwitItem, { key: idx, twit: twit, user_id: this.props.user_id });
+	      }).bind(this));
+	      return React.createElement(
+	        'div',
+	        { className: 'twits-box' },
+	        twits_tags
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        null,
+	        'loading...'
+	      );
+	    }
+	  }
+	});
+	
+	module.exports = Twits;
+
+/***/ },
+/* 244 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var TwitsActions = __webpack_require__(245);
+	
+	var TwitItem = React.createClass({
+	  displayName: 'TwitItem',
+	
+	  handleDelete: function (e) {
+	    TwitsActions.deleteTwit(e.target.id);
+	  },
+	
+	  render: function () {
+	    if (this.props.twit.user_id == this.props.user_id) {
+	      var deleteButton = React.createElement(
+	        'button',
+	        { className: 'small', onClick: this.handleDelete,
+	          id: this.props.twit.id },
+	        React.createElement('i', { className: 'fa fa-remove fa-2x' })
+	      );
+	    } else {
+	      var deleteButton = "";
+	    }
+	    // debugger
+	    return React.createElement(
+	      'div',
+	      { className: 'twit' },
+	      this.props.twit.body,
+	      React.createElement(
+	        'div',
+	        { className: 'container one column twit-delete' },
+	        deleteButton
+	      ),
+	      React.createElement('br', null),
+	      'by: ',
+	      this.props.twit.user,
+	      React.createElement('br', null)
+	    );
+	  }
+	});
+	
+	module.exports = TwitItem;
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(231);
+	
+	var TwitsActions = {
+	  saveTwit: function (data) {
+	    ApiUtil.saveTwit(data);
+	  },
+	
+	  fetchTwits: function (project_id) {
+	    ApiUtil.fetchTwits(project_id);
+	  },
+	
+	  deleteTwit: function (id) {
+	    ApiUtil.deleteTwit(id);
+	  }
+	
+	};
+	
+	module.exports = TwitsActions;
+
+/***/ },
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var TwitsActions = __webpack_require__(245);
+	var TagsActions = __webpack_require__(247);
+	
+	var TwitForm = React.createClass({
+	  displayName: 'TwitForm',
+	
+	  getInitialState: function () {
+	    return { body: "", project_id: this.props.project_id, tags: "" };
+	  },
+	
+	  changeHandler: function (e) {
+	    this.setState({ body: e.target.value });
+	  },
+	
+	  handleTagChange: function (e) {
+	    this.setState({ tags: e.target.value });
+	  },
+	
+	  handleSubmit: function (e) {
+	    // debugger
+	    e.preventDefault();
+	    var twit = {
+	      twit: {
+	        body: this.state.body,
+	        project_id: this.state.project_id
+	      }
+	    };
+	    var tags = this.state.tags.split(",").map(function (tag) {
+	      return tag.trim();
+	    });
+	
+	    TagsActions.saveTags(tags, this.state.project_id);
+	    TwitsActions.saveTwit(twit);
+	    this.setState({ body: "", tags: "" });
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'form',
+	        { className: 'center-align', onSubmit: this.handleSubmit },
+	        React.createElement('input', { type: 'text', onChange: this.changeHandler,
+	          value: this.state.body,
+	          placeholder: 'Be brief: max 150 chars' }),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Tags:'
+	        ),
+	        React.createElement('input', { type: 'text', onChange: this.handleTagChange,
+	          value: this.state.tags,
+	          placeholder: 'Ex: energy, promising, mindblowing' }),
+	        React.createElement('input', { type: 'submit', value: 'Submit Twit' })
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = TwitForm;
+
+/***/ },
+/* 247 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(231);
+	var TagsStore = __webpack_require__(248);
+	
+	var TagsActions = {
+	  fetchAllTags: function () {
+	    ApiUtil.fetchAllTags();
+	  },
+	
+	  fetchTags: function (project_id) {
+	    ApiUtil.fetchTags(project_id);
+	  },
+	
+	  saveTags: function (tags, project_id) {
+	    // debugger
+	    tags.forEach((function (tag) {
+	      var tag_data = { tag: { name: tag } };
+	      ApiUtil.saveTag(tag_data, project_id, this.saveTagging);
+	    }).bind(this));
+	  },
+	  saveTagging: function (tag, project_id) {
+	    // debugger
+	    ApiUtil.saveTagging(tag, project_id);
+	  }
+	};
+	
+	module.exports = TagsActions;
+
+/***/ },
+/* 248 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(210);
+	var Store = __webpack_require__(214).Store;
+	
+	var _tags = [];
+	
+	var TagsStore = new Store(Dispatcher);
+	
+	TagsStore.all = function () {
+	  return _tags;
+	};
+	
+	TagsStore.getProjectTags = function (project_id) {
+	  return _tags.filter(function (tag) {
+	    debugger;
+	    return tag.project_id == project_id;
+	  });
+	};
+	
+	TagsStore.resetAllTags = function (tags) {
+	  // debugger
+	  _tags = tags;
+	};
+	
+	TagsStore.addTwit = function (tag) {
+	  var is_found = false;
+	  _tags.forEach(function (el) {
+	    if (el.name === tag.name) {
+	      is_found = true;
+	    }
+	  });
+	
+	  if (!is_found) {
+	    _tags.push(tag);
+	  }
+	};
+	
+	TagsStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "TAGS_RECEIVED":
+	      this.resetAllTags(payload.tags);
+	      TagsStore.__emitChange();
+	      break;
+	    case "TAG_RECEIVED":
+	      this.addTwit(payload.tag);
+	      TagsStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = TagsStore;
+
+/***/ },
+/* 249 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var TagsStore = __webpack_require__(248);
+	var TagsActions = __webpack_require__(247);
+	
+	var Tags = React.createClass({
+	  displayName: 'Tags',
+	
+	  getInitialState: function () {
+	    return { tags: [] };
+	  },
+	  componentDidMount: function () {
+	    TagsActions.fetchTags(this.props.project_id);
+	    this.TagsToken = TagsStore.addListener(this.reloadTags);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.TagsToken.remove();
+	  },
+	
+	  reloadTags: function () {
+	    this.setState({ tags: TagsStore.all() });
+	  },
+	
+	  render: function () {
+	    // debugger
+	    var tags_elements = this.state.tags.map((function (tag, idx) {
+	      if (this.state.tags.length - 1 === idx) {
+	        return React.createElement(
+	          'span',
+	          { key: idx },
+	          "#" + tag.name
+	        );
+	      } else {
+	        return React.createElement(
+	          'span',
+	          { key: idx },
+	          "#" + tag.name + ", "
+	        );
+	      }
+	    }).bind(this));
+	
+	    var tags_title = "";
+	
+	    if (this.state.tags.length !== 0) {
+	      tags_title = React.createElement(
+	        'strong',
+	        null,
+	        'Tags:'
+	      );
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      tags_title,
+	      React.createElement(
+	        'div',
+	        null,
+	        tags_elements
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Tags;
 
 /***/ }
 /******/ ]);
