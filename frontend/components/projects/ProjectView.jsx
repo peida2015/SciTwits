@@ -16,7 +16,7 @@ var FollowButton = require('./FollowButton');
 var ProjectView = React.createClass({
 
   getInitialState: function () {
-    return ({title: "", description: "", significance: "", media:"", twits: "", follows: [], hiddenPic:"" })
+    return ({title: "", description: "", significance: "", media:"", twits: "", follows: [], hiddenPic: "" })
   },
 
   componentDidMount: function () {
@@ -62,14 +62,18 @@ var ProjectView = React.createClass({
     this.setState({ follows: FollowsStore.getProjectFollows(this.props.params.id) });
   },
 
+  hideImage: function (e) {
+    $(".hidden-pic").css({display: "none"});
+    $(".fake-bg").css({display: "none"});
+    this.setState({ hiddenPic:""})
+  },
+
   showImage: function(e) {
-    console.log("clicked");
-    $("body").css({opacity:0.7});
-
-
-    //   .css({ content:"", position:"fixed", left: "0px", top: "0px",
-    //   border:"1px solid black", width:"auto", height: "auto", margin: "auto", opacity: 0.7
-    // })
+    console.log('clicked');
+    $(".hidden-pic").css({display: "block"});
+    $(".fake-bg").css({display: "block", opacity: 0.2});
+    var img_tag = (<img onClick={this.hideImage}  className="u-max-full-width" id="hidden-pic" src= {e.target.src.replace(e.target.src.match("w_100,h_100,c_fill/")[0],"")}/>);
+    this.setState({ hiddenPic: img_tag})
   },
 
   buildProject: function () {
@@ -79,9 +83,7 @@ var ProjectView = React.createClass({
       var media_tags = this.state.media.map(function (medium, idx) {
         // debugger
         return (
-          <a className='thumbnail' href={cropped_url+medium.link}>
-            <img key={idx} src={cropped_url+ "/w_300,h_300,c_fill/"+medium.link}></img>
-          </a>
+          <img key={idx} src={cropped_url+ "w_100,h_100,c_fill/"+medium.link}></img>
         )
       });
     }
@@ -91,13 +93,13 @@ var ProjectView = React.createClass({
           <div className="center-align follow-box">
             <h6>{ this.state.follows.length + " followers" }</h6>
           </div>
-          <strong onClick={this.showImage}>Title:</strong>
+          <strong>Title:</strong>
           <div className="title">{ this.state.title }</div><br/>
           <strong>Description:</strong>
           <div className="description">{ this.state.description }</div><br/>
           <strong>Significance:</strong>
           <div className="significance">{ this.state.significance }</div><br/>
-          <div className="media-file">{media_tags}</div>
+          <div className="media-file"  onClick={this.showImage}>{media_tags}</div>
           <Tags project_id={this.props.params.id} />
         </div>
     )
@@ -108,6 +110,7 @@ var ProjectView = React.createClass({
 
     return(
       <div className="container">
+
         <FollowButton project_id={this.props.params.id}
           user_id={this.props.routes[0].indexRoute.user_id}/>
         <div className="ten columns">
@@ -117,12 +120,13 @@ var ProjectView = React.createClass({
         {this.buildProject()}
 
         <div className="five columns">
+          <div className="hidden-pic u-max-full-width">
+            {this.state.hiddenPic}
+          </div>
           <TwitForm project_id={this.props.params.id}/>
           <Twits twits={this.state.twits} user_id={this.props.routes[0].indexRoute.user_id}/>
         </div>
-        <div className="hidden-pic">
-          {this.state.hiddenPic}
-        </div>
+        <div className="fake-bg" onClick={this.hideImage}></div>
       </div>
     )
   }

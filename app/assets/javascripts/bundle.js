@@ -31590,13 +31590,18 @@
 	    this.setState({ follows: FollowsStore.getProjectFollows(this.props.params.id) });
 	  },
 	
-	  showImage: function (e) {
-	    console.log("clicked");
-	    $("body").css({ opacity: 0.7 });
+	  hideImage: function (e) {
+	    $(".hidden-pic").css({ display: "none" });
+	    $(".fake-bg").css({ display: "none" });
+	    this.setState({ hiddenPic: "" });
+	  },
 	
-	    //   .css({ content:"", position:"fixed", left: "0px", top: "0px",
-	    //   border:"1px solid black", width:"auto", height: "auto", margin: "auto", opacity: 0.7
-	    // })
+	  showImage: function (e) {
+	    console.log('clicked');
+	    $(".hidden-pic").css({ display: "block" });
+	    $(".fake-bg").css({ display: "block", opacity: 0.2 });
+	    var img_tag = React.createElement('img', { onClick: this.hideImage, className: 'u-max-full-width', id: 'hidden-pic', src: e.target.src.replace(e.target.src.match("w_100,h_100,c_fill/")[0], "") });
+	    this.setState({ hiddenPic: img_tag });
 	  },
 	
 	  buildProject: function () {
@@ -31605,11 +31610,7 @@
 	    if (this.state.media !== "") {
 	      var media_tags = this.state.media.map(function (medium, idx) {
 	        // debugger
-	        return React.createElement(
-	          'a',
-	          { className: 'thumbnail', href: cropped_url + medium.link },
-	          React.createElement('img', { key: idx, src: cropped_url + "/w_300,h_300,c_fill/" + medium.link })
-	        );
+	        return React.createElement('img', { key: idx, src: cropped_url + "w_100,h_100,c_fill/" + medium.link });
 	      });
 	    }
 	
@@ -31627,7 +31628,7 @@
 	      ),
 	      React.createElement(
 	        'strong',
-	        { onClick: this.showImage },
+	        null,
 	        'Title:'
 	      ),
 	      React.createElement(
@@ -31660,7 +31661,7 @@
 	      React.createElement('br', null),
 	      React.createElement(
 	        'div',
-	        { className: 'media-file' },
+	        { className: 'media-file', onClick: this.showImage },
 	        media_tags
 	      ),
 	      React.createElement(Tags, { project_id: this.props.params.id })
@@ -31694,14 +31695,15 @@
 	      React.createElement(
 	        'div',
 	        { className: 'five columns' },
+	        React.createElement(
+	          'div',
+	          { className: 'hidden-pic u-max-full-width' },
+	          this.state.hiddenPic
+	        ),
 	        React.createElement(TwitForm, { project_id: this.props.params.id }),
 	        React.createElement(Twits, { twits: this.state.twits, user_id: this.props.routes[0].indexRoute.user_id })
 	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'hidden-pic' },
-	        this.state.hiddenPic
-	      )
+	      React.createElement('div', { className: 'fake-bg', onClick: this.hideImage })
 	    );
 	  }
 	});
@@ -31727,11 +31729,6 @@
 	    return { uploadResult: "", title: "", description: "", significance: "", media: [] };
 	  },
 	
-	  // componentDidMount: function () {
-	  //   debugger
-	  //   this.addListener("");
-	  // },
-	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
 	    var that = this;
@@ -31745,13 +31742,11 @@
 	    };
 	    ProjectsActions.createProject(data, function (proj_id) {
 	      MediaActions.saveMedia([that.state.media, proj_id], that.redirectToView);
-	      debugger;
 	    });
 	  },
 	
 	  handleChange: function (e) {
-	    // debugger
-	    // this.setState({ e.target.dataset["name"] : e.target.value});
+	
 	    if (e.target.dataset["name"] === "title") {
 	      this.setState({ title: e.target.value });
 	    } else if (e.target.dataset["name"] === "description") {
@@ -31759,8 +31754,6 @@
 	    } else {
 	      this.setState({ significance: e.target.value });
 	    }
-	    // debugger;
-	    // this.setState(e.target.value
 	  },
 	
 	  redirectToView: function (id) {
@@ -31784,9 +31777,6 @@
 	    } else {
 	        this.setState({ uploadResult: "Something happened during upload.  Try again!" });
 	      }
-	    // debugger
-	    // this.render();
-	    // console.log(results);
 	  },
 	
 	  uploadedTag: function (medium, idx) {
@@ -31900,7 +31890,6 @@
 	    //This iterates through each uploaded image and get ApiUtil to send POST request to DB through saveMedium.  Should receive the object back after save.
 	    media_data[0].forEach(function (medium) {
 	      medium.medium.project_id = proj_id;
-	      debugger;
 	      ApiUtil.saveMedium(medium, function (proj_id) {
 	        console.log("medium saved for: " + proj_id);
 	        callback(proj_id);

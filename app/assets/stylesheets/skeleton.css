@@ -180,9 +180,8 @@
   color: yellow;
   background: transparent;
   position: fixed;
-  bottom: 0px;
+  bottom: 70px;
   left: 60%;
-  padding: 10px;
 }
 .follow-box {
   font-size: 12px;
@@ -193,18 +192,39 @@
   border-radius: 4px;
 }
 .hidden-pic {
+  display: none;
   content: "";
+  position: fixed;
+  top:auto;
+  left:35%;
+  height:auto;
+  width:auto;
+  margin-top: auto;
+  margin-left: auto;
+  z-index: 11;
+  padding: 20px;
+  background: white;
+  overflow: visible;
+}
+.fake-bg {
   position:fixed;
-  width: 500px;
-  height: 500px;
-  margin: 0 auto;
+  display: none;
+  content: "";
+  width:100%;
+  height: 100%;
+  z-index: 2;
+  background: white;
+  top:0px;
+  left: 0px;
 }
 #root {
   width: 1050px;
   margin: 0 auto;
   overflow: auto;
 }
-
+/*#hidden-pic {
+  max-width: fit-content
+}*/
 
 
 

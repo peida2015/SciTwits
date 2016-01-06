@@ -11,11 +11,6 @@ var ProjectForm = React.createClass({
     return ({ uploadResult: "", title: "", description: "", significance: "", media: []})
   },
 
-  // componentDidMount: function () {
-  //   debugger
-  //   this.addListener("");
-  // },
-
   handleSubmit: function(e) {
     e.preventDefault();
     var that = this;
@@ -29,13 +24,11 @@ var ProjectForm = React.createClass({
     };
     ProjectsActions.createProject(data, function (proj_id) {
       MediaActions.saveMedia([that.state.media, proj_id], that.redirectToView)
-      debugger
     });
   },
 
   handleChange: function (e) {
-    // debugger
-    // this.setState({ e.target.dataset["name"] : e.target.value});
+
     if (e.target.dataset["name"]==="title") {
       this.setState({title : e.target.value })
     } else if (e.target.dataset["name"]==="description") {
@@ -43,8 +36,7 @@ var ProjectForm = React.createClass({
     } else {
       this.setState({significance : e.target.value })
     }
-    // debugger;
-    // this.setState(e.target.value
+
   },
 
   redirectToView: function(id) {
@@ -68,9 +60,7 @@ var ProjectForm = React.createClass({
     } else {
       this.setState({ uploadResult: "Something happened during upload.  Try again!"});
     }
-    // debugger
-    // this.render();
-          // console.log(results);
+
   },
 
   uploadedTag: function (medium, idx) {

@@ -7,7 +7,6 @@ var MediaActions = {
 //This iterates through each uploaded image and get ApiUtil to send POST request to DB through saveMedium.  Should receive the object back after save.
     media_data[0].forEach(function (medium){
       medium.medium.project_id = proj_id;
-      debugger
       ApiUtil.saveMedium(medium, function(proj_id){
         console.log("medium saved for: "+proj_id);
         callback(proj_id)
