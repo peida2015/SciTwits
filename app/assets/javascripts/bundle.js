@@ -31600,7 +31600,7 @@
 	    console.log('clicked');
 	    $(".hidden-pic").css({ display: "block" });
 	    $(".fake-bg").css({ display: "block", opacity: 0.2 });
-	    var img_tag = React.createElement('img', { onClick: this.hideImage, className: 'u-max-full-width', id: 'hidden-pic', src: e.target.src.replace(e.target.src.match("w_100,h_100,c_fill/")[0], "") });
+	    var img_tag = React.createElement('img', { onClick: this.hideImage, className: 'u-max-full-width', src: e.target.src.replace(e.target.src.match("w_100,h_100,c_fill/")[0], "") });
 	    this.setState({ hiddenPic: img_tag });
 	  },
 	
@@ -31674,6 +31674,11 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'container' },
+	      React.createElement(
+	        'div',
+	        { className: 'hidden-pic' },
+	        this.state.hiddenPic
+	      ),
 	      React.createElement(FollowButton, { project_id: this.props.params.id,
 	        user_id: this.props.routes[0].indexRoute.user_id }),
 	      React.createElement(
@@ -31695,11 +31700,6 @@
 	      React.createElement(
 	        'div',
 	        { className: 'five columns' },
-	        React.createElement(
-	          'div',
-	          { className: 'hidden-pic u-max-full-width' },
-	          this.state.hiddenPic
-	        ),
 	        React.createElement(TwitForm, { project_id: this.props.params.id }),
 	        React.createElement(Twits, { twits: this.state.twits, user_id: this.props.routes[0].indexRoute.user_id })
 	      ),

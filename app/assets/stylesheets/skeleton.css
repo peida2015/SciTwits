@@ -196,15 +196,13 @@
   content: "";
   position: fixed;
   top:auto;
-  left:35%;
+  left:30%;
   height:auto;
-  width:auto;
-  margin-top: auto;
-  margin-left: auto;
+  max-width:60%;
   z-index: 11;
   padding: 20px;
   background: white;
-  overflow: visible;
+  overflow:hidden;
 }
 .fake-bg {
   position:fixed;
@@ -336,7 +334,7 @@ body::after {
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
-  margin-bottom: 2rem;
+  margin-bottom: 0rem;
   font-weight: 400;
   font-family: 'Play', serif, FontAwesome;
   text-align: center;

@@ -72,7 +72,7 @@ var ProjectView = React.createClass({
     console.log('clicked');
     $(".hidden-pic").css({display: "block"});
     $(".fake-bg").css({display: "block", opacity: 0.2});
-    var img_tag = (<img onClick={this.hideImage}  className="u-max-full-width" id="hidden-pic" src= {e.target.src.replace(e.target.src.match("w_100,h_100,c_fill/")[0],"")}/>);
+    var img_tag = (<img onClick={this.hideImage}  className="u-max-full-width" src= {e.target.src.replace(e.target.src.match("w_100,h_100,c_fill/")[0],"")}/>);
     this.setState({ hiddenPic: img_tag})
   },
 
@@ -110,6 +110,9 @@ var ProjectView = React.createClass({
 
     return(
       <div className="container">
+        <div className="hidden-pic">
+          {this.state.hiddenPic}
+        </div>
 
         <FollowButton project_id={this.props.params.id}
           user_id={this.props.routes[0].indexRoute.user_id}/>
@@ -120,9 +123,6 @@ var ProjectView = React.createClass({
         {this.buildProject()}
 
         <div className="five columns">
-          <div className="hidden-pic u-max-full-width">
-            {this.state.hiddenPic}
-          </div>
           <TwitForm project_id={this.props.params.id}/>
           <Twits twits={this.state.twits} user_id={this.props.routes[0].indexRoute.user_id}/>
         </div>
