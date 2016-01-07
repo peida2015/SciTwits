@@ -31597,11 +31597,25 @@
 	  },
 	
 	  showImage: function (e) {
+	
+	    var img_url = e.target.src.replace(e.target.src.match("w_100,h_100,c_fill/")[0], "").toString();
+	
+	    var img = new Image();
+	
+	    var width = 0;
+	    img.onload = function () {
+	      var options = {
+	        src: img_url
+	      };
+	      $(".hidden-pic").attr(options).css({ display: "block", width: this.width, height: this.height, position: "fixed", top: "50%", left: "50%", marginTop: -this.height / 2, marginLeft: -this.width / 2, background: "white", zIndex: "3" });
+	      console.log(this.width);
+	    };
+	
+	    img.src = img_url;
+	
+	    // debugger  // {this.state.hiddenPic}
 	    console.log('clicked');
-	    $(".hidden-pic").css({ display: "block" });
 	    $(".fake-bg").css({ display: "block", opacity: 0.2 });
-	    var img_tag = React.createElement('img', { onClick: this.hideImage, className: 'u-max-full-width', src: e.target.src.replace(e.target.src.match("w_100,h_100,c_fill/")[0], "") });
-	    this.setState({ hiddenPic: img_tag });
 	  },
 	
 	  buildProject: function () {
@@ -31675,11 +31689,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'container' },
-	      React.createElement(
-	        'div',
-	        { className: 'hidden-pic' },
-	        this.state.hiddenPic
-	      ),
+	      React.createElement('iframe', { onClick: this.hideImage, className: 'hidden-pic', type: 'image', frameBorder: '0', scrolling: 'no' }),
 	      React.createElement(FollowButton, { project_id: this.props.params.id,
 	        user_id: this.props.routes[0].indexRoute.user_id }),
 	      React.createElement(
