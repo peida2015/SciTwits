@@ -31626,6 +31626,7 @@
 	          this.state.follows.length + " followers"
 	        )
 	      ),
+	      React.createElement('br', null),
 	      React.createElement(
 	        'strong',
 	        null,

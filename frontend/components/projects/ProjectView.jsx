@@ -93,6 +93,7 @@ var ProjectView = React.createClass({
           <div className="center-align follow-box">
             <h6>{ this.state.follows.length + " followers" }</h6>
           </div>
+          <br/>
           <strong>Title:</strong>
           <div className="title">{ this.state.title }</div><br/>
           <strong>Description:</strong>
