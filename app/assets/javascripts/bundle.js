@@ -24243,7 +24243,7 @@
 	        { className: 'ten columns', onClick: this.redirectToView.bind(null, project.id) },
 	        React.createElement(
 	          'div',
-	          { className: 'title' },
+	          { className: 'clickable' },
 	          React.createElement(
 	            'strong',
 	            null,
@@ -24255,7 +24255,7 @@
 	        React.createElement('br', null),
 	        React.createElement(
 	          'div',
-	          { className: 'significance' },
+	          { className: 'clickable' },
 	          React.createElement(
 	            'strong',
 	            null,

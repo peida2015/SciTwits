@@ -626,6 +626,7 @@ form.button_to {
 .u-pull-left {
   float: left; }
 .center-align { text-align: center }
+.clickable{ cursor: pointer; cursor: hand; }
 
 
 /* Misc

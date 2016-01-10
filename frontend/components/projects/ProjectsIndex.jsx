@@ -87,12 +87,12 @@ var ProjectsIndex = React.createClass({
     return (
       <div key={idx} className="project five columns box">
           <div className="ten columns" onClick={this.redirectToView.bind(null, project.id)}>
-            <div className="title">
+            <div className="clickable">
               <strong>Title:</strong><br/>
               { project.title }
             </div>
 <br/>
-            <div className="significance">
+            <div className="clickable">
               <strong>Significance:</strong><br/>
               { project.significance }
             </div>
