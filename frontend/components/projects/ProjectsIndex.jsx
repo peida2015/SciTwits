@@ -34,14 +34,15 @@ var ProjectsIndex = React.createClass({
 
   handleDelete: function (e) {
     // console.log("Clicked Remove");
-    ProjectsActions.deleteProject(e.target.id)
+    debugger
+    ProjectsActions.deleteProject(e.currentTarget.id)
   },
 
   handleEditClick: function (e){
-    var project = ProjectStore.find(e.target.id);
+    var project = ProjectStore.find(e.currentTarget.id);
     if (project) {
       // debugger
-      this.props.history.pushState(this.state, 'projects/edit', {id: e.target.id});
+      this.props.history.pushState(this.state, 'projects/edit', {id: e.currentTarget.id});
     } else {
       alert("project doesn't exist!");
     }

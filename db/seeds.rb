@@ -41,6 +41,11 @@ projects = [
     3,
     "Help computers work smarter, and harder."
   ],
+  [ "Sustainable Transportation",
+    "Developing a transporation system of the future requires adherence to sustainable principles and best practices in planning.  Innovations are being developed in our lab to meet this challenge.",
+    3,
+    "Moving more people more efficiently in more ways than just cars."
+  ],
 ]
 
 20.times do
@@ -65,5 +70,24 @@ twits = [
 end
 
 twits.each do |user_id, project_id, body|
-  Twits.create(user_id: user_id, project_id: project_id, body: body);
+  Twit.create(user_id: user_id, project_id: project_id, body: body);
+end
+
+media = [
+  ["vyetlshpahrhtt6naoc3.jpg", 'image', 2],
+  ["wwqyribs4vxvxhzwr4l1.png", 'image', 2],
+  ["trp2cdqhfadt05hk4yon.png", 'image', 2],
+  ["main_1200_jpjnnd.jpg", 'image', 3], ["1413458769593_wps_28_Fusion_Reactor_Image_by_M_ywgpid.jpg", 'image', 3], ["0myK3rC_wt7lg6.jpg", 'image', 1], ["unified-field-theory-Converted2-1024x459_mp2yxe.jpg", 'image', 1], ["einstein-rosen-bridge2_m1scx7.jpg", 'image', 1], ["einstein-calendar-oct2015_ewnzyl.jpg", 'image', 1],
+  ["20120818_181544_en7b3s.jpg", 'image', 5],
+  ["
+sustainable_transport_encyclopaedia_p1jdcb.jpg", 'image', 5],
+  ["7a_c5snlo.jpg", 'image', 5],
+  ["pag38_nj8opf.jpg", 'image', 5],
+  ["sustainabletransport_xbajka.gif", 'image', 5],
+  ["artificialfictionbrain_gengiskanhg_wikimedia-commons-cc-by-sa-3.0-100411445-primary.idge_cqaobe.png", 'image', 4],
+  ["lnkdmap_c6xyow.jpg", 'image', 4]
+]
+
+media.each do |link, medium_type, project_id|
+  Medium.create(link: link, medium_type: medium_type, project_id: project_id)
 end

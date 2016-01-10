@@ -18,7 +18,8 @@
       "webpack": "",
       "react-router": "",
       "flux":"",
-      "cloudinary": ""
+      "cloudinary": "",
+      "magnific-popup": ""
   },
   "engines": {
     "node": "",

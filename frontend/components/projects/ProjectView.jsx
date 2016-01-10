@@ -11,6 +11,7 @@ var MediaActions = require('../../actions/MediaActions');
 var TwitForm = require('../twits/TwitForm');
 var Tags = require('../tags/Tags');
 var FollowButton = require('./FollowButton');
+var MagnificPopup = require("magnific-popup")
 
 
 var ProjectView = React.createClass({
@@ -80,15 +81,24 @@ var ProjectView = React.createClass({
         src: img_url
       }
       $(".hidden-pic").attr(options).css({display: "block", width: this.width, height: this.height, position:"fixed", top:"50%", left:"50%", marginTop: -this.height/2, marginLeft: -this.width/2, background:"white", zIndex:"3"});
-       console.log(this.width);
     };
 
     img.src = img_url;
 
-
-    // debugger  // {this.state.hiddenPic}
-    console.log('clicked');
     $(".fake-bg").css({display: "block", opacity: 0.2});
+    // debugger  // {this.state.hiddenPic}
+
+    // $(".media-file").magnificPopup({
+    //   delegate: 'a',
+    //   type:'image',
+    //   closeOnContentClick: true,
+    //   mainClass: 'mfp-img-mobile',
+		//   image: {
+		// 	  verticalFit: true
+		//   },
+    //   gallery:{enabled:true}
+    // })
+    // debugger
   },
 
   buildProject: function () {
@@ -98,7 +108,9 @@ var ProjectView = React.createClass({
       var media_tags = this.state.media.map(function (medium, idx) {
         // debugger
         return (
-          <img key={idx} src={cropped_url+ "w_100,h_100,c_fill/"+medium.link}></img>
+          // <a href={cropped_url+medium.link}>
+            <img key={idx} src={cropped_url+ "w_100,h_100,c_fill/"+medium.link}></img>
+          // </a>
         )
       });
     }
@@ -142,6 +154,7 @@ var ProjectView = React.createClass({
           <Twits twits={this.state.twits} user_id={this.props.routes[0].indexRoute.user_id}/>
         </div>
         <div className="fake-bg" onClick={this.hideImage}></div>
+
       </div>
     )
   }
