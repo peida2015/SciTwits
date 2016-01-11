@@ -31555,13 +31555,12 @@
 	    this.FollowsToken = FollowsStore.addListener(this.fetchFollows);
 	    this.ProjectToken = ProjectStore.addListener(this.parseProject);
 	
-	    // }.bind(this));
 	    TwitsActions.fetchTwits(this.props.params.id);
 	    ProjectsActions.fetchAllProjects();
 	    MediaActions.fetchMedia(this.props.params.id);
 	    FollowsActions.fetchFollows();
-	    // this.fetchTwits();
-	    // this.fetchMedia();
+	
+	    this.updateTwits = setInterval(TwitsActions.fetchTwits.bind(null, this.props.params.id), 8000);
 	  },
 	
 	  parseProject: function () {
@@ -31578,6 +31577,7 @@
 	    this.TwitsToken.remove();
 	    this.ProjectToken.remove();
 	    this.FollowsToken.remove();
+	    clearInterval(this.updateTwits);
 	  },
 	
 	  fetchMedia: function () {
@@ -31607,7 +31607,8 @@
 	    var width = 0;
 	    img.onload = function () {
 	      var options = {
-	        src: img_url
+	        src: img_url,
+	        type: 'content'
 	      };
 	      $(".hidden-pic").attr(options).css({ display: "block", width: this.width, height: this.height, position: "fixed", top: "50%", left: "50%", marginTop: -this.height / 2, marginLeft: -this.width / 2, background: "white", zIndex: "3" });
 	    };
@@ -31615,19 +31616,6 @@
 	    img.src = img_url;
 	
 	    $(".fake-bg").css({ display: "block", opacity: 0.2 });
-	    // debugger  // {this.state.hiddenPic}
-	
-	    // $(".media-file").magnificPopup({
-	    //   delegate: 'a',
-	    //   type:'image',
-	    //   closeOnContentClick: true,
-	    //   mainClass: 'mfp-img-mobile',
-	    //   image: {
-	    // 	  verticalFit: true
-	    //   },
-	    //   gallery:{enabled:true}
-	    // })
-	    // debugger
 	  },
 	
 	  buildProject: function () {
@@ -31701,7 +31689,7 @@
 	  },
 	
 	  render: function () {
-	    // console.log("ProjectView");
+	    console.log("ProjectView");
 	
 	    return React.createElement(
 	      'div',
