@@ -31,7 +31,7 @@ var ProjectView = React.createClass({
     MediaActions.fetchMedia(this.props.params.id);
     FollowsActions.fetchFollows();
 
-    this.updateTwits = setInterval(TwitsActions.fetchTwits.bind(null,this.props.params.id), 8000)
+    this.updateTwits = setInterval(TwitsActions.fetchTwits.bind(null,this.props.params.id), 20000)
   },
 
   parseProject: function () {
@@ -116,14 +116,14 @@ var ProjectView = React.createClass({
           <div className="description">{ this.state.description }</div><br/>
           <strong>Significance:</strong>
           <div className="significance">{ this.state.significance }</div><br/>
-          <div className="media-file"  onClick={this.showImage}>{media_tags}</div>
+          <div className="media-file center-align clickable"  onClick={this.showImage}>{media_tags}</div>
           <Tags project_id={this.props.params.id} />
         </div>
     )
   },
 
   render: function () {
-console.log("ProjectView");
+// console.log("ProjectView");
 
     return(
       <div className="container">

@@ -31560,7 +31560,7 @@
 	    MediaActions.fetchMedia(this.props.params.id);
 	    FollowsActions.fetchFollows();
 	
-	    this.updateTwits = setInterval(TwitsActions.fetchTwits.bind(null, this.props.params.id), 8000);
+	    this.updateTwits = setInterval(TwitsActions.fetchTwits.bind(null, this.props.params.id), 20000);
 	  },
 	
 	  parseProject: function () {
@@ -31681,7 +31681,7 @@
 	      React.createElement('br', null),
 	      React.createElement(
 	        'div',
-	        { className: 'media-file', onClick: this.showImage },
+	        { className: 'media-file center-align clickable', onClick: this.showImage },
 	        media_tags
 	      ),
 	      React.createElement(Tags, { project_id: this.props.params.id })
@@ -31689,7 +31689,7 @@
 	  },
 	
 	  render: function () {
-	    console.log("ProjectView");
+	    // console.log("ProjectView");
 	
 	    return React.createElement(
 	      'div',
