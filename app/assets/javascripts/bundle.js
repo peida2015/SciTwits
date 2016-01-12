@@ -31560,7 +31560,7 @@
 	    MediaActions.fetchMedia(this.props.params.id);
 	    FollowsActions.fetchFollows();
 	
-	    this.updateTwits = setInterval(TwitsActions.fetchTwits.bind(null, this.props.params.id), 20000);
+	    this.updateTwits = setInterval(TwitsActions.fetchTwits.bind(null, this.props.params.id), 30000);
 	  },
 	
 	  parseProject: function () {
