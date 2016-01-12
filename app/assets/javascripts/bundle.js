@@ -77,7 +77,7 @@
 	  var routes = React.createElement(
 	    Route,
 	    { path: '/', component: SciTwits },
-	    React.createElement(IndexRoute, { component: ProjectsIndex, user_id: root.dataset["user_id"] }),
+	    React.createElement(IndexRoute, { component: ProjectsIndex, user_id: root.dataset["user_id"] || "" }),
 	    React.createElement(Route, { path: 'projects/form', component: ProjectForm }),
 	    React.createElement(Route, { path: 'projects/edit', component: ProjectEdit }),
 	    React.createElement(Route, { path: 'projects/:id', component: ProjectView })

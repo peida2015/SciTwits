@@ -28,7 +28,7 @@ $(function () {
 
   var routes = (
     <Route path='/' component={SciTwits}>
-      <IndexRoute component={ProjectsIndex} user_id={root.dataset["user_id"]}>
+      <IndexRoute component={ProjectsIndex} user_id={root.dataset["user_id"] || ""}>
       </IndexRoute>
       <Route path='projects/form' component={ProjectForm}></Route>
       <Route path='projects/edit' component={ProjectEdit}></Route>
