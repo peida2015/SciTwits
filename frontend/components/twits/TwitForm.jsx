@@ -8,7 +8,13 @@ var TwitForm = React.createClass ({
   },
 
   changeHandler: function (e) {
-    this.setState({ body: e.target.value})
+    // debugger
+    this.setState({ body: e.target.value })
+    if (e.target.value.length <= 150) {
+      $('.twit-error').hide()
+    } else {
+      $('.twit-error').show()
+    }
   },
 
   handleTagChange: function (e) {
@@ -27,20 +33,24 @@ var TwitForm = React.createClass ({
     var tags = this.state.tags.split(",").map(function (tag){
       return tag.trim();
     });
-
-    TagsActions.saveTags(tags, this.state.project_id);
-    TwitsActions.saveTwit(twit);
-    this.setState({ body: "", tags: ""})
+    if (this.state.body.length <=150) {
+      TagsActions.saveTags(tags, this.state.project_id);
+      TwitsActions.saveTwit(twit);
+      this.setState({ body: "", tags: ""})
+    } else {
+      $('.twit-error').show();
+    }
   },
 
   render: function () {
     return (
       <div>
         <form  className="center-align" onSubmit={this.handleSubmit}>
-          <input type="text" onChange={this.changeHandler}
+          <input className="twit-input" type="text" onChange={this.changeHandler}
                   value={this.state.body}
                   placeholder="Be brief: max 150 chars">
           </input>
+          <div className="twit-error"><strong>Cannot exceed 150 chars. It's {this.state.body.length} chars long.</strong></div>
           <label>Tags:</label>
           <input type="text" onChange={this.handleTagChange}
             value={this.state.tags}

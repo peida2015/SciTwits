@@ -31968,7 +31968,13 @@
 	  },
 	
 	  changeHandler: function (e) {
+	    // debugger
 	    this.setState({ body: e.target.value });
+	    if (e.target.value.length <= 150) {
+	      $('.twit-error').hide();
+	    } else {
+	      $('.twit-error').show();
+	    }
 	  },
 	
 	  handleTagChange: function (e) {
@@ -31987,10 +31993,13 @@
 	    var tags = this.state.tags.split(",").map(function (tag) {
 	      return tag.trim();
 	    });
-	
-	    TagsActions.saveTags(tags, this.state.project_id);
-	    TwitsActions.saveTwit(twit);
-	    this.setState({ body: "", tags: "" });
+	    if (this.state.body.length <= 150) {
+	      TagsActions.saveTags(tags, this.state.project_id);
+	      TwitsActions.saveTwit(twit);
+	      this.setState({ body: "", tags: "" });
+	    } else {
+	      $('.twit-error').show();
+	    }
 	  },
 	
 	  render: function () {
@@ -32000,9 +32009,20 @@
 	      React.createElement(
 	        'form',
 	        { className: 'center-align', onSubmit: this.handleSubmit },
-	        React.createElement('input', { type: 'text', onChange: this.changeHandler,
+	        React.createElement('input', { className: 'twit-input', type: 'text', onChange: this.changeHandler,
 	          value: this.state.body,
 	          placeholder: 'Be brief: max 150 chars' }),
+	        React.createElement(
+	          'div',
+	          { className: 'twit-error' },
+	          React.createElement(
+	            'strong',
+	            null,
+	            'Cannot exceed 150 chars. It\'s ',
+	            this.state.body.length,
+	            ' chars long.'
+	          )
+	        ),
 	        React.createElement(
 	          'label',
 	          null,

@@ -168,6 +168,10 @@
   float: right;
   margin-right: 20%;
 }
+.twit-error {
+  display:none;
+  color:yellow
+}
 .errors {
   color: yellow;
   background: transparent;
@@ -541,6 +545,12 @@ label > .label-body {
   display: inline-block;
   margin-left: .5rem;
   font-weight: normal; }
+input .twit-input::after {
+  content: "Cannot exceed 150 chars.";
+  color: yellow;
+  background: black;
+  display:inline;
+}
 
 
 /* Lists
@@ -617,7 +627,7 @@ form {
   /*margin-bottom: 10rem;*/
   font-family: 'Montserrat', sans-serif, FontAwesome;
   font-weight: 400;
-  color: #999;
+  color: white;
 }
 form.button_to {
   width: 118px;
