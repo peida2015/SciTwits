@@ -1,47 +1,50 @@
 var React = require('react');
 var ProjectStore = require('../../stores/project');
+var FollowsActions = require('../../actions/FollowsActions');
 var ProjectsActions = require('../../actions/ProjectsActions');
 var FollowButton = require('./FollowButton');
 // var History = require('react-router').History;
 
 var ProjectsIndex = React.createClass({
-  // mixins:[History],
 
   getInitialState: function () {
-    return ({ projects: [] });
+    return ({ projects: [], fetchState: "See All Projects"});
   },
 
   redirectToView: function (id) {
-    // debugger;
-    // e.preventDefault();
     this.props.history.pushState(this.state, 'projects/'+id, {user_id: this.props.route.user_id});
   },
 
   componentDidMount: function () {
-    // debugger
-    ProjectsActions.fetchAllProjects();
+    ProjectsActions.fetchFollowedProjects(this.props.route.user_id);
     this.listenerToken = ProjectStore.addListener(this.handleStoreChange);
   },
 
+  handleToggleGet: function () {
+    if (this.state.fetchState ==="Projects You Followed") {
+      ProjectsActions.fetchFollowedProjects(this.props.route.user_id);
+      this.setState({fetchState: "See All Projects"})
+    } else {
+      ProjectsActions.fetchAllProjects();
+      this.setState({fetchState: "Projects You Followed"})
+    }
+    FollowsActions.fetchFollows();
+  },
   componentWillUnmount: function () {
     this.listenerToken.remove();
   },
 
   handleStoreChange: function () {
-    // console.log("Store changed");
     this.setState({ projects: ProjectStore.all() })
   },
 
   handleDelete: function (e) {
-    // console.log("Clicked Remove");
-    debugger
     ProjectsActions.deleteProject(e.currentTarget.id)
   },
 
   handleEditClick: function (e){
     var project = ProjectStore.find(e.currentTarget.id);
     if (project) {
-      // debugger
       this.props.history.pushState(this.state, 'projects/edit', {id: e.currentTarget.id});
     } else {
       alert("project doesn't exist!");
@@ -81,7 +84,6 @@ var ProjectsIndex = React.createClass({
   },
 
   buildProject: function (project, idx) {
-    // debugger
     var buttons = this.buildButtons(project);
 
     return (
@@ -112,13 +114,11 @@ var ProjectsIndex = React.createClass({
   },
 
   render: function () {
-    // debugger
     var proj_view = this.state.projects.map(this.buildProject);
-    // console.log("ProjectsIndex");
 
     return (
       <div>
-
+        <button className="get-button" onClick={this.handleToggleGet}><h6>{this.state.fetchState}</h6></button>
         <br></br>
         { proj_view }
       </div>

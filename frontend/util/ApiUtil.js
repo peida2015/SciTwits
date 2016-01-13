@@ -10,6 +10,14 @@ var ApiUtil = {
       success: ApiActions.receiveAllProjects
     })
   },
+  fetchFollowedProjects: function (user_id){
+    $.ajax({
+      type: "GET",
+      url: "api/projects",
+      data: {user_id: user_id},
+      success: ApiActions.receiveAllProjects
+    })
+  },
 
   saveProject: function (proj_data, callback) {
     $.ajax({

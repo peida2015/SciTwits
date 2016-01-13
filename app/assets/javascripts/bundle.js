@@ -24147,6 +24147,7 @@
 
 	var React = __webpack_require__(1);
 	var ProjectStore = __webpack_require__(209);
+	var FollowsActions = __webpack_require__(234);
 	var ProjectsActions = __webpack_require__(230);
 	var FollowButton = __webpack_require__(233);
 	// var History = require('react-router').History;
@@ -24154,43 +24155,44 @@
 	var ProjectsIndex = React.createClass({
 	  displayName: 'ProjectsIndex',
 	
-	  // mixins:[History],
-	
 	  getInitialState: function () {
-	    return { projects: [] };
+	    return { projects: [], fetchState: "See All Projects" };
 	  },
 	
 	  redirectToView: function (id) {
-	    // debugger;
-	    // e.preventDefault();
 	    this.props.history.pushState(this.state, 'projects/' + id, { user_id: this.props.route.user_id });
 	  },
 	
 	  componentDidMount: function () {
-	    // debugger
-	    ProjectsActions.fetchAllProjects();
+	    ProjectsActions.fetchFollowedProjects(this.props.route.user_id);
 	    this.listenerToken = ProjectStore.addListener(this.handleStoreChange);
 	  },
 	
+	  handleToggleGet: function () {
+	    if (this.state.fetchState === "Projects You Followed") {
+	      ProjectsActions.fetchFollowedProjects(this.props.route.user_id);
+	      this.setState({ fetchState: "See All Projects" });
+	    } else {
+	      ProjectsActions.fetchAllProjects();
+	      this.setState({ fetchState: "Projects You Followed" });
+	    }
+	    FollowsActions.fetchFollows();
+	  },
 	  componentWillUnmount: function () {
 	    this.listenerToken.remove();
 	  },
 	
 	  handleStoreChange: function () {
-	    // console.log("Store changed");
 	    this.setState({ projects: ProjectStore.all() });
 	  },
 	
 	  handleDelete: function (e) {
-	    // console.log("Clicked Remove");
-	    debugger;
 	    ProjectsActions.deleteProject(e.currentTarget.id);
 	  },
 	
 	  handleEditClick: function (e) {
 	    var project = ProjectStore.find(e.currentTarget.id);
 	    if (project) {
-	      // debugger
 	      this.props.history.pushState(this.state, 'projects/edit', { id: e.currentTarget.id });
 	    } else {
 	      alert("project doesn't exist!");
@@ -24232,7 +24234,6 @@
 	  },
 	
 	  buildProject: function (project, idx) {
-	    // debugger
 	    var buttons = this.buildButtons(project);
 	
 	    return React.createElement(
@@ -24284,13 +24285,20 @@
 	  },
 	
 	  render: function () {
-	    // debugger
 	    var proj_view = this.state.projects.map(this.buildProject);
-	    // console.log("ProjectsIndex");
 	
 	    return React.createElement(
 	      'div',
 	      null,
+	      React.createElement(
+	        'button',
+	        { className: 'get-button', onClick: this.handleToggleGet },
+	        React.createElement(
+	          'h6',
+	          null,
+	          this.state.fetchState
+	        )
+	      ),
 	      React.createElement('br', null),
 	      proj_view
 	    );
@@ -31071,6 +31079,11 @@
 	    ApiUtil.fetchAll();
 	  },
 	
+	  fetchFollowedProjects: function (user_id) {
+	    // debugger
+	    ApiUtil.fetchFollowedProjects(user_id);
+	  },
+	
 	  createProject: function (data, callback) {
 	    ApiUtil.saveProject(data, callback);
 	  },
@@ -31099,6 +31112,14 @@
 	      type: "GET",
 	      url: "api/projects",
 	      data: "",
+	      success: ApiActions.receiveAllProjects
+	    });
+	  },
+	  fetchFollowedProjects: function (user_id) {
+	    $.ajax({
+	      type: "GET",
+	      url: "api/projects",
+	      data: { user_id: user_id },
 	      success: ApiActions.receiveAllProjects
 	    });
 	  },

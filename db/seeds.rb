@@ -61,7 +61,7 @@ projects.each do |title, description, owner_id, significance|
 end
 
 twits = [
-  [1, 2, 'Now humans have even slimmer chance.']
+  [1, 4, 'Now humans have even slimmer chance.']
 ]
 
 100.times do

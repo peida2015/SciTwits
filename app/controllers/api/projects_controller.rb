@@ -4,7 +4,7 @@ class Api::ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-    @projects = Project.all
+    params[:user_id].nil? ? @projects = Project.all : @projects = User.find(params[:user_id]).followed_projects
     render :index
   end
 

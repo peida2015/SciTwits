@@ -5,6 +5,11 @@ var ProjectsActions = {
     ApiUtil.fetchAll();
   },
 
+  fetchFollowedProjects: function (user_id) {
+    // debugger
+    ApiUtil.fetchFollowedProjects(user_id);
+  },
+
   createProject: function (data, callback) {
     ApiUtil.saveProject(data, callback);
   },
