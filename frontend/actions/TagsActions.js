@@ -6,6 +6,10 @@ var TagsActions = {
     ApiUtil.fetchAllTags();
   },
 
+  fetchFavoriteTags: function () {
+    ApiUtil.fetchFavoriteTags();
+  },
+
   fetchTags: function (project_id) {
     ApiUtil.fetchTags(project_id);
   },

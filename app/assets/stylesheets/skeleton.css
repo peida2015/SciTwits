@@ -216,6 +216,12 @@
   overflow: auto;
 }
 
+strong.tags {
+  padding: 5px;
+  border-radius: 8px;
+  background: lightblue;
+  margin-left: 5px;
+}
 
 /*For smaller devices*/
 @media(min-width: 300px) and (max-device-width: 400px){

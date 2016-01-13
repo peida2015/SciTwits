@@ -51,7 +51,7 @@
 	var IndexRoute = __webpack_require__(159).IndexRoute;
 	// var Link = require('react-router').Link;
 	var ProjectsIndex = __webpack_require__(208);
-	var ProjectView = __webpack_require__(236);
+	var ProjectView = __webpack_require__(238);
 	var ProjectForm = __webpack_require__(248);
 	var ProjectEdit = __webpack_require__(250);
 	// debugger
@@ -24147,16 +24147,19 @@
 
 	var React = __webpack_require__(1);
 	var ProjectStore = __webpack_require__(209);
-	var FollowsActions = __webpack_require__(234);
-	var ProjectsActions = __webpack_require__(230);
-	var FollowButton = __webpack_require__(233);
+	var FollowsActions = __webpack_require__(230);
+	var ProjectsActions = __webpack_require__(233);
+	var TagsActions = __webpack_require__(234);
+	var TagStore = __webpack_require__(235);
+	var FollowButton = __webpack_require__(236);
+	
 	// var History = require('react-router').History;
 	
 	var ProjectsIndex = React.createClass({
 	  displayName: 'ProjectsIndex',
 	
 	  getInitialState: function () {
-	    return { projects: [], fetchState: "See All Projects" };
+	    return { projects: [], fetchState: "See All Projects", favoriteTags: [] };
 	  },
 	
 	  redirectToView: function (id) {
@@ -24166,6 +24169,8 @@
 	  componentDidMount: function () {
 	    ProjectsActions.fetchFollowedProjects(this.props.route.user_id);
 	    this.listenerToken = ProjectStore.addListener(this.handleStoreChange);
+	    TagsActions.fetchFavoriteTags();
+	    this.TagsListerner = TagStore.addListener(this.handleTagChange);
 	  },
 	
 	  handleToggleGet: function () {
@@ -24180,10 +24185,15 @@
 	  },
 	  componentWillUnmount: function () {
 	    this.listenerToken.remove();
+	    this.TagsListerner.remove();
 	  },
 	
 	  handleStoreChange: function () {
 	    this.setState({ projects: ProjectStore.all() });
+	  },
+	
+	  handleTagChange: function () {
+	    this.setState({ favoriteTags: TagStore.all() });
 	  },
 	
 	  handleDelete: function (e) {
@@ -24195,8 +24205,13 @@
 	    if (project) {
 	      this.props.history.pushState(this.state, 'projects/edit', { id: e.currentTarget.id });
 	    } else {
+	      this.TagsListerner.remove();
 	      alert("project doesn't exist!");
 	    }
+	  },
+	
+	  tagSearch: function (tag_id) {
+	    ProjectsActions.fetchTaggedProjects(tag_id);
 	  },
 	
 	  followButton: function (project_id) {
@@ -24284,9 +24299,17 @@
 	    );
 	  },
 	
+	  buildTags: function (tag, idx) {
+	    return React.createElement(
+	      'strong',
+	      { className: 'tags u-pull-right clickable', key: idx, onClick: this.tagSearch.bind(null, tag.id) },
+	      "#" + tag.name
+	    );
+	  },
+	
 	  render: function () {
 	    var proj_view = this.state.projects.map(this.buildProject);
-	
+	    var tags = this.state.favoriteTags.map(this.buildTags);
 	    return React.createElement(
 	      'div',
 	      null,
@@ -24299,6 +24322,7 @@
 	          this.state.fetchState
 	        )
 	      ),
+	      tags,
 	      React.createElement('br', null),
 	      proj_view
 	    );
@@ -31074,30 +31098,26 @@
 
 	var ApiUtil = __webpack_require__(231);
 	
-	var ProjectsActions = {
-	  fetchAllProjects: function () {
-	    ApiUtil.fetchAll();
+	var FollowsActions = {
+	  fetchFollows: function () {
+	    ApiUtil.fetchFollows();
 	  },
-	
-	  fetchFollowedProjects: function (user_id) {
+	  saveFollow: function (project_id, user_id) {
+	    var follow_data = {
+	      follow: {
+	        project_id: project_id,
+	        user_id: user_id
+	      }
+	    };
+	    ApiUtil.saveFollow(follow_data);
+	  },
+	  unFollow: function (follow_id) {
 	    // debugger
-	    ApiUtil.fetchFollowedProjects(user_id);
-	  },
-	
-	  createProject: function (data, callback) {
-	    ApiUtil.saveProject(data, callback);
-	  },
-	
-	  updateProject: function (data, callback) {
-	    ApiUtil.changeProject(data, callback);
-	  },
-	
-	  deleteProject: function (id, callback) {
-	    ApiUtil.destroyProject(id, callback);
+	    ApiUtil.unFollow(follow_id);
 	  }
-	
 	};
-	module.exports = ProjectsActions;
+	
+	module.exports = FollowsActions;
 
 /***/ },
 /* 231 */
@@ -31115,11 +31135,21 @@
 	      success: ApiActions.receiveAllProjects
 	    });
 	  },
+	
 	  fetchFollowedProjects: function (user_id) {
 	    $.ajax({
 	      type: "GET",
 	      url: "api/projects",
 	      data: { user_id: user_id },
+	      success: ApiActions.receiveAllProjects
+	    });
+	  },
+	
+	  fetchTaggedProjects: function (tag_id) {
+	    $.ajax({
+	      type: "GET",
+	      url: "api/projects",
+	      data: { tag_id: tag_id },
 	      success: ApiActions.receiveAllProjects
 	    });
 	  },
@@ -31200,9 +31230,6 @@
 	      url: "api/twits",
 	      data: twit_data,
 	      success: ApiActions.receiveTwit
-	      // error: function (resp){
-	      //   console.log(resp);
-	      // }
 	    });
 	  },
 	
@@ -31211,14 +31238,10 @@
 	      type: "DELETE",
 	      url: "api/twits/" + twit_id,
 	      success: ApiActions.receiveTwits
-	      // callback(resp.project_id);
-	      // error: function (resp){
-	      //   console.log(resp);
-	      // }
 	    });
 	  },
 	
-	  fetchAllTags: function () {
+	  fetchFavoriteTags: function () {
 	    $.ajax({
 	      type: "GET",
 	      url: "api/tags",
@@ -31375,9 +31398,133 @@
 /* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var ApiUtil = __webpack_require__(231);
+	
+	var ProjectsActions = {
+	  fetchAllProjects: function () {
+	    ApiUtil.fetchAll();
+	  },
+	
+	  fetchFollowedProjects: function (user_id) {
+	    // debugger
+	    ApiUtil.fetchFollowedProjects(user_id);
+	  },
+	
+	  fetchTaggedProjects: function (tag_id) {
+	    ApiUtil.fetchTaggedProjects(tag_id);
+	  },
+	
+	  createProject: function (data, callback) {
+	    ApiUtil.saveProject(data, callback);
+	  },
+	
+	  updateProject: function (data, callback) {
+	    ApiUtil.changeProject(data, callback);
+	  },
+	
+	  deleteProject: function (id, callback) {
+	    ApiUtil.destroyProject(id, callback);
+	  }
+	
+	};
+	module.exports = ProjectsActions;
+
+/***/ },
+/* 234 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(231);
+	var TagsStore = __webpack_require__(235);
+	
+	var TagsActions = {
+	  fetchAllTags: function () {
+	    ApiUtil.fetchAllTags();
+	  },
+	
+	  fetchFavoriteTags: function () {
+	    ApiUtil.fetchFavoriteTags();
+	  },
+	
+	  fetchTags: function (project_id) {
+	    ApiUtil.fetchTags(project_id);
+	  },
+	
+	  saveTags: function (tags, project_id) {
+	    // debugger
+	    tags.forEach((function (tag) {
+	      var tag_data = { tag: { name: tag } };
+	      ApiUtil.saveTag(tag_data, project_id, this.saveTagging);
+	    }).bind(this));
+	  },
+	  saveTagging: function (tag, project_id) {
+	    // debugger
+	    ApiUtil.saveTagging(tag, project_id);
+	  }
+	};
+	
+	module.exports = TagsActions;
+
+/***/ },
+/* 235 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(210);
+	var Store = __webpack_require__(214).Store;
+	
+	var _tags = [];
+	
+	var TagsStore = new Store(Dispatcher);
+	
+	TagsStore.all = function () {
+	  return _tags;
+	};
+	
+	TagsStore.getProjectTags = function (project_id) {
+	  return _tags.filter(function (tag) {
+	    debugger;
+	    return tag.project_id == project_id;
+	  });
+	};
+	
+	TagsStore.resetAllTags = function (tags) {
+	  _tags = tags;
+	};
+	
+	TagsStore.addTwit = function (tag) {
+	  var is_found = false;
+	  _tags.forEach(function (el) {
+	    if (el.name === tag.name) {
+	      is_found = true;
+	    }
+	  });
+	
+	  if (!is_found) {
+	    _tags.push(tag);
+	  }
+	};
+	
+	TagsStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "TAGS_RECEIVED":
+	      this.resetAllTags(payload.tags);
+	      TagsStore.__emitChange();
+	      break;
+	    case "TAG_RECEIVED":
+	      this.addTwit(payload.tag);
+	      TagsStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = TagsStore;
+
+/***/ },
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
-	var FollowsActions = __webpack_require__(234);
-	var FollowsStore = __webpack_require__(235);
+	var FollowsActions = __webpack_require__(230);
+	var FollowsStore = __webpack_require__(237);
 	
 	var FollowButton = React.createClass({
 	  displayName: 'FollowButton',
@@ -31452,34 +31599,7 @@
 	module.exports = FollowButton;
 
 /***/ },
-/* 234 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ApiUtil = __webpack_require__(231);
-	
-	var FollowsActions = {
-	  fetchFollows: function () {
-	    ApiUtil.fetchFollows();
-	  },
-	  saveFollow: function (project_id, user_id) {
-	    var follow_data = {
-	      follow: {
-	        project_id: project_id,
-	        user_id: user_id
-	      }
-	    };
-	    ApiUtil.saveFollow(follow_data);
-	  },
-	  unFollow: function (follow_id) {
-	    // debugger
-	    ApiUtil.unFollow(follow_id);
-	  }
-	};
-	
-	module.exports = FollowsActions;
-
-/***/ },
-/* 235 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(210);
@@ -31545,22 +31665,22 @@
 	module.exports = FollowsStore;
 
 /***/ },
-/* 236 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ProjectStore = __webpack_require__(209);
-	var MediaStore = __webpack_require__(237);
-	var TwitsStore = __webpack_require__(238);
-	var FollowsStore = __webpack_require__(235);
-	var ProjectsActions = __webpack_require__(230);
-	var Twits = __webpack_require__(239);
-	var FollowsActions = __webpack_require__(234);
-	var TwitsActions = __webpack_require__(241);
-	var MediaActions = __webpack_require__(242);
-	var TwitForm = __webpack_require__(243);
+	var MediaStore = __webpack_require__(239);
+	var TwitsStore = __webpack_require__(240);
+	var FollowsStore = __webpack_require__(237);
+	var ProjectsActions = __webpack_require__(233);
+	var Twits = __webpack_require__(241);
+	var FollowsActions = __webpack_require__(230);
+	var TwitsActions = __webpack_require__(243);
+	var MediaActions = __webpack_require__(244);
+	var TwitForm = __webpack_require__(245);
 	var Tags = __webpack_require__(246);
-	var FollowButton = __webpack_require__(233);
+	var FollowButton = __webpack_require__(236);
 	var MagnificPopup = __webpack_require__(247);
 	
 	var ProjectView = React.createClass({
@@ -31710,8 +31830,6 @@
 	  },
 	
 	  render: function () {
-	    // console.log("ProjectView");
-	
 	    return React.createElement(
 	      'div',
 	      { className: 'container' },
@@ -31748,7 +31866,7 @@
 	module.exports = ProjectView;
 
 /***/ },
-/* 237 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(210);
@@ -31795,7 +31913,7 @@
 	module.exports = MediaStore;
 
 /***/ },
-/* 238 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(210);
@@ -31846,11 +31964,11 @@
 	module.exports = TwitsStore;
 
 /***/ },
-/* 239 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var TwitItem = __webpack_require__(240);
+	var TwitItem = __webpack_require__(242);
 	// var TwitsStore = require('../../stores/twit');
 	
 	var Twits = React.createClass({
@@ -31880,11 +31998,11 @@
 	module.exports = Twits;
 
 /***/ },
-/* 240 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var TwitsActions = __webpack_require__(241);
+	var TwitsActions = __webpack_require__(243);
 	
 	var TwitItem = React.createClass({
 	  displayName: 'TwitItem',
@@ -31925,7 +32043,7 @@
 	module.exports = TwitItem;
 
 /***/ },
-/* 241 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ApiUtil = __webpack_require__(231);
@@ -31948,7 +32066,7 @@
 	module.exports = TwitsActions;
 
 /***/ },
-/* 242 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ApiUtil = __webpack_require__(231);
@@ -31974,12 +32092,12 @@
 	module.exports = MediaActions;
 
 /***/ },
-/* 243 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var TwitsActions = __webpack_require__(241);
-	var TagsActions = __webpack_require__(244);
+	var TwitsActions = __webpack_require__(243);
+	var TagsActions = __webpack_require__(234);
 	
 	var TwitForm = React.createClass({
 	  displayName: 'TwitForm',
@@ -32061,98 +32179,12 @@
 	module.exports = TwitForm;
 
 /***/ },
-/* 244 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ApiUtil = __webpack_require__(231);
-	var TagsStore = __webpack_require__(245);
-	
-	var TagsActions = {
-	  fetchAllTags: function () {
-	    ApiUtil.fetchAllTags();
-	  },
-	
-	  fetchTags: function (project_id) {
-	    ApiUtil.fetchTags(project_id);
-	  },
-	
-	  saveTags: function (tags, project_id) {
-	    // debugger
-	    tags.forEach((function (tag) {
-	      var tag_data = { tag: { name: tag } };
-	      ApiUtil.saveTag(tag_data, project_id, this.saveTagging);
-	    }).bind(this));
-	  },
-	  saveTagging: function (tag, project_id) {
-	    // debugger
-	    ApiUtil.saveTagging(tag, project_id);
-	  }
-	};
-	
-	module.exports = TagsActions;
-
-/***/ },
-/* 245 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(210);
-	var Store = __webpack_require__(214).Store;
-	
-	var _tags = [];
-	
-	var TagsStore = new Store(Dispatcher);
-	
-	TagsStore.all = function () {
-	  return _tags;
-	};
-	
-	TagsStore.getProjectTags = function (project_id) {
-	  return _tags.filter(function (tag) {
-	    debugger;
-	    return tag.project_id == project_id;
-	  });
-	};
-	
-	TagsStore.resetAllTags = function (tags) {
-	  // debugger
-	  _tags = tags;
-	};
-	
-	TagsStore.addTwit = function (tag) {
-	  var is_found = false;
-	  _tags.forEach(function (el) {
-	    if (el.name === tag.name) {
-	      is_found = true;
-	    }
-	  });
-	
-	  if (!is_found) {
-	    _tags.push(tag);
-	  }
-	};
-	
-	TagsStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case "TAGS_RECEIVED":
-	      this.resetAllTags(payload.tags);
-	      TagsStore.__emitChange();
-	      break;
-	    case "TAG_RECEIVED":
-	      this.addTwit(payload.tag);
-	      TagsStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = TagsStore;
-
-/***/ },
 /* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var TagsStore = __webpack_require__(245);
-	var TagsActions = __webpack_require__(244);
+	var TagsStore = __webpack_require__(235);
+	var TagsActions = __webpack_require__(234);
 	
 	var Tags = React.createClass({
 	  displayName: 'Tags',
@@ -34289,9 +34321,9 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ProjectsActions = __webpack_require__(230);
+	var ProjectsActions = __webpack_require__(233);
 	var History = __webpack_require__(159).History;
-	var MediaActions = __webpack_require__(242);
+	var MediaActions = __webpack_require__(244);
 	var UploadButton = __webpack_require__(249);
 	
 	var ProjectForm = React.createClass({
@@ -34486,7 +34518,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ProjectsActions = __webpack_require__(230);
+	var ProjectsActions = __webpack_require__(233);
 	// var History = require('react-router').History;
 	
 	var ProjectEdit = React.createClass({

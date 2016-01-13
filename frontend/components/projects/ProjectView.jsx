@@ -123,8 +123,6 @@ var ProjectView = React.createClass({
   },
 
   render: function () {
-// console.log("ProjectView");
-
     return(
       <div className="container">
         <iframe onClick={this.hideImage} className="hidden-pic" type='image' frameBorder='0' scrolling='no'>

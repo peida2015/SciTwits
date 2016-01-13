@@ -17,8 +17,7 @@ TagsStore.getProjectTags = function (project_id) {
 };
 
 TagsStore.resetAllTags = function (tags) {
-  // debugger
-  _tags = tags;
+    _tags = tags;
 };
 
 TagsStore.addTwit = function (tag) {

@@ -5,7 +5,11 @@ class Api::TagsController < ApplicationController
   end
 
   def index
-    @tags = Project.find(params[:project_id]).tags
+    if (params[:project_id].nil?)
+      @tags = Tag.all.sort{|tag1, tag2| tag2.projects.count - tag1.projects.count }.take(10)
+    else
+      @tags = Project.find(params[:project_id]).tags
+    end
     render :index
   end
 

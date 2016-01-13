@@ -4,7 +4,14 @@ class Api::ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-    params[:user_id].nil? ? @projects = Project.all : @projects = User.find(params[:user_id]).followed_projects
+    if params[:user_id]
+      @projects = User.find(params[:user_id]).followed_projects
+    elsif params[:tag_id]
+      @projects = Tag.find(params[:tag_id]).projects
+    else
+      @projects = @projects = Project.all
+    end
+
     render :index
   end
 
@@ -26,7 +33,6 @@ class Api::ProjectsController < ApplicationController
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   def update
-    debugger
     if @project.update(project_params)
       render :show, status: :ok
     else

@@ -10,6 +10,10 @@ var ProjectsActions = {
     ApiUtil.fetchFollowedProjects(user_id);
   },
 
+  fetchTaggedProjects: function (tag_id) {
+    ApiUtil.fetchTaggedProjects(tag_id);
+  },
+
   createProject: function (data, callback) {
     ApiUtil.saveProject(data, callback);
   },

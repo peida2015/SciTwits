@@ -10,11 +10,21 @@ var ApiUtil = {
       success: ApiActions.receiveAllProjects
     })
   },
+
   fetchFollowedProjects: function (user_id){
     $.ajax({
       type: "GET",
       url: "api/projects",
       data: {user_id: user_id},
+      success: ApiActions.receiveAllProjects
+    })
+  },
+
+  fetchTaggedProjects: function (tag_id) {
+    $.ajax({
+      type: "GET",
+      url: "api/projects",
+      data: {tag_id: tag_id},
       success: ApiActions.receiveAllProjects
     })
   },
@@ -95,9 +105,6 @@ var ApiUtil = {
       url: "api/twits",
       data: twit_data,
       success: ApiActions.receiveTwit
-      // error: function (resp){
-      //   console.log(resp);
-      // }
     })
   },
 
@@ -106,14 +113,10 @@ var ApiUtil = {
       type: "DELETE",
       url: "api/twits/"+twit_id,
       success: ApiActions.receiveTwits
-        // callback(resp.project_id);
-      // error: function (resp){
-      //   console.log(resp);
-      // }
     })
   },
 
-  fetchAllTags: function () {
+  fetchFavoriteTags: function () {
     $.ajax({
       type: "GET",
       url: "api/tags",

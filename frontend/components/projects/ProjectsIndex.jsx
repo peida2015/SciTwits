@@ -2,13 +2,16 @@ var React = require('react');
 var ProjectStore = require('../../stores/project');
 var FollowsActions = require('../../actions/FollowsActions');
 var ProjectsActions = require('../../actions/ProjectsActions');
+var TagsActions = require('../../actions/TagsActions');
+var TagStore = require('../../stores/tag');
 var FollowButton = require('./FollowButton');
+
 // var History = require('react-router').History;
 
 var ProjectsIndex = React.createClass({
 
   getInitialState: function () {
-    return ({ projects: [], fetchState: "See All Projects"});
+    return ({ projects: [], fetchState: "See All Projects", favoriteTags:[]});
   },
 
   redirectToView: function (id) {
@@ -18,6 +21,8 @@ var ProjectsIndex = React.createClass({
   componentDidMount: function () {
     ProjectsActions.fetchFollowedProjects(this.props.route.user_id);
     this.listenerToken = ProjectStore.addListener(this.handleStoreChange);
+    TagsActions.fetchFavoriteTags();
+    this.TagsListerner = TagStore.addListener(this.handleTagChange);
   },
 
   handleToggleGet: function () {
@@ -32,10 +37,15 @@ var ProjectsIndex = React.createClass({
   },
   componentWillUnmount: function () {
     this.listenerToken.remove();
+    this.TagsListerner.remove();
   },
 
   handleStoreChange: function () {
     this.setState({ projects: ProjectStore.all() })
+  },
+
+  handleTagChange: function () {
+    this.setState({ favoriteTags: TagStore.all() })
   },
 
   handleDelete: function (e) {
@@ -47,8 +57,13 @@ var ProjectsIndex = React.createClass({
     if (project) {
       this.props.history.pushState(this.state, 'projects/edit', {id: e.currentTarget.id});
     } else {
+      this.TagsListerner.remove();
       alert("project doesn't exist!");
     }
+  },
+
+  tagSearch: function (tag_id) {
+    ProjectsActions.fetchTaggedProjects(tag_id)
   },
 
   followButton: function (project_id) {
@@ -113,12 +128,17 @@ var ProjectsIndex = React.createClass({
     )
   },
 
+  buildTags: function (tag, idx) {
+    return (<strong className="tags u-pull-right clickable" key={idx} onClick={this.tagSearch.bind(null,tag.id)}>{"#"+tag.name}</strong>)
+  },
+
   render: function () {
     var proj_view = this.state.projects.map(this.buildProject);
-
+    var tags = this.state.favoriteTags.map(this.buildTags)
     return (
       <div>
         <button className="get-button" onClick={this.handleToggleGet}><h6>{this.state.fetchState}</h6></button>
+        {tags}
         <br></br>
         { proj_view }
       </div>
