@@ -5,9 +5,9 @@ class Api::ProjectsController < ApplicationController
   # GET /projects.json
   def index
     if params[:user_id]
-      @projects = User.find(params[:user_id]).followed_projects
+      @projects = User.find(params[:user_id]).followed_projects.includes(:owner)
     elsif params[:tag_id]
-      @projects = Tag.find(params[:tag_id]).projects
+      @projects = Tag.find(params[:tag_id]).projects.includes(:owner)
     else
       @projects = @projects = Project.all
     end

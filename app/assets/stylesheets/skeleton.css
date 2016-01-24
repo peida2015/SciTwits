@@ -64,7 +64,8 @@
   width: inherit;
   margin: 0 auto;
   border: 1px solid #bbb;
-  background-color: white
+  background-color: white;
+  animation: fade-in 2s linear;
 }
 .twits-box {
   height: 200px;
@@ -217,7 +218,8 @@
 }
 
 strong.tags {
-  padding: 5px;
+  font-size: 0.75em;
+  padding: 0px 5px;
   border-radius: 8px;
   background: lightblue;
   margin-left: 5px;
@@ -668,6 +670,7 @@ form.button_to {
   float: left; }
 .center-align { text-align: center }
 .clickable{ cursor: pointer; cursor: hand; }
+.fit-height{ height: fit-content }
 
 
 /* Misc
@@ -722,3 +725,8 @@ there.
 
 /* Imported webfonts from weloveiconfonts.com and Google Fonts */
 @import url(//fonts.googleapis.com/css?family=Montserrat:400,700|Play:400,700);
+
+@keyframes fade-in {
+  from {opacity: 0 }
+  to { opacity: 1 }
+}

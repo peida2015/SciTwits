@@ -24314,17 +24314,25 @@
 	      'div',
 	      null,
 	      React.createElement(
-	        'button',
-	        { className: 'get-button', onClick: this.handleToggleGet },
+	        'div',
+	        null,
 	        React.createElement(
-	          'h6',
-	          null,
-	          this.state.fetchState
-	        )
-	      ),
-	      tags,
-	      React.createElement('br', null),
-	      proj_view
+	          'div',
+	          { className: 'fit-height' },
+	          React.createElement(
+	            'button',
+	            { className: 'get-button', onClick: this.handleToggleGet },
+	            React.createElement(
+	              'h6',
+	              null,
+	              this.state.fetchState
+	            )
+	          ),
+	          tags,
+	          React.createElement('br', null)
+	        ),
+	        proj_view
+	      )
 	    );
 	  }
 	});

@@ -134,13 +134,17 @@ var ProjectsIndex = React.createClass({
 
   render: function () {
     var proj_view = this.state.projects.map(this.buildProject);
-    var tags = this.state.favoriteTags.map(this.buildTags)
+    var tags = this.state.favoriteTags.map(this.buildTags);
     return (
       <div>
-        <button className="get-button" onClick={this.handleToggleGet}><h6>{this.state.fetchState}</h6></button>
-        {tags}
-        <br></br>
-        { proj_view }
+        <div>
+          <div className='fit-height'>
+            <button className="get-button" onClick={this.handleToggleGet}><h6>{this.state.fetchState}</h6></button>
+            {tags}
+            <br></br>
+          </div>
+          { proj_view }
+        </div>
       </div>
     )
   }

@@ -1,6 +1,6 @@
 class Api::TwitsController < ApplicationController
   def index
-    @twits = Project.find(params[:project_id]).twits
+    @twits = Project.find(params[:project_id]).twits.includes(:user)
     render :index
   end
 

@@ -6,9 +6,10 @@ class Api::TagsController < ApplicationController
 
   def index
     if (params[:project_id].nil?)
-      @tags = Tag.all.sort{|tag1, tag2| tag2.projects.count - tag1.projects.count }.take(10)
+      @tags = Tag.all.includes(:projects)
+      @tags = @tags.sort{|tag1, tag2| tag2.projects.length - tag1.projects.length }.take(10)
     else
-      @tags = Project.find(params[:project_id]).tags
+      @tags = Project.find(params[:project_id]).tags.includes(:projects)
     end
     render :index
   end
