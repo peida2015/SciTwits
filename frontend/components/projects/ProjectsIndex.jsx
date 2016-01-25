@@ -133,29 +133,42 @@ var ProjectsIndex = React.createClass({
   },
 
   render: function () {
-    console.log('render ProjectsIndex');
+    // console.log('render ProjectsIndex');
     var proj_view = this.state.projects.map(this.buildProject);
     var tags = this.state.favoriteTags.map(this.buildTags);
+    $(window).scroll(function() {
+      if ($(this).scrollTop() !== 0) {
+        $('.header').css({'position':'fixed', 'margin':'auto', 'width':'100%', 'background-color':'black', 'z-index':'1', 'left':'0', 'right':'0'});
+        $('#root').css('top','120px');
+        $('.hidden-filler').css('display', 'block');
+      } else {
+        $('.header').css({'position':'relative', 'margin':'auto', 'width':'960px', 'background-color':'transparent', 'z-index':'1'});
+        $('#root').css('top','0px');
+        $('.hidden-filler').css('display', 'none');
+      }
+    })
+
+
     return (
       <div>
+        <div className='fit-height'>
           <div className='fit-height'>
-            <div className='fit-height'>
-              <button className="get-button" onClick={this.handleToggleGet}><h6>{this.state.fetchState}</h6></button>
-              <div className='outline eight columns u-pull-right'>
-                <div className='eight columns u-pull-right'>
-                  {tags}
-                </div>
-                <span className="tagged u-pull-left">Explore projects tagged:</span>
+            <button className="get-button" onClick={this.handleToggleGet}><h6>{this.state.fetchState}</h6></button>
+            <div className='outline eight columns u-pull-right'>
+              <div className='eight columns u-pull-right'>
+                {tags}
               </div>
-              <br></br>
+              <span className="tagged u-pull-left">Explore projects tagged:</span>
             </div>
-            <div className='sub-bg fit-height'>
-              <div></div>
-              { proj_view }
-            </div>
-
+            <br></br>
           </div>
-      </div>
+          <div className='sub-bg fit-height'>
+            <div></div>
+            { proj_view }
+          </div>
+
+        </div>
+    </div>
     )
   }
 });

@@ -24308,9 +24308,21 @@
 	  },
 	
 	  render: function () {
-	    console.log('render ProjectsIndex');
+	    // console.log('render ProjectsIndex');
 	    var proj_view = this.state.projects.map(this.buildProject);
 	    var tags = this.state.favoriteTags.map(this.buildTags);
+	    $(window).scroll(function () {
+	      if ($(this).scrollTop() !== 0) {
+	        $('.header').css({ 'position': 'fixed', 'margin': 'auto', 'width': '100%', 'background-color': 'black', 'z-index': '1', 'left': '0', 'right': '0' });
+	        $('#root').css('top', '120px');
+	        $('.hidden-filler').css('display', 'block');
+	      } else {
+	        $('.header').css({ 'position': 'relative', 'margin': 'auto', 'width': '960px', 'background-color': 'transparent', 'z-index': '1' });
+	        $('#root').css('top', '0px');
+	        $('.hidden-filler').css('display', 'none');
+	      }
+	    });
+	
 	    return React.createElement(
 	      'div',
 	      null,
@@ -31856,7 +31868,7 @@
 	  },
 	
 	  render: function () {
-	    pics = $('.thumbnail').css('border', '1px solid lightgray').hover(function () {
+	    $('.thumbnail').css('border', '1px solid lightgray').hover(function () {
 	      $(this).fadeTo('fast', 0.5);
 	    }, function () {
 	      $(this).stop().fadeTo('fast', 1);
@@ -31864,7 +31876,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'container' },
+	      { className: 'container sub-bg' },
 	      React.createElement('iframe', { onClick: this.hideImage, className: 'hidden-pic', type: 'image', frameBorder: '0', scrolling: 'no' }),
 	      React.createElement(FollowButton, { project_id: this.props.params.id,
 	        user_id: this.props.routes[0].indexRoute.user_id }),

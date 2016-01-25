@@ -68,7 +68,7 @@
   animation: fade-in 2s linear;
 }
 .twits-box {
-  height: 200px;
+  height: 400px;
   overflow-y: auto;
   overflow-x: hidden;
   margin: 0 auto;
@@ -84,7 +84,18 @@
   overflow:hidden;
   position:relative;
   display: block;
+  width: 960px;
+  margin: auto;
 }
+.hidden-filler {
+  position: relative;
+  display: none;
+  height: 120px;
+  width: 100%;
+  top: -0px;
+  content: "";
+}
+.header
 .header-nav {
   width: 960px;
   margin: 0 auto;
@@ -231,12 +242,9 @@ strong.tags {
 .outline {
   border: 1px solid white;
   height: 38px;
-  /*width: 650px;*/
   overflow: auto;
   display: initial;
-  /*margin-left: 10%;*/
   position: relative;
-  /*float: right;*/
 }
 /*For smaller devices*/
 @media(min-width: 300px) and (max-device-width: 400px){
@@ -350,20 +358,17 @@ body {
   color: #222;
   position: relative;
   top: 0;
-  min-height: 660px;
+  min-height: 100vh;
   overflow-y:inherit;
 }
 
 .sub-bg{
   background-color: rgba(0, 0, 0, 0.7);;
-  /*content: "";*/
   height: 100%;
   width: 98%;
   border: 2px solid lightgray;
-  /*display: block;*/
-
-  /*position: absolute;*/
 }
+
 body::after {
   content: "";
   background-image: url(http://imgsrc.hubblesite.org/hu/db/images/hs-2006-14-a-1280x800_wallpaper.jpg);
@@ -695,6 +700,7 @@ form.button_to {
 .center-align { text-align: center }
 .clickable{ cursor: pointer; cursor: hand; }
 .fit-height{ height: fit-content; overflow: hidden;}
+.margin-LR { margin: 0px 10px}
 
 
 /* Misc

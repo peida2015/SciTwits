@@ -123,7 +123,7 @@ var ProjectView = React.createClass({
   },
 
   render: function () {
-    pics = $('.thumbnail').css('border', '1px solid lightgray').hover(
+    $('.thumbnail').css('border', '1px solid lightgray').hover(
       function () {
         $(this).fadeTo('fast', 0.5);
       },
@@ -131,9 +131,9 @@ var ProjectView = React.createClass({
         $(this).stop().fadeTo('fast', 1);
       }
     )
-
+    
     return(
-      <div className="container">
+      <div className="container sub-bg">
         <iframe onClick={this.hideImage} className="hidden-pic" type='image' frameBorder='0' scrolling='no'>
         </iframe>
 
