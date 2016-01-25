@@ -98,7 +98,7 @@ var ProjectView = React.createClass({
         // debugger
         return (
           // <a href={cropped_url+medium.link}>
-            <img key={idx} src={cropped_url+ "w_100,h_100,c_fill/"+medium.link}></img>
+            <img key={idx} className='thumbnail' src={cropped_url+ "w_100,h_100,c_fill/"+medium.link}></img>
           // </a>
         )
       });
@@ -123,6 +123,15 @@ var ProjectView = React.createClass({
   },
 
   render: function () {
+    pics = $('.thumbnail').css('border', '1px solid lightgray').hover(
+      function () {
+        $(this).fadeTo('fast', 0.5);
+      },
+      function () {
+        $(this).stop().fadeTo('fast', 1);
+      }
+    )
+
     return(
       <div className="container">
         <iframe onClick={this.hideImage} className="hidden-pic" type='image' frameBorder='0' scrolling='no'>

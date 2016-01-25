@@ -31775,7 +31775,7 @@
 	        // debugger
 	        return(
 	          // <a href={cropped_url+medium.link}>
-	          React.createElement('img', { key: idx, src: cropped_url + "w_100,h_100,c_fill/" + medium.link })
+	          React.createElement('img', { key: idx, className: 'thumbnail', src: cropped_url + "w_100,h_100,c_fill/" + medium.link })
 	          // </a>
 	
 	        );
@@ -31838,6 +31838,12 @@
 	  },
 	
 	  render: function () {
+	    pics = $('.thumbnail').css('border', '1px solid lightgray').hover(function () {
+	      $(this).fadeTo('fast', 0.5);
+	    }, function () {
+	      $(this).stop().fadeTo('fast', 1);
+	    });
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'container' },
