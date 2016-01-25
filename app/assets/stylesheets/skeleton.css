@@ -216,7 +216,11 @@
   margin: 0 auto;
   overflow: auto;
 }
-
+.tagged{
+  color: white;
+  display: block;
+  padding: 5px 10px;
+}
 strong.tags {
   font-size: 0.75em;
   padding: 0px 5px;
@@ -224,7 +228,16 @@ strong.tags {
   background: lightblue;
   margin-left: 5px;
 }
-
+.outline {
+  border: 1px solid white;
+  height: 38px;
+  /*width: 650px;*/
+  overflow: auto;
+  display: initial;
+  /*margin-left: 10%;*/
+  position: relative;
+  /*float: right;*/
+}
 /*For smaller devices*/
 @media(min-width: 300px) and (max-device-width: 400px){
   .fullscreen-bg__video {

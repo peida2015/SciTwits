@@ -141,7 +141,12 @@ var ProjectsIndex = React.createClass({
           <div className='fit-height'>
             <div className='fit-height'>
               <button className="get-button" onClick={this.handleToggleGet}><h6>{this.state.fetchState}</h6></button>
-              {tags}
+              <div className='outline eight columns u-pull-right'>
+                <div className='eight columns u-pull-right'>
+                  {tags}
+                </div>
+                <span className="tagged u-pull-left">Explore projects tagged:</span>
+              </div>
               <br></br>
             </div>
             <div className='sub-bg fit-height'>

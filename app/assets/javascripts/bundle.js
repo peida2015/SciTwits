@@ -24329,7 +24329,20 @@
 	              this.state.fetchState
 	            )
 	          ),
-	          tags,
+	          React.createElement(
+	            'div',
+	            { className: 'outline eight columns u-pull-right' },
+	            React.createElement(
+	              'div',
+	              { className: 'eight columns u-pull-right' },
+	              tags
+	            ),
+	            React.createElement(
+	              'span',
+	              { className: 'tagged u-pull-left' },
+	              'Explore projects tagged:'
+	            )
+	          ),
 	          React.createElement('br', null)
 	        ),
 	        React.createElement(
