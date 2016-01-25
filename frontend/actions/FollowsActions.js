@@ -2,6 +2,7 @@ var ApiUtil = require('../util/ApiUtil');
 
 var FollowsActions = {
   fetchFollows: function () {
+    // debugger
     ApiUtil.fetchFollows();
   },
   saveFollow: function (project_id, user_id) {

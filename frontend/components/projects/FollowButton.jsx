@@ -4,12 +4,12 @@ var FollowsStore = require('../../stores/follow');
 
 var FollowButton = React.createClass({
   getInitialState: function () {
-    return ({ followed: false })
+    return ({ followed: true })
   },
 
   componentDidMount: function () {
     this.FollowsToken = FollowsStore.addListener(this._onChange)
-    FollowsActions.fetchFollows();
+    // FollowsActions.fetchFollows();
   },
 
   componentWillUnmount: function () {
@@ -30,15 +30,13 @@ var FollowButton = React.createClass({
 
   toggleFollowButton: function (e) {
     e.preventDefault();
-    // debugger
-    // return;
+
     if (this.state.followed) {
       var follow_id = FollowsStore.getFollowId(this.props.project_id, this.props.user_id);
       FollowsActions.unFollow(follow_id);
     } else {
       FollowsActions.saveFollow(this.props.project_id, this.props.user_id);
     }
-    // console.log("clicked");
   },
 
   buildButton: function () {

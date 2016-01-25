@@ -108,7 +108,7 @@ var ProjectsIndex = React.createClass({
               <strong>Title:</strong><br/>
               { project.title }
             </div>
-<br/>
+            <br/>
             <div className="clickable">
               <strong>Significance:</strong><br/>
               { project.significance }
@@ -133,6 +133,7 @@ var ProjectsIndex = React.createClass({
   },
 
   render: function () {
+    console.log('render ProjectsIndex');
     var proj_view = this.state.projects.map(this.buildProject);
     var tags = this.state.favoriteTags.map(this.buildTags);
     return (

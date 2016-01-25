@@ -9,7 +9,7 @@ class Api::ProjectsController < ApplicationController
     elsif params[:tag_id]
       @projects = Tag.find(params[:tag_id]).projects.includes(:owner)
     else
-      @projects = @projects = Project.all
+      @projects = @projects = Project.all.includes(:owner)
     end
 
     render :index
