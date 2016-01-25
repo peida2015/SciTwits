@@ -447,16 +447,17 @@ input[type="button"] {
 button:hover,
 input[type="submit"]:hover,
 input[type="reset"]:hover,
-input[type="button"]:hover,
+input[type="button"]:hover {
+  color: #FFFFFF;
+  border-color: #888;
+  outline: 0;
+  background-color: #164;
+}
 .button:focus,
 button:focus,
 input[type="submit"]:focus,
 input[type="reset"]:focus,
 input[type="button"]:focus {
-  color: #FFFFFF;
-  border-color: #888;
-  outline: 0;
-  background-color: #164;
 }
 .small:hover{ width: inherit; }
 .button.button-primary,
