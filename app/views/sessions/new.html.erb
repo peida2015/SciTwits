@@ -1,14 +1,15 @@
-
-<form class="" action=<%= sessions_url %> method="post">
-  <h3>Sign In!</h3>
-  <%= auth_token %>
-  <label for="">Username</label>
-  <input type="text" name="user[username]" value=""><br></br>
-  <label for="">Password</label>
-  <input type="password" name="user[password]" value=""><br></br>
-  <div class="center-align">
-    <button type="submit">
-      <i class="fa fa-sign-in fa-lg"></i>  Sign In
-    </button>
-  </div>
-</form>
+<div class="content">
+  <form class="" action=<%= sessions_url %> method="post">
+    <h3>Sign In!</h3>
+    <%= auth_token %>
+    <label for="">Username</label>
+    <input type="text" name="user[username]" value=""><br></br>
+    <label for="">Password</label>
+    <input type="password" name="user[password]" value=""><br></br>
+    <div class="center-align">
+      <button type="submit">
+        <i class="fa fa-sign-in fa-lg"></i>  Sign In
+      </button>
+    </div>
+  </form>
+</div>

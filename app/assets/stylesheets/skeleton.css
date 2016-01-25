@@ -37,7 +37,7 @@
   box-sizing: border-box;
   margin-top: 0;
 }
-.container.intro { color: white; padding-top: 70px; display: block}
+.container.intro { color: white; padding-top: 20px; display: block}
 .container.follow {
   display:inline-block;
   width: 75px;
@@ -46,6 +46,7 @@
   width: 960px;
   margin: 0 auto;
   overflow: hidden;
+  min-height: 60vh;
 }
 .project {
   padding: 0 20px;
@@ -92,7 +93,7 @@
   display: none;
   height: 120px;
   width: 100%;
-  top: -0px;
+  top: 0px;
   content: "";
 }
 .header
@@ -105,6 +106,7 @@
 .footer {
   opacity:1;
   position:relative;
+  bottom: 0px;
 }
 .footer-credit {
   color: white;
@@ -241,10 +243,15 @@ strong.tags {
 }
 .outline {
   border: 1px solid white;
-  height: 38px;
+  height: 45px;
+  padding: 4px;
   overflow: auto;
   display: initial;
   position: relative;
+}
+
+.session-form {
+  min-height: 60vh;
 }
 /*For smaller devices*/
 @media(min-width: 300px) and (max-device-width: 400px){
