@@ -37,7 +37,7 @@
   box-sizing: border-box;
   margin-top: 0;
 }
-.container.intro { color: white; padding-top: 20px; display: block}
+.container.intro { color: white; padding-top: 40px; display: block}
 .container.follow {
   display:inline-block;
   width: 75px;
@@ -127,11 +127,11 @@
 }
 
 .logo {
-  width:80px;
+  width:60px;
   height:auto;
   display: inline-block;
   float: left;
-  padding: 20px;
+  padding: 10px;
   -webkit-filter: grayscale(80%);
   filter: grayscale(80%);
 }
@@ -240,6 +240,9 @@ strong.tags {
   border-radius: 8px;
   background: lightblue;
   margin-left: 5px;
+}
+strong.tags:hover {
+  font-size: 1.1em;
 }
 .outline {
   border: 1px solid white;

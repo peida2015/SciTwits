@@ -24313,7 +24313,7 @@
 	    var tags = this.state.favoriteTags.map(this.buildTags);
 	    $(window).scroll(function () {
 	      if ($(this).scrollTop() !== 0) {
-	        $('.header').css({ 'position': 'fixed', 'margin': 'auto', 'width': '100%', 'background-color': 'black', 'z-index': '1', 'left': '0', 'right': '0' });
+	        $('.header').css({ 'position': 'fixed', 'margin': 'auto', 'width': '100%', 'background-color': 'rgba(0,0,0,0.7)', 'z-index': '1', 'left': '0', 'right': '0' });
 	        $('#root').css('top', '120px');
 	        $('.hidden-filler').css('display', 'block');
 	      } else {
