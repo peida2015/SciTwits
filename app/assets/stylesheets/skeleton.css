@@ -341,6 +341,16 @@ body {
   overflow-y:inherit;
 }
 
+.sub-bg{
+  background-color: rgba(0, 0, 0, 0.7);;
+  /*content: "";*/
+  height: 100%;
+  width: 98%;
+  border: 2px solid lightgray;
+  /*display: block;*/
+
+  /*position: absolute;*/
+}
 body::after {
   content: "";
   background-image: url(http://imgsrc.hubblesite.org/hu/db/images/hs-2006-14-a-1280x800_wallpaper.jpg);
@@ -671,7 +681,7 @@ form.button_to {
   float: left; }
 .center-align { text-align: center }
 .clickable{ cursor: pointer; cursor: hand; }
-.fit-height{ height: fit-content }
+.fit-height{ height: fit-content; overflow: hidden;}
 
 
 /* Misc

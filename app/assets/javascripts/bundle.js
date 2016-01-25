@@ -24316,7 +24316,7 @@
 	      null,
 	      React.createElement(
 	        'div',
-	        null,
+	        { className: 'fit-height' },
 	        React.createElement(
 	          'div',
 	          { className: 'fit-height' },
@@ -24332,7 +24332,12 @@
 	          tags,
 	          React.createElement('br', null)
 	        ),
-	        proj_view
+	        React.createElement(
+	          'div',
+	          { className: 'sub-bg fit-height' },
+	          React.createElement('div', null),
+	          proj_view
+	        )
 	      )
 	    );
 	  }
