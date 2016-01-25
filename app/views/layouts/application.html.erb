@@ -26,7 +26,8 @@
     <nav class='header-nav'>
       <img src="../assets/SciTwits.png" alt="" class="logo"/>
       <% if current_user %>
-        <label>Logged in: <%= current_user.username %></label>
+        <!-- <label>Logged in: <%= current_user.username %></label> -->
+      </br>
         <%= button_to "&#xf08b; &nbsp; Logout".html_safe, sessions_url,
             method:"delete",
             class: "button-primary" %>
